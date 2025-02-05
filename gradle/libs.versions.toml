@@ -9,11 +9,27 @@ lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.10.0"
 composeBom = "2025.01.01"
 splashScreenAPI = "1.0.1"
+kotlinx-coroutines-core = "1.8.1"
+
+#Hilt
+hilt-android = "2.49"
+hilt-compiler = "1.2.0"
+hilt-navigation-compose = "1.2.0"
 
 [libraries]
-
 #Android splash screen API
 splash-screen-api = {group = "androidx.core", name = "core-splashscreen", version.ref = "splashScreenAPI"}
+
+#Coroutines
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines-core" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines-core" }
+
+#Hilt
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt-android" }
+hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt-android" }
+androidx-hilt-compiler = { module = "androidx.hilt:hilt-compiler", version.ref = "hilt-compiler" }
+androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hilt-navigation-compose" }
+
 
 
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -32,6 +48,12 @@ androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 
 [plugins]
+dagger-hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt-android" }
 android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 
+
+[bundles]
+coroutines = ["kotlinx-coroutines-android", "kotlinx-coroutines-core"]
+hilt-compiler = ["androidx-hilt-compiler", "hilt-android-compiler"]
+hilt = ["hilt-android","androidx-hilt-navigation-compose"]

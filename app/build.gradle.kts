@@ -1,6 +1,9 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id ("kotlin-kapt")
+    kotlin("kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -53,6 +56,11 @@ dependencies {
 
     //Splash Screen API
     implementation(libs.splash.screen.api)
+
+    //Hilt
+    implementation(libs.bundles.hilt)
+    kapt(libs.bundles.hilt.compiler)
+
 
 
     implementation(libs.androidx.core.ktx)

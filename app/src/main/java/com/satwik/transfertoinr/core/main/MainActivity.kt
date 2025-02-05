@@ -42,7 +42,7 @@ class MainActivity : ComponentActivity() {
             Scaffold(
                 modifier = Modifier.background(color = Color.Red),
                 bottomBar = { TTFBottomNavigationBar() }){
-                    RecipientScreen()
+                    HomeScreen()
             }
         }
     }
