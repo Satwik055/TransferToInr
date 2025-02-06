@@ -1,5 +1,7 @@
 package com.satwik.transfertoinr.core.designsystem.components
 
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -9,6 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.sp
@@ -20,6 +23,7 @@ import com.satwik.transfertoinr.core.designsystem.theme.fontFamily
 @Composable
 fun TTFTextField(
     modifier: Modifier = Modifier,
+    keyboardType: KeyboardType = KeyboardType.Text,
     text:String,
     font: FontFamily = fontFamily,
     onValueChange: (String) -> Unit,
@@ -30,7 +34,8 @@ fun TTFTextField(
     isError:Boolean = false
 ){
     OutlinedTextField(
-        modifier = modifier,
+        modifier = modifier.fillMaxWidth(),
+        keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
         value = text,
         enabled = enabled,
         onValueChange = onValueChange,
@@ -46,7 +51,7 @@ fun TTFTextField(
         ),
         singleLine = true,
         supportingText = { Text(text = errorText,fontFamily = font, color = Color.Red, fontSize = 13.sp) },
-        textStyle = TextStyle(fontFamily = font, fontWeight = FontWeight.Normal, fontSize = 16.sp, color = EerieBlack),
+        textStyle = TextStyle(fontFamily = font, fontWeight = FontWeight.Normal, fontSize = 16.sp, color = JungleGreen),
         placeholder = {
             Text(
                 text = placeholder,

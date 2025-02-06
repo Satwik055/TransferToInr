@@ -57,11 +57,14 @@ dependencies {
     //Splash Screen API
     implementation(libs.splash.screen.api)
 
+
     //Hilt
     implementation(libs.bundles.hilt)
     kapt(libs.bundles.hilt.compiler)
 
 
+
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.32.0")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

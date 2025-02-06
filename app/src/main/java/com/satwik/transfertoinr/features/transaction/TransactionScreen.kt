@@ -5,14 +5,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.satwik.transfertoinr.core.designsystem.components.TTFHeader
+import com.satwik.transfertoinr.core.designsystem.components.TTFTextHeader
 
 @Composable
 fun TransactionScreen(modifier: Modifier = Modifier) {
     Column (
         modifier = modifier.fillMaxSize()
     ){
-        TTFHeader(text = "Transaction")
+        TTFTextHeader(text = "Transaction")
         Content()
 
     }

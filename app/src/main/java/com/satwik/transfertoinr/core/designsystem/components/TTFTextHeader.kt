@@ -11,12 +11,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
-import com.satwik.transfertoinr.R
 import com.satwik.transfertoinr.core.designsystem.theme.JungleGreen
 import com.satwik.transfertoinr.core.designsystem.theme.Typography
 
 @Composable
-fun TTFHeader(modifier: Modifier = Modifier, text: String, style: TextStyle = Typography.headlineLarge) {
+fun TTFTextHeader(modifier: Modifier = Modifier, text: String, style: TextStyle = Typography.headlineLarge) {
     Box(
         modifier = modifier
             .background(color = JungleGreen)
