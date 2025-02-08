@@ -39,9 +39,8 @@ fun TTFBottomNavigationBar(
         R.drawable.ic_plane,
         R.drawable.ic_page,
         R.drawable.ic_people,
-        R.drawable.ic_account,
+        R.drawable.ic_account
     )
-
     Row(
         modifier = Modifier.fillMaxWidth().padding(10.dp),
         horizontalArrangement = Arrangement.SpaceAround,
@@ -50,7 +49,7 @@ fun TTFBottomNavigationBar(
         items.forEachIndexed { index, title ->
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.clickable { onItemSelected(index) }
+                modifier = Modifier.clickable {onItemSelected(index)}
             ) {
                 if (selectedItem == index) {
                     HorizontalDivider(
@@ -67,7 +66,6 @@ fun TTFBottomNavigationBar(
                     modifier = Modifier.size(22.dp)
                 )
                 Spacer(modifier = Modifier.height(5.dp))
-
                 Text(
                     text = title,
                     style = TextStyle(fontFamily = fontFamily, fontSize = 11.sp, fontWeight = if (selectedItem == index) FontWeight.SemiBold else FontWeight.Normal, color = if (selectedItem == index) JungleGreen else LightGrey),

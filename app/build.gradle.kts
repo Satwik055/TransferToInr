@@ -5,7 +5,6 @@ plugins {
     kotlin("kapt")
     id("com.google.dagger.hilt.android")
 }
-
 android {
     namespace = "com.satwik.transfertoinr"
     compileSdk = 35
@@ -16,7 +15,6 @@ android {
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
@@ -57,12 +55,19 @@ dependencies {
     //Splash Screen API
     implementation(libs.splash.screen.api)
 
-
     //Hilt
     implementation(libs.bundles.hilt)
     kapt(libs.bundles.hilt.compiler)
 
+    implementation(libs.bundles.coroutines)
 
+    //Supabase
+    implementation("io.github.jan-tennert.supabase:postgrest-kt:2.5.4")
+//    implementation ("io.github.jan-tennert.supabase:auth-kt:3.1.1")
+
+
+    //Ktor
+    implementation(libs.bundles.ktor)
 
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.32.0")
 

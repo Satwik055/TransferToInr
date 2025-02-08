@@ -10,6 +10,8 @@ activityCompose = "1.10.0"
 composeBom = "2025.01.01"
 splashScreenAPI = "1.0.1"
 kotlinx-coroutines-core = "1.8.1"
+ktor = "3.0.3"
+supabase= "3.1.1"
 
 #Hilt
 hilt-android = "2.49"
@@ -30,6 +32,14 @@ hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", ve
 androidx-hilt-compiler = { module = "androidx.hilt:hilt-compiler", version.ref = "hilt-compiler" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hilt-navigation-compose" }
 
+#Ktor
+ktor-core = {group ="io.ktor", name= "ktor-client-core", version.ref = "ktor"}
+ktor-cio = {group="io.ktor", name = "ktor-client-cio", version.ref= "ktor" }
+ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktor" }
+ktor-utils = { module = "io.ktor:ktor-utils", version.ref = "ktor" }
+
+#Supabase
+supabase-postgrest = { module = "io.github.jan-tennert.supabase:postgrest-kt", version.ref = "supabase" }
 
 
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -52,8 +62,9 @@ dagger-hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt-andro
 android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 
-
 [bundles]
 coroutines = ["kotlinx-coroutines-android", "kotlinx-coroutines-core"]
 hilt-compiler = ["androidx-hilt-compiler", "hilt-android-compiler"]
 hilt = ["hilt-android","androidx-hilt-navigation-compose"]
+supabase = ["supabase-postgrest"]
+ktor = ["ktor-utils", "ktor-client-android", "ktor-core", "ktor-cio"]
