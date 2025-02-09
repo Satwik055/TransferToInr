@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.satwik.transfertoinr.R
 import com.satwik.transfertoinr.core.designsystem.components.ButtonType
@@ -40,15 +41,16 @@ import com.satwik.transfertoinr.core.designsystem.components.TTFButton
 import com.satwik.transfertoinr.core.designsystem.components.TTFTextField
 import com.satwik.transfertoinr.core.designsystem.theme.JungleGreen
 import com.satwik.transfertoinr.core.designsystem.theme.fontFamily
+import com.satwik.transfertoinr.core.main.ScreenLogin
 import com.satwik.transfertoinr.features.auth.login.LoginScreenViewModel
 import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.koinInject
 import org.koin.viewmodel.getViewModelKey
 
 @Composable
-fun SignupScreen(modifier: Modifier = Modifier) {
+fun SignupScreen(modifier: Modifier = Modifier, navController: NavController) {
 
-    val systemUiController = rememberSystemUiController()
+//    val systemUiController = rememberSystemUiController()
 //    SideEffect {
 //        systemUiController.setStatusBarColor(
 //            color = Color.White,
@@ -109,7 +111,7 @@ fun SignupScreen(modifier: Modifier = Modifier) {
             Spacer(modifier = Modifier.height(5.dp))
             Text(text = "By signing up you agree our Privacy Policy and Terms and Conditions", fontFamily = fontFamily, fontSize = 12.sp, fontWeight = FontWeight.Normal, color = JungleGreen)
             Spacer(modifier = Modifier.weight(1f))
-            LoginText(onClick = { /*TODO*/ }, modifier = Modifier
+            LoginText(onClick = { navController.navigate(ScreenLogin) }, modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .padding(bottom = 12.dp))
         }
@@ -128,7 +130,7 @@ internal fun LoginText(
         modifier = modifier.clickable { onClick.invoke() },
         style = style,
         text = buildAnnotatedString {
-            append("Already have an account ? ")
+            append("Already have an account ?")
             withStyle(style = SpanStyle(color = JungleGreen, fontWeight = FontWeight.SemiBold)){
                 append("Login")
             }

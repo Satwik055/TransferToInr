@@ -60,21 +60,19 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         val viewModel: MainActivityViewModel by inject()
-
         installSplashScreen()
             .apply {
-            setKeepOnScreenCondition{
-                !viewModel.authInitialized.value
-            }
+                setKeepOnScreenCondition{!viewModel.isReady.value}
         }
         setContent {
+//            val viewModel = koinViewModel<MainActivityViewModel>()
             val state = viewModel.mainActivityState.value
             val startDestination:Any = if(state.isUserLoggedIn){ ScreenMain } else{ ScreenSignup }
             val navController = rememberNavController()
 
             NavHost(navController =navController , startDestination = startDestination) {
                 composable<ScreenSignup> {
-                    SignupScreen()
+                    SignupScreen(navController = navController)
                 }
                 composable<ScreenMain> {
                     MainScreen()

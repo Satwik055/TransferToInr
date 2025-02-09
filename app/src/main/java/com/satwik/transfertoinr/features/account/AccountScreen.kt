@@ -67,8 +67,7 @@ private fun Content(modifier: Modifier = Modifier, viewModel: AccountsScreenView
                 icon = R.drawable.ic_account,
                 modifier = modifier
                 .fillMaxWidth()
-                .padding(horizontal = 10.dp)
-                .background(Color.Red),
+                .padding(horizontal = 10.dp),
                 onClick = {
                     println("viola")
                     viewModel.logout()
