@@ -1,6 +1,6 @@
 [versions]
 agp = "8.4.2"
-kotlin = "1.9.0"
+kotlin = "2.0.0"
 coreKtx = "1.15.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -9,14 +9,18 @@ lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.10.0"
 composeBom = "2025.01.01"
 splashScreenAPI = "1.0.1"
-kotlinx-coroutines-core = "1.8.1"
+kotlinx-coroutines-core = "1.10.1"
 ktor = "3.0.3"
 supabase= "3.1.1"
-
-#Hilt
+accompanist = "0.32.0"
 hilt-android = "2.49"
 hilt-compiler = "1.2.0"
+serialization = "1.7.3"
 hilt-navigation-compose = "1.2.0"
+googleGmsGoogleServices = "4.4.2"
+firebaseAuth = "23.2.0"
+navigationCompose = "2.8.0-beta05"
+
 
 [libraries]
 #Android splash screen API
@@ -40,7 +44,20 @@ ktor-utils = { module = "io.ktor:ktor-utils", version.ref = "ktor" }
 
 #Supabase
 supabase-postgrest = { module = "io.github.jan-tennert.supabase:postgrest-kt", version.ref = "supabase" }
+supabase-auth = { module = "io.github.jan-tennert.supabase:auth-kt", version.ref = "supabase" }
 
+#Firebase
+firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
+
+
+#Navigation
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
+
+#Kotlin serializer
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization"}
+
+#Accompanisr
+accompanist = {module="com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist"}
 
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -57,14 +74,20 @@ androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-man
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 
+
+
 [plugins]
 dagger-hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt-android" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
+kotiln-serializer-plugin = {id="org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin"}
+
 
 [bundles]
 coroutines = ["kotlinx-coroutines-android", "kotlinx-coroutines-core"]
 hilt-compiler = ["androidx-hilt-compiler", "hilt-android-compiler"]
 hilt = ["hilt-android","androidx-hilt-navigation-compose"]
-supabase = ["supabase-postgrest"]
+supabase = ["supabase-postgrest", "supabase-auth"]
 ktor = ["ktor-utils", "ktor-client-android", "ktor-core", "ktor-cio"]

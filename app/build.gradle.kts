@@ -1,9 +1,10 @@
 plugins {
+    alias(libs.plugins.compose.compiler)
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    id ("kotlin-kapt")
-    kotlin("kapt")
-    id("com.google.dagger.hilt.android")
+    alias(libs.plugins.google.gms.google.services)
+    alias(libs.plugins.kotiln.serializer.plugin)
+
 }
 android {
     namespace = "com.satwik.transfertoinr"
@@ -55,21 +56,24 @@ dependencies {
     //Splash Screen API
     implementation(libs.splash.screen.api)
 
-    //Hilt
-    implementation(libs.bundles.hilt)
-    kapt(libs.bundles.hilt.compiler)
-
+    //Coroutines
     implementation(libs.bundles.coroutines)
-
-    //Supabase
-    implementation("io.github.jan-tennert.supabase:postgrest-kt:2.5.4")
-//    implementation ("io.github.jan-tennert.supabase:auth-kt:3.1.1")
-
 
     //Ktor
     implementation(libs.bundles.ktor)
 
-    implementation("com.google.accompanist:accompanist-systemuicontroller:0.32.0")
+    //Supabase
+    implementation(libs.bundles.supabase)
+
+    //Accompanist
+    implementation(libs.accompanist)
+
+    implementation("io.insert-koin:koin-android:4.0.2")
+    implementation("io.insert-koin:koin-androidx-compose:4.0.2")
+    implementation("io.insert-koin:koin-androidx-navigation:4.0.2")
+
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.kotlinx.serialization.json)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

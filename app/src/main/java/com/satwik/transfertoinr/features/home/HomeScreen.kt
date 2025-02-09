@@ -53,7 +53,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
     Column (
         modifier.fillMaxSize()
     ){
-        TTFIconHeader()
+        TTFIconHeader(helpButtonOnClick = {})
         Content(modifier = modifier
             .fillMaxSize()
             .padding(horizontal = 16.dp))

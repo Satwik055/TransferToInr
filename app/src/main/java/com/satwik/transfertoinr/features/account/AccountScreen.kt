@@ -4,6 +4,7 @@ import androidx.annotation.DrawableRes
 import androidx.collection.mutableObjectIntMapOf
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,36 +34,48 @@ import com.satwik.transfertoinr.core.designsystem.components.TTFTextHeader
 import com.satwik.transfertoinr.core.designsystem.theme.LightGrey
 import com.satwik.transfertoinr.core.designsystem.theme.VeryLightGrey
 import com.satwik.transfertoinr.core.designsystem.theme.fontFamily
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun AccountScreen(modifier: Modifier = Modifier) {
+
+    val viewModel = koinViewModel<AccountsScreenViewModel>()
     Column (
         modifier = modifier.fillMaxSize()
     ){
         TTFTextHeader(text = "Account")
-        Content(modifier.padding(16.dp))
+        Content(modifier.padding(16.dp), viewModel)
 
     }
 
 }
 
 @Composable
-private fun Content(modifier: Modifier = Modifier) {
+private fun Content(modifier: Modifier = Modifier, viewModel: AccountsScreenViewModel) {
 
     Column ( modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally){
 
         UserInfoSection(profilePic = R.drawable.profile_pic, name = "Neha Singh", email = "nehasingh@gmail.com")
         Spacer(modifier = Modifier.height(50.dp))
         Column{
-            TTFBarButtons(text = "KYC", icon = R.drawable.ic_account, modifier = modifier
+            TTFBarButtons(text = "KYC", icon = R.drawable.ic_account, onClick = {}, modifier = modifier
                 .fillMaxWidth()
                 .padding(horizontal = 10.dp))
             HorizontalDivider(color = VeryLightGrey)
-            TTFBarButtons(text = "Logout", icon = R.drawable.ic_account, modifier = modifier
+            TTFBarButtons(
+                text = "Logout",
+                icon = R.drawable.ic_account,
+                modifier = modifier
                 .fillMaxWidth()
-                .padding(horizontal = 10.dp))
+                .padding(horizontal = 10.dp)
+                .background(Color.Red),
+                onClick = {
+                    println("viola")
+                    viewModel.logout()
+                },
+            )
             HorizontalDivider(color = VeryLightGrey)
-            TTFBarButtons(text = "Privacy Policy", icon = R.drawable.ic_account, modifier = modifier
+            TTFBarButtons(text = "Privacy Policy", icon = R.drawable.ic_account, onClick = {}, modifier = modifier
                 .fillMaxWidth()
                 .padding(horizontal = 10.dp))
         }
@@ -77,13 +90,14 @@ fun TTFBarButtons(
     modifier: Modifier = Modifier,
     textStyle: TextStyle = TextStyle(fontFamily = fontFamily, fontSize = 16.sp, fontWeight = FontWeight.Medium),
     text:String,
-    @DrawableRes icon:Int
-) {
+    @DrawableRes icon:Int,
+    onClick: () -> Unit
+    ) {
 
     Row (
-        modifier = modifier,
         horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier.clickable { onClick.invoke() }
     ){
         Text(text = text, style = textStyle)
         Icon(painter = painterResource(id = icon), contentDescription = null)

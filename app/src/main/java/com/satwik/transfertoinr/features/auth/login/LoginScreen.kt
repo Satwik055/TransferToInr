@@ -26,12 +26,15 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.satwik.transfertoinr.R
 import com.satwik.transfertoinr.core.designsystem.components.TTFButton
 import com.satwik.transfertoinr.core.designsystem.components.TTFTextField
 import com.satwik.transfertoinr.core.designsystem.theme.JungleGreen
 import com.satwik.transfertoinr.core.designsystem.theme.fontFamily
+import com.satwik.transfertoinr.features.auth.signup.SignupScreenViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun LoginScreen(modifier: Modifier = Modifier) {
@@ -44,6 +47,19 @@ fun LoginScreen(modifier: Modifier = Modifier) {
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+
+    val viewModel = koinViewModel<LoginScreenViewModel>()
+    val state = viewModel.loginScreenState.value
+
+    if(state.success){
+        println("Login Done")
+    }
+    if(state.isLoading){
+        println("loading...")
+    }
+    if(state.error.isNotEmpty()){
+        println("Error : ${state.error}")
+    }
 
 
     Column (Modifier.background(color = Color.White)){
@@ -62,7 +78,7 @@ fun LoginScreen(modifier: Modifier = Modifier) {
 
             Spacer(modifier = Modifier.height(100.dp))
 
-            TTFButton(text = "Submit", onClick = {})
+            TTFButton(text = "Submit", onClick = {viewModel.login(email, password)})
             Spacer(modifier = Modifier.weight(1f))
             SignupText(onClick = { /*TODO*/ }, modifier = Modifier.align(Alignment.CenterHorizontally).padding(bottom = 12.dp))
         }

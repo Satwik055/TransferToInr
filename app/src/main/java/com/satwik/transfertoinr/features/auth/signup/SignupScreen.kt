@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,23 +31,45 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.satwik.transfertoinr.R
+import com.satwik.transfertoinr.core.designsystem.components.ButtonType
 import com.satwik.transfertoinr.core.designsystem.components.TTFButton
 import com.satwik.transfertoinr.core.designsystem.components.TTFTextField
 import com.satwik.transfertoinr.core.designsystem.theme.JungleGreen
 import com.satwik.transfertoinr.core.designsystem.theme.fontFamily
+import com.satwik.transfertoinr.features.auth.login.LoginScreenViewModel
+import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.koinInject
+import org.koin.viewmodel.getViewModelKey
 
 @Composable
 fun SignupScreen(modifier: Modifier = Modifier) {
 
     val systemUiController = rememberSystemUiController()
-    SideEffect {
-        systemUiController.setStatusBarColor(
-            color = Color.White,
-            darkIcons = true
-        )
+//    SideEffect {
+//        systemUiController.setStatusBarColor(
+//            color = Color.White,
+//            darkIcons = true
+//        )
+//    }
+
+
+    val viewModel = koinViewModel<SignupScreenViewModel>()
+    val state = viewModel.signupScreenState.value
+
+    if(state.success){
+        println("Signup Done")
     }
+    if(state.isLoading){
+        println("loading...")
+    }
+    if(state.error.isNotEmpty()){
+        println("Error : ${state.error}")
+    }
+
 
 
     var name by remember { mutableStateOf("") }
@@ -73,7 +96,16 @@ fun SignupScreen(modifier: Modifier = Modifier) {
 
             Spacer(modifier = Modifier.height(40.dp))
 
-            TTFButton(text = "Submit", onClick = {})
+            TTFButton(
+                text = "Submit",
+                type = when(state.isLoading) {
+                    true -> ButtonType.LOADING
+                    false->ButtonType.REGULAR
+            },
+                onClick = {
+                viewModel.signup(email, password)
+            })
+
             Spacer(modifier = Modifier.height(5.dp))
             Text(text = "By signing up you agree our Privacy Policy and Terms and Conditions", fontFamily = fontFamily, fontSize = 12.sp, fontWeight = FontWeight.Normal, color = JungleGreen)
             Spacer(modifier = Modifier.weight(1f))

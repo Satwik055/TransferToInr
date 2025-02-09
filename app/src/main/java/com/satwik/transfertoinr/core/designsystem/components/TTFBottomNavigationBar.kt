@@ -31,7 +31,7 @@ import com.satwik.transfertoinr.core.designsystem.theme.fontFamily
 @Composable
 fun TTFBottomNavigationBar(
     selectedItem: Int,
-    onItemSelected: (Int) -> Unit,
+    onItemSelected: (Int) ->Unit,
 ) {
     val items = listOf("Home", "Transfer", "Transaction", "Recipient", "Account")
     val icons = listOf(

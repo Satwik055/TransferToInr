@@ -1,6 +1,7 @@
 package com.satwik.transfertoinr.core.designsystem.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,7 +20,7 @@ import com.satwik.transfertoinr.core.designsystem.theme.JungleGreen
 import com.satwik.transfertoinr.core.designsystem.theme.White
 
 @Composable
-fun TTFIconHeader(modifier: Modifier = Modifier) {
+fun TTFIconHeader(modifier: Modifier = Modifier, helpButtonOnClick: () -> Unit) {
     Row (
         modifier = modifier
             .background(color = JungleGreen)
@@ -36,7 +37,7 @@ fun TTFIconHeader(modifier: Modifier = Modifier) {
             painter = painterResource(id = R.drawable.ic_message),
             tint = Color.White,
             contentDescription = null,
-            modifier = Modifier.align(Alignment.CenterVertically).size(30.dp)
+            modifier = Modifier.align(Alignment.CenterVertically).size(30.dp).clickable { helpButtonOnClick.invoke()  }
         )
     }
 
