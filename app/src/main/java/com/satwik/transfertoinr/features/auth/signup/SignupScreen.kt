@@ -89,7 +89,7 @@ fun SignupScreen(modifier: Modifier = Modifier, navController: NavController) {
             Text(text = "SIGNUP", fontFamily = fontFamily, fontSize = 35.sp, fontWeight = FontWeight.Bold, color = JungleGreen)
             Text(text = "Please signup to continue", fontFamily = fontFamily, fontSize = 15.sp, fontWeight = FontWeight.SemiBold, color = JungleGreen)
             Spacer(modifier = Modifier.height(40.dp))
-            Column(verticalArrangement = Arrangement.spacedBy(1.dp)){
+            Column(verticalArrangement = Arrangement.spacedBy(5.dp)){
                 TTFTextField(text = name, onValueChange = {name=it}, placeholder = "Name")
                 TTFTextField(text = phone, onValueChange = {phone=it}, placeholder = "Phone", keyboardType = KeyboardType.Phone)
                 TTFTextField(text = email, onValueChange = {email=it}, placeholder = "Email", keyboardType = KeyboardType.Email)
@@ -105,7 +105,7 @@ fun SignupScreen(modifier: Modifier = Modifier, navController: NavController) {
                     false->ButtonType.REGULAR
             },
                 onClick = {
-                viewModel.signup(email, password)
+                viewModel.signup(email, password, name, phone)
             })
 
             Spacer(modifier = Modifier.height(5.dp))

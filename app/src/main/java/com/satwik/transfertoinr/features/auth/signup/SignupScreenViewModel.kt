@@ -15,13 +15,13 @@ class SignupScreenViewModel(
     private val _signupScreenState = mutableStateOf(SignupScreenState())
     val signupScreenState: State<SignupScreenState> = _signupScreenState
 
-    fun signup(email:String, password:String){
+    fun signup(email:String, password:String, name:String, phone:String){
         viewModelScope.launch {
 
             _signupScreenState.value = SignupScreenState(isLoading = true)
 
             try{
-                authRepository.signup(email, password)
+                authRepository.signup(email, password, name, phone)
                 _signupScreenState.value = SignupScreenState(success = true)
 
             }

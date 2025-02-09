@@ -1,6 +1,7 @@
 package com.satwik.transfertoinr.core.designsystem.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -14,6 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.satwik.transfertoinr.core.designsystem.theme.EerieBlack
 import com.satwik.transfertoinr.core.designsystem.theme.JungleGreen
@@ -50,7 +52,7 @@ fun TTFTextField(
             errorBorderColor = Color.Red,
         ),
         singleLine = true,
-        supportingText = { Text(text = errorText,fontFamily = font, color = Color.Red, fontSize = 13.sp) },
+        supportingText = { Text(text = errorText,fontFamily = font, color = Color.Red, fontSize = 13.sp, fontWeight = FontWeight.Medium)},
         textStyle = TextStyle(fontFamily = font, fontWeight = FontWeight.Normal, fontSize = 16.sp, color = JungleGreen),
         placeholder = {
             Text(
