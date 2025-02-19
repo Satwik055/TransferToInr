@@ -55,7 +55,18 @@ private fun Content(modifier: Modifier = Modifier, viewModel: AccountsScreenView
 
     Column ( modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally){
 
-        UserInfoSection(profilePic = R.drawable.profile_pic, name = "Neha Singh", email = "nehasingh@gmail.com")
+
+        if(viewModel.userInfoState.value.isLoading){
+            println("Loading...")
+        }
+        if(viewModel.userInfoState.value.error.isNotEmpty()){
+            println(viewModel.userInfoState.value.error)
+        }
+        else{
+            println(viewModel.userInfoState.value.userInfo)
+        }
+
+        UserInfoSection(profilePic = R.drawable.profile_pic, name = viewModel.userInfoState.value.userInfo.name, email = viewModel.userInfoState.value.userInfo.email)
         Spacer(modifier = Modifier.height(50.dp))
         Column{
             TTFBarButtons(text = "KYC", icon = R.drawable.ic_account, onClick = {}, modifier = modifier

@@ -1,7 +1,11 @@
 package com.satwik.transfertoinr.core.di
 
 import android.app.Application
+import com.satwik.transfertoinr.data.account.accountModule
 import com.satwik.transfertoinr.data.auth.authModule
+import com.satwik.transfertoinr.data.recipient.recipientModule
+import com.satwik.transfertoinr.data.transaction.transactionModule
+import com.satwik.transfertoinr.data.transfer.transferModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -14,7 +18,11 @@ class MyApplication:Application(){
             androidContext(this@MyApplication)
             modules(
                 supabaseModule,
-                authModule
+                authModule,
+                recipientModule,
+                transferModule,
+                transactionModule,
+                accountModule
             )
         }
     }

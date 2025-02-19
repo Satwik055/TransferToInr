@@ -10,6 +10,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -46,6 +47,8 @@ import com.satwik.transfertoinr.features.auth.login.LoginScreen
 import com.satwik.transfertoinr.features.auth.login.LoginScreenViewModel
 import com.satwik.transfertoinr.features.auth.signup.SignupScreen
 import com.satwik.transfertoinr.features.home.HomeScreen
+import com.satwik.transfertoinr.features.privacypolicy.PrivacyPolicyScreen
+import com.satwik.transfertoinr.features.recipient.AddRecipientScreen
 import com.satwik.transfertoinr.features.recipient.RecipientScreen
 import com.satwik.transfertoinr.features.transaction.TransactionScreen
 import com.satwik.transfertoinr.features.transfer.TransferScreen
@@ -65,7 +68,7 @@ class MainActivity : ComponentActivity() {
                 setKeepOnScreenCondition{!viewModel.isReady.value}
         }
         setContent {
-//            val viewModel = koinViewModel<MainActivityViewModel>()
+
             val state = viewModel.mainActivityState.value
             val startDestination:Any = if(state.isUserLoggedIn){ ScreenMain } else{ ScreenSignup }
             val navController = rememberNavController()
@@ -75,10 +78,16 @@ class MainActivity : ComponentActivity() {
                     SignupScreen(navController = navController)
                 }
                 composable<ScreenMain> {
-                    MainScreen()
+                    MainScreen(navController = navController)
                 }
                 composable<ScreenLogin> {
                     LoginScreen()
+                }
+                composable<ScreenRecipient> {
+                    RecipientScreen(internalPadding = PaddingValues(0.dp), navController = navController)
+                }
+                composable<ScreenAddRecipient> {
+                    AddRecipientScreen()
                 }
             }
         }
@@ -87,7 +96,7 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-fun MainScreen(modifier: Modifier = Modifier) {
+fun MainScreen(modifier: Modifier = Modifier, navController: NavController) {
     var selectedIndex by remember { mutableIntStateOf(0) }
 
     Scaffold(
@@ -100,7 +109,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
             0 -> HomeScreen()
             1 -> TransferScreen()
             2 -> TransactionScreen()
-            3 -> RecipientScreen(internalPadding = it)
+            3 -> RecipientScreen(internalPadding = it, navController = navController )
             4 -> AccountScreen()
         }
     }
@@ -117,6 +126,11 @@ object ScreenSignup
 @Serializable
 object ScreenLogin
 
+@Serializable
+object ScreenRecipient
+
+@Serializable
+object ScreenAddRecipient
 
 
 

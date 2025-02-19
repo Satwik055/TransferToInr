@@ -56,6 +56,9 @@ dependencies {
     //Splash Screen API
     implementation(libs.splash.screen.api)
 
+    //Coil
+    implementation(libs.coil)
+
     //Coroutines
     implementation(libs.bundles.coroutines)
 

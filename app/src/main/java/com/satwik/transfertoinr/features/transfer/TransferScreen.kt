@@ -31,6 +31,7 @@ import com.satwik.transfertoinr.core.designsystem.components.TTFTextHeader
 import com.satwik.transfertoinr.core.designsystem.theme.LightGrey
 import com.satwik.transfertoinr.core.designsystem.theme.VeryLightGrey
 import com.satwik.transfertoinr.core.designsystem.theme.fontFamily
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun TransferScreen(modifier: Modifier = Modifier) {
@@ -50,8 +51,13 @@ val style2 = TextStyle(fontFamily = fontFamily, fontSize = 14.sp, fontWeight = F
 @Composable
 private fun Content(modifier: Modifier = Modifier) {
 
+    val viewModel = koinViewModel<TransferScreenViewModel>()
     var amount by remember { mutableStateOf("100") }
     var selectedCurrency by remember { mutableStateOf("Euro" to "EUR") }
+    val transactionCode = generateTransactionCode()
+
+    val recipientList = viewModel.recipientsState.value.recipients.map { it.name to it.bank }
+
     val currencies = listOf(
         "Euro" to "EUR",
         "US Dollar" to "USD",
@@ -59,12 +65,9 @@ private fun Content(modifier: Modifier = Modifier) {
         "Canadian Dollar" to "CAD",
         "Australian Dollar" to "AUD"
     )
-    val recipient = listOf(
-        "Rahul Roy" to "Axis Bank",
-        "Monika Seth" to "HDFC Bank",
-        "Ruchi Patidar" to "SBI Bank",
-        "Suman Sharma" to "Induslnd Bank",
-    )
+
+    println(recipientList)
+
     var selectedRecipient by remember { mutableStateOf("Rahul Roy" to "Axis Bank") }
 
     Column(
@@ -94,7 +97,7 @@ private fun Content(modifier: Modifier = Modifier) {
         Column(verticalArrangement = Arrangement.spacedBy(7.dp)) {
             Text(text = "Select a Recipient", style = style)
             TTFDropdown(
-                items = recipient,
+                items = recipientList,
                 modifier = Modifier.fillMaxWidth(),
                 selectedItem = selectedRecipient,
                 onItemSelected = { selectedRecipient = it }
@@ -113,11 +116,11 @@ private fun Content(modifier: Modifier = Modifier) {
 
         Column(verticalArrangement = Arrangement.spacedBy(7.dp)) {
             Text(text = "Enter this ID in  description while making payment", style = style)
-            TransactionIDBox(id = "FE3XDV", modifier = Modifier.fillMaxWidth())
+            TransactionIDBox(id = transactionCode, modifier = Modifier.fillMaxWidth())
 
         }
         
-        TTFButton(text = "Submit", onClick = {})
+        TTFButton(text = "Submit", onClick = {viewModel.addTransaction(transactionCode, amount.toInt(), amount.toInt().inc(), "USD", "email")})
     }
 }
 
@@ -156,3 +159,11 @@ private fun BankDetailsBox(
     }
 
 }
+
+fun generateTransactionCode(): String {
+    val chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+    return (1..6)
+        .map { chars.random() }
+        .joinToString("")
+}
+

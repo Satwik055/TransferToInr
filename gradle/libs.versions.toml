@@ -20,6 +20,8 @@ hilt-navigation-compose = "1.2.0"
 googleGmsGoogleServices = "4.4.2"
 firebaseAuth = "23.2.0"
 navigationCompose = "2.8.0-beta05"
+coil = "2.5.0"
+
 
 
 [libraries]
@@ -58,6 +60,9 @@ kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 
 #Accompanisr
 accompanist = {module="com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist"}
+
+
+coil= { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
