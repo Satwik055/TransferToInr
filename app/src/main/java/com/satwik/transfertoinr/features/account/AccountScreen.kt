@@ -29,6 +29,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.satwik.transfertoinr.R
 import com.satwik.transfertoinr.core.designsystem.components.TTFTextHeader
 import com.satwik.transfertoinr.core.designsystem.theme.LightGrey
@@ -37,7 +38,7 @@ import com.satwik.transfertoinr.core.designsystem.theme.fontFamily
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun AccountScreen(modifier: Modifier = Modifier) {
+fun AccountScreen(modifier: Modifier = Modifier, navController: NavController) {
 
     val viewModel = koinViewModel<AccountsScreenViewModel>()
     Column (

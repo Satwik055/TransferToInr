@@ -1,32 +1,43 @@
 package com.satwik.transfertoinr.features.home
 
+import AutoSlidingCarousel
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
+import com.google.accompanist.pager.ExperimentalPagerApi
 import com.satwik.transfertoinr.core.designsystem.components.Carousell
 import com.satwik.transfertoinr.core.designsystem.components.RateTable
 import com.satwik.transfertoinr.core.designsystem.components.TTFIconHeader
 import com.satwik.transfertoinr.core.designsystem.theme.JungleGreen
 import com.satwik.transfertoinr.core.designsystem.theme.fontFamily
+import com.satwik.transfertoinr.core.main.ScreenAddRecipient
+import com.satwik.transfertoinr.core.main.ScreenHelp
 import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
+fun HomeScreen(modifier: Modifier = Modifier, navController: NavController) {
     Column (
         modifier.fillMaxSize()
     ){
-        TTFIconHeader(helpButtonOnClick = {})
+        TTFIconHeader(helpButtonOnClick = {navController.navigate(ScreenHelp)})
         Content(
             modifier = modifier
                 .padding(16.dp)
@@ -35,17 +46,35 @@ fun HomeScreen(modifier: Modifier = Modifier) {
     }
 }
 
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 private fun Content(modifier: Modifier = Modifier) {
 
     val viewModel =  koinViewModel<HomeScreenViewModel>()
-
     val style = TextStyle(fontFamily = fontFamily, fontWeight = FontWeight.SemiBold, fontSize = 37.sp, color = JungleGreen)
+    val images:List<String> = listOf(
+        "https://as2.ftcdn.net/v2/jpg/04/86/72/71/1000_F_486727138_LIbtjQYhz2nwYFoziXPeUIFSpdz5tiHZ.jpg",
+        "https://img.freepik.com/free-vector/flat-abstract-sales-banner-with-offer_23-2149020199.jpg",
+        "https://img.freepik.com/premium-vector/extra-discount-3d-sale-banner-template-design-background_416835-474.jpg"
+    )
+
     Column (modifier = modifier){
         Text(text = "Hey ${viewModel.userInfoState.value.userInfo.name}", style=style)
-        Spacer(modifier = Modifier.height(20.dp))
-        Carousell()
-        Spacer(modifier = Modifier.height(30.dp))
+        Spacer(modifier = Modifier.height(10.dp))
+
+        AutoSlidingCarousel(
+            itemsCount = images.size,
+            itemContent = { index ->
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current).data(images[index]).build(),
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.height(200.dp)
+                )
+            }
+        )
+
+        Spacer(modifier = Modifier.height(10.dp))
         Text(
             text = "We provide best exchange rates",
             style=style.copy(fontSize = 18.sp),

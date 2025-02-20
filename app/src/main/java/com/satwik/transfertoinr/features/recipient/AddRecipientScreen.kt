@@ -18,13 +18,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.satwik.transfertoinr.core.designsystem.components.TTFButton
 import com.satwik.transfertoinr.core.designsystem.components.TTFTextField
 import com.satwik.transfertoinr.core.designsystem.components.TTFTextHeader
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun AddRecipientScreen(modifier: Modifier = Modifier) {
+fun AddRecipientScreen(modifier: Modifier = Modifier, navController: NavController) {
 
     val viewModel = koinViewModel<RecipientViewModel>()
 

@@ -71,6 +71,9 @@ dependencies {
     //Accompanist
     implementation(libs.accompanist)
 
+
+    implementation ("com.google.accompanist:accompanist-pager:0.22.0-rc")
+
     implementation("io.insert-koin:koin-android:4.0.2")
     implementation("io.insert-koin:koin-androidx-compose:4.0.2")
     implementation("io.insert-koin:koin-androidx-navigation:4.0.2")

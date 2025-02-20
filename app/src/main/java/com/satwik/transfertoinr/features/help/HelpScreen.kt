@@ -14,20 +14,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.satwik.transfertoinr.R
+import com.satwik.transfertoinr.core.designsystem.components.TTFTextHeader
 import com.satwik.transfertoinr.core.designsystem.theme.JungleGreen
 import com.satwik.transfertoinr.core.designsystem.theme.White
 
 @Composable
-fun HelpScreen(modifier: Modifier = Modifier) {
+fun HelpScreen(modifier: Modifier = Modifier, navController: NavController) {
     Box (
         modifier=Modifier.fillMaxSize()
     ){
-        Row (
-            modifier = Modifier.background(color = JungleGreen).fillMaxWidth().height(60.dp).padding(horizontal = 16.dp)
-        ){
-            Icon(modifier = Modifier.align(Alignment.CenterVertically).size(35.dp), painter = painterResource(id = R.drawable.ic_logo), tint = White, contentDescription = null)
-        }
+        TTFTextHeader(text = "Help & Support")
+
         Content()
     }
 }

@@ -43,27 +43,27 @@ fun RateTable() {
     val textStyle = TextStyle(fontSize = 13.sp, fontWeight = FontWeight.Normal, fontFamily = fontFamily)
 
     Column(
-        modifier = Modifier
-            .border(1.dp, JungleGreen, RoundedCornerShape(8.dp))
+        modifier = Modifier.border(1.dp, JungleGreen, RoundedCornerShape(8.dp))
     ) {
         // Header row
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(JungleGreen, shape = RoundedCornerShape(topEnd = 8.dp, topStart = 8.dp)),
+                .background(JungleGreen, shape = RoundedCornerShape(topEnd = 8.dp, topStart = 8.dp))
+            ,
             horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 text = "Provider",
                 style = textStyle.copy(fontWeight = FontWeight.Medium, color = Color.White),
-                modifier = Modifier.weight(1f).padding(16.dp)
+                modifier = Modifier.weight(1f).padding(vertical = 16.dp, horizontal = 18.dp)
             )
             tableData[0].forEach { header ->
                 Text(
                     text = header,
                     style = textStyle.copy(fontWeight = FontWeight.Medium, color = Color.White),
-                    modifier = Modifier.weight(1f).padding(16.dp)
+                    modifier = Modifier.weight(1f).padding(vertical = 16.dp, horizontal = 20.dp)
                 )
             }
         }
@@ -86,7 +86,7 @@ fun RateTable() {
                     Text(
                         text = cell,
                         style = textStyle,
-                        modifier = Modifier.weight(1f).padding(16.dp),
+                        modifier = Modifier.weight(1f).padding(vertical = 16.dp, horizontal = 20.dp),
                         color = JungleGreen
                     )
                 }

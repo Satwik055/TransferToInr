@@ -40,12 +40,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.satwik.transfertoinr.R
 import com.satwik.transfertoinr.core.designsystem.components.TTFBottomNavigationBar
+import com.satwik.transfertoinr.core.designsystem.components.TTFBottomNavigationBarz
 import com.satwik.transfertoinr.core.designsystem.theme.LightGrey
 import com.satwik.transfertoinr.core.designsystem.theme.Typography
 import com.satwik.transfertoinr.features.account.AccountScreen
 import com.satwik.transfertoinr.features.auth.login.LoginScreen
 import com.satwik.transfertoinr.features.auth.login.LoginScreenViewModel
 import com.satwik.transfertoinr.features.auth.signup.SignupScreen
+import com.satwik.transfertoinr.features.help.HelpScreen
 import com.satwik.transfertoinr.features.home.HomeScreen
 import com.satwik.transfertoinr.features.privacypolicy.PrivacyPolicyScreen
 import com.satwik.transfertoinr.features.recipient.AddRecipientScreen
@@ -87,7 +89,16 @@ class MainActivity : ComponentActivity() {
                     RecipientScreen(internalPadding = PaddingValues(0.dp), navController = navController)
                 }
                 composable<ScreenAddRecipient> {
-                    AddRecipientScreen()
+                    AddRecipientScreen(navController = navController)
+                }
+                composable<ScreenHelp> {
+                    HelpScreen(navController = navController)
+                }
+                composable<ScreenHelp> {
+                    AccountScreen(navController = navController)
+                }
+                composable<ScreenHelp> {
+                    PrivacyPolicyScreen(navController = navController)
                 }
             }
         }
@@ -102,15 +113,15 @@ fun MainScreen(modifier: Modifier = Modifier, navController: NavController) {
     Scaffold(
         modifier = modifier.background(color = Color.Red),
         bottomBar = {
-            TTFBottomNavigationBar(selectedIndex) { selectedIndex = it }
+            TTFBottomNavigationBarz(selectedIndex) { selectedIndex = it }
         }
     ) {
         when (selectedIndex) {
-            0 -> HomeScreen()
+            0 -> HomeScreen(navController = navController)
             1 -> TransferScreen()
             2 -> TransactionScreen()
             3 -> RecipientScreen(internalPadding = it, navController = navController )
-            4 -> AccountScreen()
+            4 -> AccountScreen(navController = navController)
         }
     }
 
@@ -131,6 +142,9 @@ object ScreenRecipient
 
 @Serializable
 object ScreenAddRecipient
+
+@Serializable
+object ScreenHelp
 
 
 
