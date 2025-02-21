@@ -30,12 +30,17 @@ class RecipientViewModel(
         }
     }
 
+    fun deleteRecipientById(id:Int){
+        viewModelScope.launch {
+            recipientRepository.deleteRecipientById(id)
+        }
+    }
+
     private fun getAllRecipients(){
         viewModelScope.launch {
             _recipientsState.value = RecipientsState(isLoading = true)
             try {
                 val recipients = recipientRepository.getAllRecipients()
-                println(recipients)
                 _recipientsState.value = RecipientsState(recipients = recipients)
 
             }

@@ -57,7 +57,6 @@ fun TTFBottomNavigationBar(
 ) {
     val interactionSource = remember { MutableInteractionSource() }
 
-
     val items = listOf("Home", "Transfer", "Transaction", "Recipient", "Account")
     val icons = listOf(
         R.drawable.ic_home,
@@ -116,15 +115,8 @@ fun TTFBottomNavigationBarz(
     onItemSelected: (Int) -> Unit,
 ) {
     val items = listOf("Home", "Transfer", "Transaction", "Recipient", "Account")
-    val icons = listOf(
-        R.drawable.ic_home,
-        R.drawable.ic_plane,
-        R.drawable.ic_page,
-        R.drawable.ic_people,
-        R.drawable.ic_account
-    )
 
-    val picons = listOf(
+    val icons = listOf(
         R.drawable.ic_home to R.drawable.ic_home_filled,
         R.drawable.ic_plane to R.drawable.ic_plane_filled,
         R.drawable.ic_page to R.drawable.ic_page_filled,
@@ -135,9 +127,7 @@ fun TTFBottomNavigationBarz(
     Column {
         HorizontalDivider()
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(end = 10.dp, start = 10.dp, bottom = 10.dp),
+            modifier = Modifier.fillMaxWidth().padding(end = 10.dp, start = 10.dp, bottom = 10.dp),
             horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -155,7 +145,7 @@ fun TTFBottomNavigationBarz(
                     )
                     Spacer(modifier = Modifier.height(10.dp))
                     Icon(
-                        painterResource(id = if (selectedItem == index) picons[index].second else picons[index].first),
+                        painterResource(id = if (selectedItem == index) icons[index].second else icons[index].first),
                         contentDescription = title,
                         tint = if (selectedItem == index) JungleGreen else LightGrey,
                         modifier = Modifier.size(22.dp)

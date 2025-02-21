@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -50,37 +49,20 @@ import org.koin.viewmodel.getViewModelKey
 @Composable
 fun SignupScreen(modifier: Modifier = Modifier, navController: NavController) {
 
-//    val systemUiController = rememberSystemUiController()
-//    SideEffect {
-//        systemUiController.setStatusBarColor(
-//            color = Color.White,
-//            darkIcons = true
-//        )
-//    }
-
-
     val viewModel = koinViewModel<SignupScreenViewModel>()
     val state = viewModel.signupScreenState.value
-
-    if(state.success){
-        println("Signup Done")
-    }
-    if(state.isLoading){
-        println("loading...")
-    }
-    if(state.error.isNotEmpty()){
-        println("Error : ${state.error}")
-    }
-
-
 
     var name by remember { mutableStateOf("") }
     var phone by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
-
-    Column (Modifier.background(color = Color.White)){
+    Column{
+        when {
+            state.isLoading -> println("Loading...")
+            state.error.isNotEmpty() -> println("Error: ${state.error}")
+            state.success -> println("Signup Done")
+        }
 
         Spacer(modifier = Modifier.height(10.dp))
         Icon(painter = painterResource(id = R.drawable.ic_carret), tint = JungleGreen, contentDescription = null, modifier = Modifier.padding(start = 16.dp, end = 25.dp, top = 16.dp, bottom = 16.dp))
@@ -93,7 +75,7 @@ fun SignupScreen(modifier: Modifier = Modifier, navController: NavController) {
                 TTFTextField(text = name, onValueChange = {name=it}, placeholder = "Name")
                 TTFTextField(text = phone, onValueChange = {phone=it}, placeholder = "Phone", keyboardType = KeyboardType.Phone)
                 TTFTextField(text = email, onValueChange = {email=it}, placeholder = "Email", keyboardType = KeyboardType.Email)
-                TTFTextField(text = password, onValueChange = {password=it}, placeholder = "Password", keyboardType = KeyboardType.Password)
+                TTFTextField(text = password, onValueChange = {password=it}, placeholder = "Password", keyboardType = KeyboardType.Password, isPassword = true)
             }
 
             Spacer(modifier = Modifier.height(40.dp))
@@ -102,7 +84,7 @@ fun SignupScreen(modifier: Modifier = Modifier, navController: NavController) {
                 text = "Submit",
                 type = when(state.isLoading) {
                     true -> ButtonType.LOADING
-                    false->ButtonType.REGULAR
+                    false-> ButtonType.REGULAR
             },
                 onClick = {
                 viewModel.signup(email, password, name, phone)

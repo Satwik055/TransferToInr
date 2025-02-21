@@ -2,6 +2,7 @@
 <resources>
 
     <style name="Theme.TransferToInr" parent="android:Theme.Material.Light.NoActionBar" >
+        <item name="android:windowBackground">#FFFFFF</item>
         <item name="android:statusBarColor">@color/jungle_green</item>
     </style>
 

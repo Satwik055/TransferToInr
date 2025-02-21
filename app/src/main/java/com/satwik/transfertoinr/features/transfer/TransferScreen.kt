@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.satwik.transfertoinr.core.designsystem.components.TTFButton
 import com.satwik.transfertoinr.core.designsystem.components.TTFDropdown
+import com.satwik.transfertoinr.core.designsystem.components.TTFDropdownxy
 import com.satwik.transfertoinr.core.designsystem.components.TTFTextField
 import com.satwik.transfertoinr.core.designsystem.components.TTFTextHeader
 import com.satwik.transfertoinr.core.designsystem.theme.LightGrey
@@ -39,9 +40,7 @@ fun TransferScreen(modifier: Modifier = Modifier) {
         modifier.fillMaxSize()
     ){
         TTFTextHeader(text = "Transfer")
-        Content(modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp))
+        Content(modifier = Modifier.fillMaxSize().padding(16.dp))
     }
 }
 
@@ -52,7 +51,7 @@ val style2 = TextStyle(fontFamily = fontFamily, fontSize = 14.sp, fontWeight = F
 private fun Content(modifier: Modifier = Modifier) {
 
     val viewModel = koinViewModel<TransferScreenViewModel>()
-    var amount by remember { mutableStateOf("100") }
+    var amount by remember { mutableStateOf("") }
     var selectedCurrency by remember { mutableStateOf("Euro" to "EUR") }
     val transactionCode = generateTransactionCode()
 
@@ -66,9 +65,11 @@ private fun Content(modifier: Modifier = Modifier) {
         "Australian Dollar" to "AUD"
     )
 
-    println(recipientList)
-
-    var selectedRecipient by remember { mutableStateOf("Rahul Roy" to "Axis Bank") }
+    var selectedRecipient by remember {
+        mutableStateOf(
+            if (recipientList.isEmpty()) Pair("", "") else recipientList.first()
+        )
+    }
 
     Column(
         modifier = modifier,
@@ -89,7 +90,7 @@ private fun Content(modifier: Modifier = Modifier) {
             TTFTextField(
                 text = amount,
                 onValueChange = { amount = it },
-                placeholder = "",
+                placeholder = "Eg: 100",
                 keyboardType = KeyboardType.Number
             )
         }
@@ -117,7 +118,6 @@ private fun Content(modifier: Modifier = Modifier) {
         Column(verticalArrangement = Arrangement.spacedBy(7.dp)) {
             Text(text = "Enter this ID in  description while making payment", style = style)
             TransactionIDBox(id = transactionCode, modifier = Modifier.fillMaxWidth())
-
         }
         
         TTFButton(text = "Submit", onClick = {viewModel.addTransaction(transactionCode, amount.toInt(), amount.toInt().inc(), "USD", "email")})

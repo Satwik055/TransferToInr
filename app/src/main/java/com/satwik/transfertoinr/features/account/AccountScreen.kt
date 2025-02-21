@@ -35,6 +35,8 @@ import com.satwik.transfertoinr.core.designsystem.components.TTFTextHeader
 import com.satwik.transfertoinr.core.designsystem.theme.LightGrey
 import com.satwik.transfertoinr.core.designsystem.theme.VeryLightGrey
 import com.satwik.transfertoinr.core.designsystem.theme.fontFamily
+import com.satwik.transfertoinr.core.main.ScreenPrivacyPolicy
+import com.satwik.transfertoinr.core.main.ScreenSignup
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -45,14 +47,14 @@ fun AccountScreen(modifier: Modifier = Modifier, navController: NavController) {
         modifier = modifier.fillMaxSize()
     ){
         TTFTextHeader(text = "Account")
-        Content(modifier.padding(16.dp), viewModel)
+        Content(modifier.padding(16.dp), viewModel, navController)
 
     }
 
 }
 
 @Composable
-private fun Content(modifier: Modifier = Modifier, viewModel: AccountsScreenViewModel) {
+private fun Content(modifier: Modifier = Modifier, viewModel: AccountsScreenViewModel, navController: NavController) {
 
     Column ( modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally){
 
@@ -70,25 +72,27 @@ private fun Content(modifier: Modifier = Modifier, viewModel: AccountsScreenView
         UserInfoSection(profilePic = R.drawable.profile_pic, name = viewModel.userInfoState.value.userInfo.name, email = viewModel.userInfoState.value.userInfo.email)
         Spacer(modifier = Modifier.height(50.dp))
         Column{
-            TTFBarButtons(text = "KYC", icon = R.drawable.ic_account, onClick = {}, modifier = modifier
-                .fillMaxWidth()
-                .padding(horizontal = 10.dp))
+            TTFBarButtons(
+                text = "KYC",
+                icon = R.drawable.ic_kyc,
+                onClick = {},
+                modifier = modifier.fillMaxWidth().padding(horizontal = 10.dp))
             HorizontalDivider(color = VeryLightGrey)
             TTFBarButtons(
                 text = "Logout",
-                icon = R.drawable.ic_account,
-                modifier = modifier
-                .fillMaxWidth()
-                .padding(horizontal = 10.dp),
+                icon = R.drawable.ic_logout,
+                modifier = modifier.fillMaxWidth().padding(horizontal = 10.dp),
                 onClick = {
-                    println("viola")
                     viewModel.logout()
-                },
+                    navController.navigate(ScreenSignup)
+                          },
             )
             HorizontalDivider(color = VeryLightGrey)
-            TTFBarButtons(text = "Privacy Policy", icon = R.drawable.ic_account, onClick = {}, modifier = modifier
-                .fillMaxWidth()
-                .padding(horizontal = 10.dp))
+            TTFBarButtons(
+                text = "Privacy Policy",
+                icon = R.drawable.ic_scroll,
+                onClick = {navController.navigate(ScreenPrivacyPolicy)},
+                modifier = modifier.fillMaxWidth().padding(horizontal = 10.dp))
         }
     }
 

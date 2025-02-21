@@ -17,13 +17,10 @@ class SignupScreenViewModel(
 
     fun signup(email:String, password:String, name:String, phone:String){
         viewModelScope.launch {
-
             _signupScreenState.value = SignupScreenState(isLoading = true)
-
             try{
                 authRepository.signup(email, password, name, phone)
                 _signupScreenState.value = SignupScreenState(success = true)
-
             }
             catch (e:Exception){
                 _signupScreenState.value = SignupScreenState(error = e.message.toString())

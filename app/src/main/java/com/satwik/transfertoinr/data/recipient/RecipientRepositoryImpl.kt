@@ -27,21 +27,6 @@ class RecipientRepositoryImpl(private val client:SupabaseClient):RecipientReposi
 
     override suspend fun getAllRecipients(): List<Recipient> {
 
-
-//        val uid1 = client.auth.currentUserOrNull()?.id
-//        val response1 = client.postgrest.rpc(
-//            function = "addttfuser",
-//            parameters = buildJsonObject {
-//                put("p_uid", uid1)
-//            }
-//        )
-//        val jsonString1 = response1.data
-//        val userInfo: UserInfo = Json.decodeFromString(jsonString1)
-//
-//        println(userInfo)
-
-
-
         val email = client.auth.currentUserOrNull()?.email
 
         val response = client.postgrest.rpc(
@@ -50,8 +35,25 @@ class RecipientRepositoryImpl(private val client:SupabaseClient):RecipientReposi
                 put("p_email", email)
             }
         )
+
         val jsonString = response.data
         val recipients: List<Recipient> = Json.decodeFromString(jsonString)
-        return recipients
+
+        if(recipients.isEmpty()){
+            throw Exception("No Recipients Found")
+        }
+        else{
+            return recipients
+        }
+
+    }
+
+    override suspend fun deleteRecipientById(id: Int) {
+        val response = client.postgrest.rpc(
+            function = "delete_recipient_by_id",
+            parameters = buildJsonObject {
+                put("p_id", id)
+            }
+        )
     }
 }

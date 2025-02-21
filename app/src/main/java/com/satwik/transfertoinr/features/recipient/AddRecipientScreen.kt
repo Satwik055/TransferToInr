@@ -6,12 +6,17 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,6 +25,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.satwik.transfertoinr.core.designsystem.components.TTFButton
+import com.satwik.transfertoinr.core.designsystem.components.TTFTextButtonHeader
 import com.satwik.transfertoinr.core.designsystem.components.TTFTextField
 import com.satwik.transfertoinr.core.designsystem.components.TTFTextHeader
 import org.koin.androidx.compose.koinViewModel
@@ -35,15 +41,11 @@ fun AddRecipientScreen(modifier: Modifier = Modifier, navController: NavControll
     var bank by remember { mutableStateOf("") }
 
     Box(
-        Modifier
-            .fillMaxSize()
-            .padding(bottom = 16.dp)){
-        TTFTextHeader(text = "Add Recipient")
+        Modifier.fillMaxSize().padding(bottom = 16.dp)){
+        TTFTextButtonHeader(text = "Add Recipient", onBackClick = {navController.popBackStack()})
 
-        Column (
-            Modifier
-                .padding(16.dp)
-                .align(Alignment.Center)){
+        Column(
+            Modifier.padding(vertical = 90.dp, horizontal = 16.dp).align(Alignment.TopCenter)){
             TTFTextField(text = name, onValueChange = {name=it}, placeholder = "Recipient Name")
             TTFTextField(text = accountNumber, onValueChange = {accountNumber=it}, placeholder = "Account Number")
             TTFTextField(text = ifscCode, onValueChange = {ifscCode=it}, placeholder = "IFSC Code")
@@ -53,10 +55,11 @@ fun AddRecipientScreen(modifier: Modifier = Modifier, navController: NavControll
         TTFButton(
             modifier = Modifier
             .align(Alignment.BottomCenter)
-            .padding(horizontal = 16.dp),
+            .padding(vertical = 20.dp, horizontal = 16.dp),
             text = "Add",
             onClick = {
                 viewModel.addRecipient(name = name, accountNumber = accountNumber, ifscCode = ifscCode, bank = bank)
+                navController.popBackStack()
             }
         )
     }

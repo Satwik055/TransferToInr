@@ -22,6 +22,16 @@ class TransactionRepositoryImpl(private val client: SupabaseClient):TransactionR
         )
         val jsonString = response.data
         val transactions: List<Transaction> = Json.decodeFromString(jsonString)
-        return transactions
+
+        if(transactions.isEmpty()){
+            throw Exception("No Transactions Found")
+        }
+        else{
+            return transactions
+        }
+
+
+
+
     }
 }

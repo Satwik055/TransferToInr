@@ -42,6 +42,7 @@ import com.satwik.transfertoinr.R
 import com.satwik.transfertoinr.core.designsystem.components.TTFBottomNavigationBar
 import com.satwik.transfertoinr.core.designsystem.components.TTFBottomNavigationBarz
 import com.satwik.transfertoinr.core.designsystem.theme.LightGrey
+import com.satwik.transfertoinr.core.designsystem.theme.TransferToInrTheme
 import com.satwik.transfertoinr.core.designsystem.theme.Typography
 import com.satwik.transfertoinr.features.account.AccountScreen
 import com.satwik.transfertoinr.features.auth.login.LoginScreen
@@ -70,7 +71,6 @@ class MainActivity : ComponentActivity() {
                 setKeepOnScreenCondition{!viewModel.isReady.value}
         }
         setContent {
-
             val state = viewModel.mainActivityState.value
             val startDestination:Any = if(state.isUserLoggedIn){ ScreenMain } else{ ScreenSignup }
             val navController = rememberNavController()
@@ -98,6 +98,9 @@ class MainActivity : ComponentActivity() {
                     AccountScreen(navController = navController)
                 }
                 composable<ScreenHelp> {
+                    HelpScreen(navController = navController)
+                }
+                composable<ScreenPrivacyPolicy> {
                     PrivacyPolicyScreen(navController = navController)
                 }
             }
@@ -111,7 +114,8 @@ fun MainScreen(modifier: Modifier = Modifier, navController: NavController) {
     var selectedIndex by remember { mutableIntStateOf(0) }
 
     Scaffold(
-        modifier = modifier.background(color = Color.Red),
+        containerColor = Color.White,
+        modifier = modifier.background(color = Color.White),
         bottomBar = {
             TTFBottomNavigationBarz(selectedIndex) { selectedIndex = it }
         }
@@ -145,6 +149,10 @@ object ScreenAddRecipient
 
 @Serializable
 object ScreenHelp
+
+@Serializable
+object ScreenPrivacyPolicy
+
 
 
 

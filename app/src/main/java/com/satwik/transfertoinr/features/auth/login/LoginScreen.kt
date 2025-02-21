@@ -39,11 +39,11 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun LoginScreen(modifier: Modifier = Modifier) {
 
-    val systemUiController = rememberSystemUiController()
-    systemUiController.setStatusBarColor(
-        color = Color.White,
-        darkIcons = true
-    )
+//    val systemUiController = rememberSystemUiController()
+//    systemUiController.setStatusBarColor(
+//        color = Color.White,
+//        darkIcons = true
+//    )
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -62,7 +62,7 @@ fun LoginScreen(modifier: Modifier = Modifier) {
     }
 
 
-    Column (Modifier.background(color = Color.White)){
+    Column{
 
         Spacer(modifier = Modifier.height(10.dp))
         Icon(painter = painterResource(id = R.drawable.ic_carret), tint = JungleGreen, contentDescription = null, modifier = Modifier.padding(start = 16.dp, end = 25.dp, top = 16.dp, bottom = 16.dp))
