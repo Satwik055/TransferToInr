@@ -17,8 +17,8 @@ import kotlinx.coroutines.launch
 
 class MainActivityViewModel(private val supabaseClient: SupabaseClient):ViewModel() {
 
-    private val _mainActivityState = mutableStateOf(MainActivityState())
-    val mainActivityState: State<MainActivityState> = _mainActivityState
+    private val _isLoggedIn = mutableStateOf(false)
+    val isLoggedIn: State<Boolean> = _isLoggedIn
 
     private val _isReady = MutableStateFlow(false)
     val isReady = _isReady.asStateFlow()
@@ -35,8 +35,8 @@ class MainActivityViewModel(private val supabaseClient: SupabaseClient):ViewMode
         viewModelScope.launch {
             supabaseClient.auth.sessionStatus.collectLatest { status ->
                 when(status){
-                    is SessionStatus.Authenticated -> _mainActivityState.value = MainActivityState(isUserLoggedIn =true)
-                    else -> MainActivityState(isUserLoggedIn = false)
+                    is SessionStatus.Authenticated -> _isLoggedIn.value = true
+                    else -> _isLoggedIn.value = false
                 }
             }
         }

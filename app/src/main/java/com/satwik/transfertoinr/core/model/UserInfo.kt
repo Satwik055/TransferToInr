@@ -6,4 +6,6 @@ import kotlinx.serialization.Serializable
 data class UserInfo(
     val name:String = "",
     val email:String = "",
+    val phone:String = "",
+    val kyc_status:Boolean =false
 )

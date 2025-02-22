@@ -29,7 +29,7 @@ fun SetupNavgraph(navController:NavHostController, startDestination:Any, activit
             LoginScreen()
         }
         composable<ScreenRecipient> {
-            RecipientScreen(internalPadding = PaddingValues(0.dp), navController = navController)
+            RecipientScreen(navController = navController)
         }
         composable<ScreenAddRecipient> {
             AddRecipientScreen(navController = navController)

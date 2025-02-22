@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -30,23 +29,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.satwik.transfertoinr.core.designsystem.components.TTFButton
-import com.satwik.transfertoinr.core.designsystem.components.TTFTextHeader
 import com.satwik.transfertoinr.core.designsystem.theme.JungleGreen
 import com.satwik.transfertoinr.core.designsystem.theme.fontFamily
 import com.satwik.transfertoinr.core.main.ScreenAddRecipient
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun RecipientScreen(modifier: Modifier = Modifier, internalPadding: PaddingValues, navController: NavController) {
-    Column (
-        modifier = modifier.fillMaxSize().padding(internalPadding)
-    ){
-        Content(modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-            navController
-        )
-    }
+fun RecipientScreen(modifier: Modifier = Modifier, navController: NavController) {
+    Content(modifier = Modifier.fillMaxSize(), navController)
 }
 
 @Composable

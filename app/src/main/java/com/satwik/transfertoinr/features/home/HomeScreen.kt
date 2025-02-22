@@ -1,58 +1,46 @@
 package com.satwik.transfertoinr.features.home
 
 import AutoSlidingCarousel
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.google.accompanist.pager.ExperimentalPagerApi
-import com.satwik.transfertoinr.core.designsystem.components.Carousell
 import com.satwik.transfertoinr.core.designsystem.components.RateTable
-import com.satwik.transfertoinr.core.designsystem.components.TTFIconHeader
 import com.satwik.transfertoinr.core.designsystem.theme.JungleGreen
 import com.satwik.transfertoinr.core.designsystem.theme.fontFamily
-import com.satwik.transfertoinr.core.main.ScreenAddRecipient
-import com.satwik.transfertoinr.core.main.ScreenHelp
 import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier, navController: NavController, internalPadding: PaddingValues) {
-    Column (
-        modifier.fillMaxSize().padding(internalPadding)
-    ){
-        Content(
-            modifier = modifier
-                .padding(16.dp)
-                .fillMaxSize()
-        )
-    }
+fun HomeScreen(modifier: Modifier = Modifier) {
+    Content(
+        modifier = modifier.fillMaxSize()
+    )
 }
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-private fun Content(modifier: Modifier = Modifier) {
+internal fun Content(modifier: Modifier = Modifier) {
 
     val viewModel =  koinViewModel<HomeScreenViewModel>()
+    val user = viewModel.userInfoState.value.userInfo
     val style = TextStyle(fontFamily = fontFamily, fontWeight = FontWeight.SemiBold, fontSize = 37.sp, color = JungleGreen)
     val images:List<String> = listOf(
         "https://as2.ftcdn.net/v2/jpg/04/86/72/71/1000_F_486727138_LIbtjQYhz2nwYFoziXPeUIFSpdz5tiHZ.jpg",
@@ -61,7 +49,7 @@ private fun Content(modifier: Modifier = Modifier) {
     )
 
     Column (modifier = modifier){
-        Text(text = "Hey ${viewModel.userInfoState.value.userInfo.name}", style=style)
+        Text(text = "Hey ${user.name}", style=style, maxLines = 1, overflow = TextOverflow.Ellipsis)
         Spacer(modifier = Modifier.height(10.dp))
 
         AutoSlidingCarousel(

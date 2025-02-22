@@ -20,6 +20,7 @@ class AccountRepositoryImpl(private val client: SupabaseClient):AccountRepositor
         )
         val jsonString = response.data
         val userInfo= Json.decodeFromString<List<UserInfo>>(jsonString)
+        println("RESPONSE: $userInfo")
         return userInfo.first()
     }
 }
