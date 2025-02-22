@@ -47,6 +47,7 @@ ktor-utils = { module = "io.ktor:ktor-utils", version.ref = "ktor" }
 #Supabase
 supabase-postgrest = { module = "io.github.jan-tennert.supabase:postgrest-kt", version.ref = "supabase" }
 supabase-auth = { module = "io.github.jan-tennert.supabase:auth-kt", version.ref = "supabase" }
+supabase-storage = {module = "io.github.jan-tennert.supabase:storage-kt", version.ref = "supabase"}
 
 #Firebase
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
@@ -94,5 +95,5 @@ kotiln-serializer-plugin = {id="org.jetbrains.kotlin.plugin.serialization", vers
 coroutines = ["kotlinx-coroutines-android", "kotlinx-coroutines-core"]
 hilt-compiler = ["androidx-hilt-compiler", "hilt-android-compiler"]
 hilt = ["hilt-android","androidx-hilt-navigation-compose"]
-supabase = ["supabase-postgrest", "supabase-auth"]
+supabase = ["supabase-postgrest", "supabase-auth", "supabase-storage"]
 ktor = ["ktor-utils", "ktor-client-android", "ktor-core", "ktor-cio"]

@@ -2,6 +2,8 @@
 <resources>
 
     <style name="CustomTheme.SplashScreen" parent="Theme.SplashScreen">
+        <item name="android:windowBackground">#FFFFFF</item>
+        <item name="android:statusBarColor">@color/jungle_green</item>
         <item name="windowSplashScreenBackground">@color/jungle_green</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/splash_inset</item>
         <item name="postSplashScreenTheme">@style/Theme.TransferToInr</item>

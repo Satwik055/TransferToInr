@@ -18,13 +18,10 @@ class AuthRepositoryImpl(private val client: SupabaseClient) :AuthRepository {
     }
 
     override suspend fun signup(email: String, password: String, name: String, phone: String) {
-        runBlocking {
-            val user = client.auth.signUpWith(Email) {
+        val user = client.auth.signUpWith(Email) {
             this.email = email
             this.password = password
         }
-
-            println("User id:"+user?.id)
 
             val response = client.postgrest.rpc(
                 function = "addttfuser",
@@ -36,10 +33,10 @@ class AuthRepositoryImpl(private val client: SupabaseClient) :AuthRepository {
                 }
             )
         }
-    }
+
 
     override suspend fun logout() {
         println("Logout Initiated")
-        client.auth.sessionManager.deleteSession()
+        client.auth.clearSession()
     }
 }

@@ -3,6 +3,7 @@ package com.satwik.transfertoinr.features.account
 import android.app.Activity
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.Indication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -19,10 +20,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -37,6 +40,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.satwik.transfertoinr.R
 import com.satwik.transfertoinr.core.designsystem.theme.JungleGreen
+import com.satwik.transfertoinr.core.designsystem.theme.LightGrey
 import com.satwik.transfertoinr.core.designsystem.theme.VeryLightGrey
 import com.satwik.transfertoinr.core.designsystem.theme.fontFamily
 import com.satwik.transfertoinr.core.main.ScreenPrivacyPolicy
@@ -122,18 +126,20 @@ fun TTFBarButtons(
     onClick: () -> Unit
     ) {
 
+    val customIndication = ripple(color = LightGrey)
     Row (
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .height(50.dp)
-            .fillMaxWidth()
-            .padding(horizontal = 10.dp)
             .clickable(
                 onClick = { onClick.invoke() },
                 interactionSource = remember { MutableInteractionSource() },
-                indication = null
+                indication = customIndication
             )
+            .fillMaxWidth()
+            .padding(horizontal = 10.dp)
+
 
     ){
         Text(text = text, style = textStyle)
@@ -189,19 +195,21 @@ fun KycButton(
     onClick: () -> Unit,
     isVerified:Boolean
 ) {
+    val customIndication = ripple(color = LightGrey)
 
     Row (
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
-            .height(50.dp)
-            .fillMaxWidth()
-            .padding(horizontal = 10.dp)
             .clickable(
                 onClick = { onClick.invoke() },
                 interactionSource = remember { MutableInteractionSource() },
-                indication = null
+                indication = customIndication
             )
+            .height(50.dp)
+            .fillMaxWidth()
+            .padding(horizontal = 10.dp)
+
 
     ){
         Text(text = text, style = textStyle)

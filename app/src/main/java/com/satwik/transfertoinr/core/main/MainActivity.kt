@@ -8,8 +8,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -28,46 +31,33 @@ import com.satwik.transfertoinr.features.recipient.RecipientScreen
 import com.satwik.transfertoinr.features.transaction.TransactionScreen
 import com.satwik.transfertoinr.features.transfer.TransferScreen
 import org.koin.android.ext.android.inject
+import org.koin.androidx.compose.koinViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        actionBar?.hide()
 
         val viewModel: MainActivityViewModel by inject()
-        installSplashScreen().apply { setKeepOnScreenCondition{!viewModel.isReady.value} }
+        installSplashScreen().apply { setKeepOnScreenCondition{viewModel.isInitializing.value} }
 
         setContent {
-            val isLoggedIn = viewModel.isLoggedIn.value
+            val isInitializing = viewModel.isInitializing.collectAsState().value
+            val isLoggedIn = viewModel.isLoggedIn.collectAsState().value
             val startDestination:Any = if(isLoggedIn){ ScreenMain } else{ ScreenSignup }
             val navController = rememberNavController()
 
-            SetupNavgraph(
-                navController = navController,
-                startDestination = startDestination,
-                activity = this@MainActivity
-            )
+            if(!isInitializing){
+                SetupNavgraph(
+                    navController = navController,
+                    startDestination = startDestination,
+                    activity = this@MainActivity
+                )
+            }
         }
     }
 }
 
-//
-//@Composable
-//fun MainScreen(navController: NavController, activity: Activity) {
-//    var selectedIndex by remember { mutableIntStateOf(0) }
-//    Scaffold(
-//        containerColor = Color.White,
-//        topBar = { TTFScaffoldHeader(selectedIndex = selectedIndex, navController = navController) },
-//        bottomBar = { TTFBottomNavigationBar(selectedIndex) { selectedIndex = it } }
-//    ) {
-//        when (selectedIndex) {
-//            0 -> HomeScreen(internalPadding = it)
-//            1 -> TransferScreen(internalPadding = it)
-//            2 -> TransactionScreen(internalPadding = it)
-//            3 -> RecipientScreen(internalPadding = it, navController = navController )
-//            4 -> AccountScreen(navController = navController, activity = activity, internalPadding = it)
-//        }
-//    }
-//}
 
 @Composable
 fun MainScreen(navController: NavController, activity: Activity) {
@@ -78,7 +68,9 @@ fun MainScreen(navController: NavController, activity: Activity) {
         topBar = { TTFScaffoldHeader(selectedIndex = selectedIndex, navController = navController) },
         bottomBar = { TTFBottomNavigationBar(selectedIndex) { selectedIndex = it } }
     ) { internalPadding ->
-        Box(modifier = Modifier.padding(internalPadding).padding(16.dp)) {
+        Box(modifier = Modifier
+            .padding(internalPadding)
+            .padding(16.dp)) {
             when (selectedIndex) {
                 0 -> HomeScreen()
                 1 -> TransferScreen()

@@ -57,7 +57,7 @@ fun SignupScreen(modifier: Modifier = Modifier, navController: NavController) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
-    Column{
+    Column(Modifier.background(Color.White)){
         when {
             state.isLoading -> println("Loading...")
             state.error.isNotEmpty() -> println("Error: ${state.error}")
