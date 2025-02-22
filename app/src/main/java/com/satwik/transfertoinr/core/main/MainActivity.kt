@@ -1,11 +1,13 @@
 package com.satwik.transfertoinr.core.main
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.annotation.DrawableRes
+import androidx.annotation.MainThread
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -41,6 +43,8 @@ import androidx.navigation.compose.rememberNavController
 import com.satwik.transfertoinr.R
 import com.satwik.transfertoinr.core.designsystem.components.TTFBottomNavigationBar
 import com.satwik.transfertoinr.core.designsystem.components.TTFBottomNavigationBarz
+import com.satwik.transfertoinr.core.designsystem.components.TTFIconHeader
+import com.satwik.transfertoinr.core.designsystem.components.TTFTextHeader
 import com.satwik.transfertoinr.core.designsystem.theme.LightGrey
 import com.satwik.transfertoinr.core.designsystem.theme.TransferToInrTheme
 import com.satwik.transfertoinr.core.designsystem.theme.Typography
@@ -50,6 +54,7 @@ import com.satwik.transfertoinr.features.auth.login.LoginScreenViewModel
 import com.satwik.transfertoinr.features.auth.signup.SignupScreen
 import com.satwik.transfertoinr.features.help.HelpScreen
 import com.satwik.transfertoinr.features.home.HomeScreen
+import com.satwik.transfertoinr.features.kyc.KycScreen
 import com.satwik.transfertoinr.features.privacypolicy.PrivacyPolicyScreen
 import com.satwik.transfertoinr.features.recipient.AddRecipientScreen
 import com.satwik.transfertoinr.features.recipient.RecipientScreen
@@ -71,90 +76,61 @@ class MainActivity : ComponentActivity() {
                 setKeepOnScreenCondition{!viewModel.isReady.value}
         }
         setContent {
-            val state = viewModel.mainActivityState.value
-            val startDestination:Any = if(state.isUserLoggedIn){ ScreenMain } else{ ScreenSignup }
+            val userState = viewModel.mainActivityState.value
+            val startDestination:Any = if(userState.isUserLoggedIn){ ScreenMain } else{ ScreenSignup }
             val navController = rememberNavController()
 
-            NavHost(navController =navController , startDestination = startDestination) {
-                composable<ScreenSignup> {
-                    SignupScreen(navController = navController)
-                }
-                composable<ScreenMain> {
-                    MainScreen(navController = navController)
-                }
-                composable<ScreenLogin> {
-                    LoginScreen()
-                }
-                composable<ScreenRecipient> {
-                    RecipientScreen(internalPadding = PaddingValues(0.dp), navController = navController)
-                }
-                composable<ScreenAddRecipient> {
-                    AddRecipientScreen(navController = navController)
-                }
-                composable<ScreenHelp> {
-                    HelpScreen(navController = navController)
-                }
-                composable<ScreenHelp> {
-                    AccountScreen(navController = navController)
-                }
-                composable<ScreenHelp> {
-                    HelpScreen(navController = navController)
-                }
-                composable<ScreenPrivacyPolicy> {
-                    PrivacyPolicyScreen(navController = navController)
-                }
-            }
+            SetupNavgraph(
+                navController = navController,
+                startDestination = startDestination,
+                activity = this@MainActivity
+            )
         }
     }
 }
 
 
 @Composable
-fun MainScreen(modifier: Modifier = Modifier, navController: NavController) {
+fun MainScreen(navController: NavController, activity: Activity) {
     var selectedIndex by remember { mutableIntStateOf(0) }
 
     Scaffold(
         containerColor = Color.White,
-        modifier = modifier.background(color = Color.White),
-        bottomBar = {
-            TTFBottomNavigationBarz(selectedIndex) { selectedIndex = it }
-        }
+        topBar = { TTFHeader(selectedIndex = selectedIndex, navController = navController) },
+        bottomBar = { TTFBottomNavigationBarz(selectedIndex) { selectedIndex = it } }
     ) {
         when (selectedIndex) {
-            0 -> HomeScreen(navController = navController)
-            1 -> TransferScreen()
-            2 -> TransactionScreen()
+            0 -> HomeScreen(navController = navController, internalPadding = it)
+            1 -> TransferScreen(internalPadding = it)
+            2 -> TransactionScreen(internalPadding = it)
             3 -> RecipientScreen(internalPadding = it, navController = navController )
-            4 -> AccountScreen(navController = navController)
+            4 -> AccountScreen(navController = navController, activity = activity, internalPadding = it)
         }
     }
 
 }
 
 
-@Serializable
-object ScreenMain
-
-@Serializable
-object ScreenSignup
-
-@Serializable
-object ScreenLogin
-
-@Serializable
-object ScreenRecipient
-
-@Serializable
-object ScreenAddRecipient
-
-@Serializable
-object ScreenHelp
-
-@Serializable
-object ScreenPrivacyPolicy
 
 
+@Composable
+fun TTFHeader(selectedIndex: Int, navController: NavController) {
+
+    fun getScreenTitle(selectedIndex: Int): String {
+        return when (selectedIndex) {
+            0 -> "Home"
+            1 -> "Transfer"
+            2 -> "Transactions"
+            3 -> "Recipients"
+            4 -> "Account"
+            else -> "App"
+        }
+    }
+
+    when (selectedIndex) {
+        0 -> TTFIconHeader(helpButtonOnClick = { navController.navigate(ScreenHelp) })
+        else -> TTFTextHeader(text = getScreenTitle(selectedIndex))
+    }
 
 
-
-
+}

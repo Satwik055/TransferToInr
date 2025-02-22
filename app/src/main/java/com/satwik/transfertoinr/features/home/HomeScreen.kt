@@ -3,6 +3,7 @@ package com.satwik.transfertoinr.features.home
 import AutoSlidingCarousel
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -35,11 +36,10 @@ import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier, navController: NavController) {
+fun HomeScreen(modifier: Modifier = Modifier, navController: NavController, internalPadding: PaddingValues) {
     Column (
-        modifier.fillMaxSize()
+        modifier.fillMaxSize().padding(internalPadding)
     ){
-        TTFIconHeader(helpButtonOnClick = {navController.navigate(ScreenHelp)})
         Content(
             modifier = modifier
                 .padding(16.dp)

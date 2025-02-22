@@ -39,12 +39,10 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun RecipientScreen(modifier: Modifier = Modifier, internalPadding: PaddingValues, navController: NavController) {
     Column (
-        modifier = modifier.fillMaxSize()
+        modifier = modifier.fillMaxSize().padding(internalPadding)
     ){
-        TTFTextHeader(text = "Recipient")
         Content(modifier = Modifier
             .fillMaxSize()
-            .padding(internalPadding)
             .padding(16.dp),
             navController
         )

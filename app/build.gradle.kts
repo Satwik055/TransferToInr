@@ -65,22 +65,32 @@ dependencies {
     //Ktor
     implementation(libs.bundles.ktor)
 
+    implementation("io.ktor:ktor-client-okhttp:3.0.3")
+
+
     //Supabase
     implementation(libs.bundles.supabase)
 
     //Accompanist
     implementation(libs.accompanist)
 
-
+    //Accompanist Pager
     implementation ("com.google.accompanist:accompanist-pager:0.22.0-rc")
 
     implementation("io.insert-koin:koin-android:4.0.2")
     implementation("io.insert-koin:koin-androidx-compose:4.0.2")
     implementation("io.insert-koin:koin-androidx-navigation:4.0.2")
 
+    val sumsubSDK = "1.34.1"
+    // SumSub core
+    implementation("com.sumsub.sns:idensic-mobile-sdk:$sumsubSDK")
+    // Video Identification module
+    implementation ("com.sumsub.sns:idensic-mobile-sdk-videoident:$sumsubSDK")
+    // eID module
+    implementation ("com.sumsub.sns:idensic-mobile-sdk-eid:$sumsubSDK")
+
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

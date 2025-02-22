@@ -5,6 +5,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -35,11 +36,10 @@ import com.satwik.transfertoinr.core.designsystem.theme.fontFamily
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun TransferScreen(modifier: Modifier = Modifier) {
+fun TransferScreen(modifier: Modifier = Modifier, internalPadding: PaddingValues) {
     Column (
-        modifier.fillMaxSize()
+        modifier.fillMaxSize().padding(internalPadding)
     ){
-        TTFTextHeader(text = "Transfer")
         Content(modifier = Modifier.fillMaxSize().padding(16.dp))
     }
 }

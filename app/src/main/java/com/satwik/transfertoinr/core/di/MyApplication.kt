@@ -3,6 +3,7 @@ package com.satwik.transfertoinr.core.di
 import android.app.Application
 import com.satwik.transfertoinr.data.account.accountModule
 import com.satwik.transfertoinr.data.auth.authModule
+import com.satwik.transfertoinr.data.kyc.kycModule
 import com.satwik.transfertoinr.data.recipient.recipientModule
 import com.satwik.transfertoinr.data.transaction.transactionModule
 import com.satwik.transfertoinr.data.transfer.transferModule
@@ -22,7 +23,8 @@ class MyApplication:Application(){
                 recipientModule,
                 transferModule,
                 transactionModule,
-                accountModule
+                accountModule,
+                kycModule
             )
         }
     }

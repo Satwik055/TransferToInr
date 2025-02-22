@@ -1,5 +1,6 @@
 package com.satwik.transfertoinr.features.account
 
+import android.app.Activity
 import androidx.annotation.DrawableRes
 import androidx.collection.mutableObjectIntMapOf
 import androidx.compose.foundation.Image
@@ -8,6 +9,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,11 +17,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -37,28 +41,44 @@ import com.satwik.transfertoinr.core.designsystem.theme.VeryLightGrey
 import com.satwik.transfertoinr.core.designsystem.theme.fontFamily
 import com.satwik.transfertoinr.core.main.ScreenPrivacyPolicy
 import com.satwik.transfertoinr.core.main.ScreenSignup
+import com.sumsub.sns.core.SNSMobileSDK
+import com.sumsub.sns.core.data.listener.TokenExpirationHandler
+import kotlinx.datetime.format.Padding
 import org.koin.androidx.compose.koinViewModel
+import java.util.Locale
 
 @Composable
-fun AccountScreen(modifier: Modifier = Modifier, navController: NavController) {
+fun AccountScreen(modifier: Modifier = Modifier, navController: NavController, activity: Activity, internalPadding: PaddingValues) {
 
     val viewModel = koinViewModel<AccountsScreenViewModel>()
     Column (
-        modifier = modifier.fillMaxSize()
+        modifier = modifier.fillMaxSize().padding(internalPadding)
     ){
-        TTFTextHeader(text = "Account")
-        Content(modifier.padding(16.dp), viewModel, navController)
-
+        Content(modifier.padding(16.dp), viewModel, navController, activity)
     }
-
 }
 
 @Composable
-private fun Content(modifier: Modifier = Modifier, viewModel: AccountsScreenViewModel, navController: NavController) {
+private fun Content(modifier: Modifier = Modifier, viewModel: AccountsScreenViewModel, navController: NavController, activity: Activity) {
+
+
+    val accessToken = "_act-sbx-jwt-eyJhbGciOiJub25lIn0.eyJqdGkiOiJfYWN0LXNieC02YjI3OWNmYS03M2IyLTRkNDYtYmI5Ni04Yzg3N2YxYzIxOGUtdjIiLCJ1cmwiOiJodHRwczovL2FwaS5zdW1zdWIuY29tIn0.-v2"
+    val tokenExpirationHandler = object : TokenExpirationHandler {
+        override fun onTokenExpired(): String {
+            // Fetch a new token from your backend
+            val newToken = "..."
+            return newToken
+        }
+    }
+    val snsSdk = remember {
+        SNSMobileSDK.Builder(activity).withDebug(true)
+            .withAccessToken(accessToken, onTokenExpiration = tokenExpirationHandler)
+            .withLocale(Locale("en"))
+            .build()
+    }
+
 
     Column ( modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally){
-
-
         if(viewModel.userInfoState.value.isLoading){
             println("Loading...")
         }
@@ -75,7 +95,7 @@ private fun Content(modifier: Modifier = Modifier, viewModel: AccountsScreenView
             TTFBarButtons(
                 text = "KYC",
                 icon = R.drawable.ic_kyc,
-                onClick = {},
+                onClick = {snsSdk.launch()},
                 modifier = modifier.fillMaxWidth().padding(horizontal = 10.dp))
             HorizontalDivider(color = VeryLightGrey)
             TTFBarButtons(
@@ -128,5 +148,4 @@ fun UserInfoSection(modifier: Modifier = Modifier, @DrawableRes profilePic:Int, 
 
     }
 }
-
 
