@@ -4,6 +4,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.satwik.transfertoinr.core.model.Recipient
 import com.satwik.transfertoinr.data.recipient.RecipientRepository
 import kotlinx.coroutines.launch
 
@@ -14,11 +15,6 @@ class RecipientViewModel(
     private val _recipientsState = mutableStateOf(RecipientsState())
     val recipientsState: State<RecipientsState> = _recipientsState
 
-
-    init {
-        getAllRecipients()
-    }
-
     fun addRecipient(name:String, accountNumber:String, ifscCode:String, bank:String){
         viewModelScope.launch {
             recipientRepository.addRecipient(
@@ -28,15 +24,19 @@ class RecipientViewModel(
                 bank = bank
             )
         }
+
     }
 
-    fun deleteRecipientById(id:Int){
+    fun deleteRecipientById(id: Int) {
         viewModelScope.launch {
             recipientRepository.deleteRecipientById(id)
+            _recipientsState.value = _recipientsState.value.copy(
+                recipients = _recipientsState.value.recipients.filter { it.id != id }
+            )
         }
     }
 
-    private fun getAllRecipients(){
+    fun getAllRecipients(){
         viewModelScope.launch {
             _recipientsState.value = RecipientsState(isLoading = true)
             try {

@@ -20,6 +20,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,6 +37,7 @@ import com.satwik.transfertoinr.core.designsystem.components.TTFButton
 import com.satwik.transfertoinr.core.designsystem.theme.JungleGreen
 import com.satwik.transfertoinr.core.designsystem.theme.fontFamily
 import com.satwik.transfertoinr.core.main.ScreenAddRecipient
+import com.satwik.transfertoinr.core.model.Recipient
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -45,19 +51,24 @@ private fun Content(modifier: Modifier = Modifier, navController: NavController)
 
         val style1 = TextStyle(fontWeight = FontWeight.Normal, fontFamily = fontFamily, fontSize = 14.sp, color = JungleGreen)
         val viewModel = koinViewModel<RecipientViewModel>()
-        val state = viewModel.recipientsState
 
-        if(state.value.isLoading){
+        LaunchedEffect(Unit) {
+            viewModel.getAllRecipients()
+        }
+
+        val state = viewModel.recipientsState.value
+
+        if(state.isLoading){
             CircularProgressIndicator(color = JungleGreen, modifier = Modifier.align(Alignment.Center))
         }
-        if(state.value.error.isNotEmpty()){
-            Text(text = state.value.error, style = style1, modifier = Modifier.align(Alignment.Center))
+        if(state.error.isNotEmpty()){
+            Text(text = state.error, style = style1, modifier = Modifier.align(Alignment.Center))
         }
         else{
             LazyColumn (
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ){
-                items(state.value.recipients){recipient->
+                items(state.recipients){recipient->
                     RecipientListItem(name = recipient.name, accountNumber = recipient.account_number, bankName = recipient.bank, deleteOnClick = { viewModel.deleteRecipientById(recipient.id) })
                 }
             }

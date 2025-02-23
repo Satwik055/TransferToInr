@@ -14,11 +14,7 @@ class TransactionViewModel(private val transactionRepository: TransactionReposit
     private val _transactionState = mutableStateOf(TransactionState())
     val transactionState: State<TransactionState> = _transactionState
 
-    init {
-        getAllTransaction()
-    }
-
-    private fun getAllTransaction(){
+    fun getAllTransaction(){
         viewModelScope.launch {
 
             _transactionState.value = TransactionState(isLoading = true)

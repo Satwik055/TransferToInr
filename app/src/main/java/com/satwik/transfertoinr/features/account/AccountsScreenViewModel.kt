@@ -21,11 +21,6 @@ class AccountsScreenViewModel(
     private val _userInfoState = mutableStateOf(UserInfoState())
     val userInfoState: State<UserInfoState> = _userInfoState
 
-
-    init {
-        getUserInfo()
-    }
-
     fun logout(){
         viewModelScope.launch {
             println("Logout clicked")
@@ -33,7 +28,7 @@ class AccountsScreenViewModel(
         }
     }
 
-    private fun getUserInfo(){
+    fun getUserInfo(){
         viewModelScope.launch {
             _userInfoState.value = UserInfoState(isLoading = true)
             try {
