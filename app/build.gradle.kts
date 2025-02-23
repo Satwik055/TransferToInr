@@ -74,6 +74,8 @@ dependencies {
     //Accompanist
     implementation(libs.accompanist)
 
+    implementation ("com.google.accompanist:accompanist-navigation-animation:0.32.0")
+
     //Accompanist Pager
     implementation ("com.google.accompanist:accompanist-pager:0.22.0-rc")
 

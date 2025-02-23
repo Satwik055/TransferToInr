@@ -22,3 +22,20 @@ object ScreenHelp
 
 @Serializable
 object ScreenPrivacyPolicy
+
+@Serializable
+object ScreenHome
+
+@Serializable
+object ScreenTransfer
+
+@Serializable
+object ScreenTransaction
+
+@Serializable
+object ScreenAccount
+
+
+
+
+

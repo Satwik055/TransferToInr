@@ -1,25 +1,69 @@
 package com.satwik.transfertoinr.features.privacypolicy
 
+import android.annotation.SuppressLint
+import android.view.ViewGroup
+import android.webkit.WebView
+import android.webkit.WebViewClient
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import com.satwik.transfertoinr.core.designsystem.components.headers.TTFTextHeader
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import com.satwik.transfertoinr.core.designsystem.theme.JungleGreen
-import com.satwik.transfertoinr.core.designsystem.theme.fontFamily
 
+
+@SuppressLint("SetJavaScriptEnabled")
 @Composable
-fun PrivacyPolicyScreen(modifier: Modifier = Modifier, navController: NavController) {
-     val style = TextStyle(fontFamily = fontFamily, color = JungleGreen, fontSize = 13.sp)
-    Column {
-        TTFTextHeader(text = "Privacy Policy", isBackButtonEnabled = true,  onBackClick = {navController.popBackStack()})
-        Text(text = "This is the privacy policy screen.", style = style, modifier = Modifier.padding(16.dp))
+fun PrivacyPolicyScreen(modifier: Modifier = Modifier) {
+    val url = "https://transfertoinr.com/privacy-policy/#"
+    var isLoading by remember { mutableStateOf(true) } // Track loading state
+
+    Box(modifier = modifier.fillMaxSize()) {
+        AndroidView(
+            modifier = Modifier.fillMaxSize(),
+            factory = { context ->
+                WebView(context).apply {
+                    webViewClient = object : WebViewClient() {
+                        override fun onPageFinished(view: WebView?, url: String?) {
+                            super.onPageFinished(view, url)
+                            isLoading = false // Page finished loading
+                        }
+                    }
+                    settings.javaScriptEnabled = true
+                    settings.loadWithOverviewMode = true
+                    settings.useWideViewPort = true
+                    settings.setSupportZoom(true)
+                    layoutParams =
+                        ViewGroup.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.MATCH_PARENT
+                        )
+                }
+            },
+            update = { webView ->
+                webView.loadUrl(url)
+            }
+        )
+
+        if (isLoading) {
+            CircularProgressIndicator(
+                color = JungleGreen,
+                modifier = Modifier
+                    .size(50.dp)
+                    .align(Alignment.Center)
+            )
+        }
     }
-
 }
-

@@ -1,5 +1,6 @@
 package com.satwik.transfertoinr.features.recipient
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,6 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.satwik.transfertoinr.core.designsystem.components.TTFButton
@@ -29,7 +31,7 @@ fun AddRecipientScreen(modifier: Modifier = Modifier, navController: NavControll
     var bank by remember { mutableStateOf("") }
 
     Box(
-        Modifier.fillMaxSize().padding(bottom = 16.dp)){
+        Modifier.fillMaxSize().padding(bottom = 16.dp).background(Color.White)){
         TTFTextHeader(text = "Add Recipient", isBackButtonEnabled = true, onBackClick = {navController.popBackStack()})
 
         Column(
