@@ -24,6 +24,7 @@ import androidx.navigation.compose.composable
 import com.satwik.transfertoinr.features.auth.login.LoginScreen
 import com.satwik.transfertoinr.features.auth.signup.SignupScreen
 import com.satwik.transfertoinr.features.help.HelpScreen
+import com.satwik.transfertoinr.features.kyc.KycScreen
 import com.satwik.transfertoinr.features.privacypolicy.PrivacyPolicyScreen
 import com.satwik.transfertoinr.features.recipient.AddRecipientScreen
 import com.satwik.transfertoinr.features.recipient.RecipientScreen
@@ -64,6 +65,9 @@ fun SetupNavgraph(navController:NavHostController, startDestination:Any, activit
             popExitTransition = { slideOutVertically(targetOffsetY = { it }, animationSpec = tween(400)) }
         ){
             AddRecipientScreen(navController = navController)
+        }
+        composable<ScreenKyc> {
+            KycScreen(activity)
         }
     }
 }

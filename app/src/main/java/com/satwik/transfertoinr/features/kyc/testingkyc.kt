@@ -2,83 +2,68 @@ package com.satwik.transfertoinr.features.kyc
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import okhttp3.MediaType
+import de.authada.org.bouncycastle.util.encoders.Hex
+import io.ktor.http.HttpMethod
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonObject
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
-import java.util.Base64
+import org.json.JSONObject
+import java.nio.charset.StandardCharsets
+import java.security.InvalidKeyException
+import java.security.NoSuchAlgorithmException
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 
-@RequiresApi(Build.VERSION_CODES.O)
 fun main(){
-//    foo()
-
-    println(getAccessToken("satwikkumar055@gmail.com", "821021995", "21", "id-and-liveness", 60000))
+    println(getAccessToken("23", "id-and-liveness", 600, "asd", "3534345"))
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
-fun getAccessToken(email:String, phone:String, userId:String, levelName:String, ttlInSecs:Int): String {
+fun getAccessToken(userId:String, levelName:String, ttlInSecs:Int, email: String, phone: String): String {
     val client = OkHttpClient()
-    val time = System.currentTimeMillis()/1000
+    val time = System.currentTimeMillis() / 1000
+    val appToken = "sbx:WN4xuyf3SQmqE0zwbJHH7dUk.GyNV2VpyFEED8NWId7eoH7L17t7kPNX2"
+    val secret = "szwbAQ6nc1n3F3PkhjuN8dNpAWriaqbw"
+    val body = "{\"applicantIdentifiers\":{\"email\":\"$email\",\"phone\":\"$phone\"},\"ttlInSecs\":$ttlInSecs,\"userId\":\"$userId\",\"levelName\":\"$levelName\"}"
 
-    val mediaType = "application/json".toMediaTypeOrNull()
-    val body =
-        "{\"applicantIdentifiers\":{\"email\":\"$email\",\"phone\":\"$phone\"},\"ttlInSecs\":$ttlInSecs,\"userId\":\"$userId\",\"levelName\":\"$levelName\"}".toRequestBody(
-            mediaType
-        )
-
-
-    // Example usage
-    val secret = "R1XeS0zCmNkDUHRPwKyhtpGiL87sYXCi"
-//    val data = "$time+POST/resources/accessTokens?userId=$userId&levelName=$levelName&ttlInSecs=$ttlInSecs&applicantIdentifiers.email=$email&applicantIdentifiers.phone=$phone"
-    val data = "$time+POST/resources/accessTokens?userId=$userId&levelName=$levelName&ttlInSecs=$ttlInSecs"
-    val signature = generateSignature(secret, data)
+    val signature = generateSignature(
+        ts = time,
+        key = secret,
+        body = body
+    )
 
     val request = Request.Builder()
         .url("https://api.sumsub.com/resources/accessTokens/sdk")
-        .post(body)
+        .post(body.toRequestBody("application/json".toMediaTypeOrNull()))
         .addHeader("content-type", "application/json")
-        .addHeader("X-App-Token", "sbx:o0ZJDRaqp3Cm6AmKxFNj7xBl.xli866gudNgzrPfTju3stM3SQkSKHJRy")
+        .addHeader("X-App-Token", appToken)
         .addHeader("X-App-Access-Sig", signature)
-        .addHeader("X-App-Access-Ts", "$time")
+        .addHeader("X-App-Access-Ts", time.toString())
         .build()
 
-    val response = client.newCall(request).execute()
-
-    return response.body?.string() ?: ""
+    val response = client.newCall(request).execute().body?.string() ?: ""
+    val responseBody = Json.decodeFromString<AccessTokenResponse>(response)
+    return responseBody.token
 }
 
 
-fun foo(){
-    val client = OkHttpClient()
-
-    val time = System.currentTimeMillis()
-
-    val mediaType = "application/json".toMediaTypeOrNull()
-    val body = RequestBody.create(mediaType, "{\"applicantIdentifiers\":{\"email\":\"string\",\"phone\":\"string\"},\"ttlInSecs\":600,\"userId\":\"string\",\"levelName\":\"id-and-liveness\"}")
-    val request = Request.Builder()
-        .url("https://api.sumsub.com/resources/accessTokens/sdk")
-        .post(body)
-        .addHeader("content-type", "application/json")
-        .addHeader("X-App-Token", "sbx:lSnT7ikVjtXs2kW2TMIiXC9u.0SU0nbnL6LF4jt6SniiiXqyGNRa6URI2")
-        .addHeader("X-App-Access-Sig", "1607551635POST/resources/accessTokens?userId=cfd20712-24a2-4c7d-9ab0-146f3c142335&levelName=basic-kyc-level&ttlInSecs=600")
-        .addHeader("X-App-Access-Ts", "sbx:lSnT7ikVjtXs2kW2TMIiXC9u.0SU0nbnL6LF4jt6SniiiXqyGNRa6URI2")
-        .build()
-
-    val response = client.newCall(request).execute()
-    println(response)
+fun generateSignature(ts: Long, key:String, body:String): String {
+    val path = "/resources/accessTokens/sdk"
+    val hmacSha256 = Mac.getInstance("HmacSHA256")
+    val secretKeySpec = SecretKeySpec(key.toByteArray(StandardCharsets.UTF_8), "HmacSHA256")
+    hmacSha256.init(secretKeySpec)
+    hmacSha256.update((ts.toString() + "POST" + path).toByteArray(StandardCharsets.UTF_8))
+    val bytes = body.toByteArray(StandardCharsets.UTF_8).let { hmacSha256.doFinal(it) } ?: hmacSha256.doFinal()
+    return bytes.joinToString("") { "%02x".format(it) }
 }
 
 
-@RequiresApi(Build.VERSION_CODES.O)
-fun generateSignature(secret: String, data: String): String {
-    val hmac = Mac.getInstance("HmacSHA256")
-    val secretKey = SecretKeySpec(secret.toByteArray(), "HmacSHA256")
-    hmac.init(secretKey)
-    val hash = hmac.doFinal(data.toByteArray())
-    return Base64.getEncoder().encodeToString(hash)
-}
-
+@Serializable
+data class AccessTokenResponse(
+    val token: String,
+    val userId: String
+)

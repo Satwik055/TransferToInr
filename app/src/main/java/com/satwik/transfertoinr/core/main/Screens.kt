@@ -35,6 +35,8 @@ object ScreenTransaction
 @Serializable
 object ScreenAccount
 
+@Serializable
+object ScreenKyc
 
 
 

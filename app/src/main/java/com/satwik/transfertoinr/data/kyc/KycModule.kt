@@ -9,10 +9,10 @@ import org.koin.dsl.module
 
 val kycModule = module {
     single<KycRepository> {
-        KycRepositoryImpl()
+        KycRepositoryImpl(get())
     }
 
     viewModel {
-        KycScreenViewModel(get())
+        KycScreenViewModel(get(), get())
     }
 }

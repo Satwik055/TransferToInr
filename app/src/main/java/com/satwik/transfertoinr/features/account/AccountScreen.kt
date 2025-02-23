@@ -43,6 +43,7 @@ import com.satwik.transfertoinr.core.designsystem.theme.JungleGreen
 import com.satwik.transfertoinr.core.designsystem.theme.LightGrey
 import com.satwik.transfertoinr.core.designsystem.theme.VeryLightGrey
 import com.satwik.transfertoinr.core.designsystem.theme.fontFamily
+import com.satwik.transfertoinr.core.main.ScreenKyc
 import com.satwik.transfertoinr.core.main.ScreenPrivacyPolicy
 import com.satwik.transfertoinr.core.main.ScreenSignup
 import com.sumsub.sns.core.SNSMobileSDK
@@ -60,7 +61,8 @@ private fun Content(modifier: Modifier = Modifier, navController: NavController,
 
     val viewModel = koinViewModel<AccountsScreenViewModel>()
     val user = viewModel.userInfoState.value.userInfo
-    val accessToken = "_act-sbx-jwt-eyJhbGciOiJub25lIn0.eyJqdGkiOiJfYWN0LXNieC02YjI3OWNmYS03M2IyLTRkNDYtYmI5Ni04Yzg3N2YxYzIxOGUtdjIiLCJ1cmwiOiJodHRwczovL2FwaS5zdW1zdWIuY29tIn0.-v2"
+
+    val accessToken = "_act-sbx-jwt-eyJhbGciOiJub25lIn0.eyJqdGkiOiJfYWN0LXNieC01YzJlODJkNC04YWNiLTRjZTEtYWIwNC0zZTc0NDMwNDcyZTQtdjIiLCJ1cmwiOiJodHRwczovL2FwaS5zdW1zdWIuY29tIn0.-v2"
     val tokenExpirationHandler = object : TokenExpirationHandler {
         override fun onTokenExpired(): String {
             // Fetch a new token from your backend
@@ -93,7 +95,7 @@ private fun Content(modifier: Modifier = Modifier, navController: NavController,
             KycButton(
                 text = "KYC",
                 isVerified = user.kyc_status,
-                onClick = {snsSdk.launch()}
+                onClick = {navController.navigate(ScreenKyc)}
             )
             HorizontalDivider(color = VeryLightGrey)
             TTFBarButtons(
