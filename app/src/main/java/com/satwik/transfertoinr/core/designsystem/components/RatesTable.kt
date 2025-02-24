@@ -22,7 +22,19 @@ import com.satwik.transfertoinr.core.designsystem.theme.VeryLightGrey
 import com.satwik.transfertoinr.core.designsystem.theme.fontFamily
 
 @Composable
-fun RateTable() {
+fun RateTable(
+    ttiRate:Double,
+    ttiFees:Double,
+    wiseRate:Double,
+    wiseFees:Double,
+    skrillRate:Double,
+    skrillFees:Double,
+    paypalRate:Double,
+    paypalFees:Double,
+    bankRate:Double,
+    bankFees:Double
+
+) {
     val providerLogos = listOf(
         R.drawable.ic_ttf,
         R.drawable.ic_wise,
@@ -33,11 +45,11 @@ fun RateTable() {
 
     val tableData = listOf(
         listOf("Send", "Receive", "Fees"),
-        listOf("1 €", "93.00 ₹", "0 €"),
-        listOf("1 €", "89.89 ₹", "1.71 €"),
-        listOf("1 €", "89.24 ₹", "0.99 €"),
-        listOf("1 €", "88.36 ₹", "1.99 €"),
-        listOf("1 €", "85.00 ₹", "-"),
+        listOf("1 €", ttiRate.toString(), ttiFees.toString()),
+        listOf("1 €", wiseRate.toString(), wiseFees.toString()),
+        listOf("1 €", skrillRate.toString(), skrillFees.toString()),
+        listOf("1 €", paypalRate.toString(), paypalFees.toString()),
+        listOf("1 €", bankRate.toString(), bankFees.toString()),
     )
 
     val textStyle = TextStyle(fontSize = 13.sp, fontWeight = FontWeight.Normal, fontFamily = fontFamily)
@@ -100,9 +112,9 @@ fun RateTable() {
 
 
 
-@Preview
-@Composable
-fun PreviewExchangeRateTable() {
-    RateTable()
-}
+//@Preview
+//@Composable
+//fun PreviewExchangeRateTable() {
+//    RateTable()
+//}
 

@@ -1,5 +1,6 @@
 package com.satwik.transfertoinr.data.transfer
 
+import com.satwik.transfertoinr.core.model.CurrencyType
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.postgrest.postgrest
@@ -10,8 +11,7 @@ class TransferRepositoryImpl(private val client: SupabaseClient): TransferReposi
     override suspend fun createTransfer(
         transactionCode: String,
         sent: Int,
-        recieve: Int,
-        currency: String,
+        currency: CurrencyType,
     ) {
         val email = client.auth.currentUserOrNull()?.email
         val response = client.postgrest.rpc(
@@ -19,8 +19,7 @@ class TransferRepositoryImpl(private val client: SupabaseClient): TransferReposi
             parameters = buildJsonObject {
                 put("p_transaction_code", transactionCode)
                 put("p_sent", sent)
-                put("p_receive", recieve)
-                put("p_currency", currency)
+                put("p_currency", currency.name)
                 put("p_email", email)
             }
         )

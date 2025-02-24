@@ -18,7 +18,7 @@ val accountModule = module {
     }
 
     viewModel {
-        HomeScreenViewModel(get())
+        HomeScreenViewModel(get(), get())
     }
 }
 

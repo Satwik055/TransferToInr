@@ -12,9 +12,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Button
@@ -26,7 +29,9 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -44,11 +49,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import com.satwik.transfertoinr.core.designsystem.components.NewTTFDropdown
 import com.satwik.transfertoinr.core.designsystem.components.TTFButton
 import com.satwik.transfertoinr.core.designsystem.components.TTFDropdown
 import com.satwik.transfertoinr.core.designsystem.components.TTFTextField
 import com.satwik.transfertoinr.core.designsystem.theme.JungleGreen
 import com.satwik.transfertoinr.core.designsystem.theme.LightGrey
+import com.satwik.transfertoinr.core.designsystem.theme.Smoke
 import com.satwik.transfertoinr.core.designsystem.theme.VeryLightGrey
 import com.satwik.transfertoinr.core.designsystem.theme.fontFamily
 import kotlinx.coroutines.launch
@@ -66,9 +73,14 @@ private val style2 = TextStyle(fontFamily = fontFamily, fontSize = 14.sp, fontWe
 internal fun Content(modifier: Modifier = Modifier) {
 
     val viewModel = koinViewModel<TransferScreenViewModel>()
-    var amount by remember { mutableStateOf("") }
-    var selectedCurrency by remember { mutableStateOf("Euro" to "EUR") }
+    var amount by remember { mutableStateOf("0") }
     var transactionCode by remember { mutableStateOf("") }
+    val ttirate = viewModel.ttiRate.collectAsState().value
+
+    LaunchedEffect(Unit) {
+        viewModel.getTtiRate()
+        viewModel.getAllRecipients()
+    }
 
     //For snackbar
     val snackbarHostState = remember { SnackbarHostState() }
@@ -80,43 +92,39 @@ internal fun Content(modifier: Modifier = Modifier) {
 
     val recipientList = viewModel.recipientsState.value.recipients.map { it.name to it.bank }
 
-    val currencies = listOf(
-        "Euro" to "EUR",
-        "US Dollar" to "USD",
-        "British Pound" to "GBP",
-        "Canadian Dollar" to "CAD",
-        "Australian Dollar" to "AUD"
-    )
-
     var selectedRecipient by remember {
         mutableStateOf(
             if (recipientList.isEmpty()) Pair("", "") else recipientList.first()
         )
     }
 
+
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(15.dp)
     ) {
-        Column(verticalArrangement = Arrangement.spacedBy(7.dp)) {
-            Text(text = "Select a currency", style = style)
-            TTFDropdown(
-                items = currencies,
-                modifier = Modifier.fillMaxWidth(),
-                selectedItem = selectedCurrency,
-                onItemSelected = { selectedCurrency = it }
-            )
-        }
 
         Column(verticalArrangement = Arrangement.spacedBy(7.dp)){
             Text(text = "Enter the amount", style = style)
             TTFTextField(
                 text = amount,
+//                errorText = "sommething went wrong if you want it ",
                 onValueChange = { amount = it },
                 placeholder = "Eg: 100",
                 keyboardType = KeyboardType.Number
             )
+            Text(
+                text = "You Recieve: ${amount.toInt() * ttirate}",
+                style = style.copy(fontWeight = FontWeight.Medium, fontSize = 13.sp),
+                modifier = Modifier.align(Alignment.End).offset(y = -(19.dp))
+            )
+
+
         }
+
+//        Text(text = "You Recieve: ${amount.toInt()*ttirate}", style = style, modifier = Modifier.fillMaxWidth().background(color = Smoke, shape = RoundedCornerShape(3.dp)).padding(vertical = 16.dp, horizontal = 16.dp))
+
+
 
         Column(verticalArrangement = Arrangement.spacedBy(7.dp)) {
             Text(text = "Select a Recipient", style = style)
@@ -126,6 +134,7 @@ internal fun Content(modifier: Modifier = Modifier) {
                 selectedItem = selectedRecipient,
                 onItemSelected = { selectedRecipient = it }
             )
+
         }
 
         Column(verticalArrangement = Arrangement.spacedBy(7.dp)) {
@@ -143,6 +152,16 @@ internal fun Content(modifier: Modifier = Modifier) {
             TransactionIDBox(id = transactionCode, modifier = Modifier.fillMaxWidth())
         }
 
+
+        Column(verticalArrangement = Arrangement.spacedBy(7.dp)) {
+            var selectedReason by remember { mutableStateOf("") }
+            val reasons = listOf("as", "asa", "as")
+
+            Text(text = "Select a reason for payment", style = style)
+            NewTTFDropdown(items = reasons, selectedItem = selectedReason, onItemSelected = { selectedReason =it} )
+        }
+
+
         SnackbarHost(
             snackbar = { TTFSnackbar(text = "Transfer started", color = JungleGreen)},
             hostState = snackbarHostState,
@@ -152,9 +171,9 @@ internal fun Content(modifier: Modifier = Modifier) {
             text = "Submit",
             onClick = {
 //                coroutineScope.launch { snackbarHostState.showSnackbar("This is a Snackbar!", duration = SnackbarDuration.Short) }
-                viewModel.addTransaction(transactionCode, amount.toInt(), amount.toInt().inc(), "USD", "email")
+                viewModel.addTransaction(transactionCode, amount.toInt())
                 transactionCode = generateTransactionCode() //new code after submitting
-                amount = ""
+                amount = "0"
             })
     }
 }
@@ -215,7 +234,8 @@ fun TTFSnackbar(modifier: Modifier = Modifier, text:String, color: Color) {
             .height(45.dp)
             .graphicsLayer {
                 shadowElevation = 5.dp.toPx()
-                translationY = 40f },
+                translationY = 40f
+            },
         shape = RoundedCornerShape(5.dp))
     {
         Row(

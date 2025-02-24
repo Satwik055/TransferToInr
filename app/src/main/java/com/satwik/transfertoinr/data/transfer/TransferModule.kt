@@ -13,6 +13,6 @@ val transferModule = module {
     }
 
     viewModel {
-        TransferScreenViewModel(get(), get())
+        TransferScreenViewModel(get(), get(), get(), get())
     }
 }

@@ -4,24 +4,29 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.satwik.transfertoinr.core.model.CurrencyType
+import com.satwik.transfertoinr.data.account.AccountRepository
+import com.satwik.transfertoinr.data.exchange_rate.ExchangeRateRepository
 import com.satwik.transfertoinr.data.recipient.RecipientRepository
 import com.satwik.transfertoinr.data.transfer.TransferRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class TransferScreenViewModel(
     private val recipientRepository: RecipientRepository,
-    private val transferRepository: TransferRepository
+    private val transferRepository: TransferRepository,
+    private val accountRepository: AccountRepository,
+    private val exchangeRatesRepository: ExchangeRateRepository
 ):ViewModel() {
-
 
     private val _recipientsState = mutableStateOf(RecipientsStateTransferScreen())
     val recipientsState: State<RecipientsStateTransferScreen> = _recipientsState
 
+    private val _ttiRate = MutableStateFlow(0.0)
+    val ttiRate = _ttiRate.asStateFlow()
 
-    init {
-        getAllRecipients()
-    }
-    private fun getAllRecipients(){
+    fun getAllRecipients(){
         viewModelScope.launch {
             _recipientsState.value = RecipientsStateTransferScreen(isLoading = true)
             try {
@@ -36,15 +41,22 @@ class TransferScreenViewModel(
         }
     }
 
-
-    fun addTransaction(transactionCode:String, sent:Int, recieve:Int, currency:String, email:String){
+    fun addTransaction(transactionCode:String, sent:Int){
         viewModelScope.launch {
+            val prefferedCurrency= accountRepository.getUserInfo().preffered_currency
             transferRepository.createTransfer(
                 transactionCode = transactionCode,
                 sent = sent,
-                recieve = recieve,
-                currency = currency,
+                currency = prefferedCurrency,
             )
+        }
+    }
+
+    fun getTtiRate(){
+        viewModelScope.launch {
+            val prefferedCurrency = accountRepository.getUserInfo().preffered_currency
+            val ttirate = exchangeRatesRepository.getExchangeRates(prefferedCurrency).tti
+            _ttiRate.value = ttirate
         }
     }
 }

@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.satwik.transfertoinr.core.model.CurrencyType
 import com.satwik.transfertoinr.data.account.AccountRepository
 import com.satwik.transfertoinr.data.auth.AuthRepository
 import com.satwik.transfertoinr.features.transfer.RecipientsStateTransferScreen
@@ -41,6 +42,8 @@ class AccountsScreenViewModel(
             }
         }
     }
+
+
 
 
 //    private val customTheme = SNSTheme{

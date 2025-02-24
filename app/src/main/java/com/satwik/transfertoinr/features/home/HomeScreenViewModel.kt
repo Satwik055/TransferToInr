@@ -4,16 +4,20 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.satwik.transfertoinr.core.model.UserInfo
 import com.satwik.transfertoinr.data.account.AccountRepository
-import com.satwik.transfertoinr.features.account.UserInfoState
+import com.satwik.transfertoinr.data.exchange_rate.ExchangeRateRepository
 import kotlinx.coroutines.launch
-import kotlin.reflect.jvm.internal.impl.utils.DFS.VisitedWithSet
 
-class HomeScreenViewModel(private val accountRepository: AccountRepository):ViewModel() {
+class HomeScreenViewModel(
+    private val accountRepository: AccountRepository,
+    private val exchangeRateRepository: ExchangeRateRepository
+):ViewModel() {
 
     private val _userInfoState = mutableStateOf(UserInfoStateHome())
     val userInfoState: State<UserInfoStateHome> = _userInfoState
+
+    private val _exchangeRateState = mutableStateOf(ExchangeRateState())
+    val exchangeRateState: State<ExchangeRateState> = _exchangeRateState
 
     init {
         getUserInfo()
@@ -29,6 +33,20 @@ class HomeScreenViewModel(private val accountRepository: AccountRepository):View
             }
             catch (e:Exception){
                 _userInfoState.value = UserInfoStateHome(error = e.message.toString())
+            }
+        }
+    }
+
+    fun getExchangeRates(){
+        viewModelScope.launch {
+            _exchangeRateState.value = ExchangeRateState(isLoading = true)
+            try{
+                val prefferedCurrency = accountRepository.getUserInfo().preffered_currency
+                val rate = exchangeRateRepository.getExchangeRates(prefferedCurrency)
+                _exchangeRateState.value = ExchangeRateState(rate = rate)
+            }
+            catch (e:Exception){
+                _exchangeRateState.value = ExchangeRateState(error = e.message.toString())
             }
         }
     }

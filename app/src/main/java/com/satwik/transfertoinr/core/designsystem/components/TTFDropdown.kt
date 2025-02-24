@@ -112,3 +112,80 @@ fun TTFDropdown(
         }
     }
 }
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun NewTTFDropdown(
+    modifier: Modifier = Modifier,
+    dropDownColor: Color = White,
+    textStyle: TextStyle = TextStyle(fontFamily = fontFamily, fontWeight = FontWeight.Normal, fontSize = 15.sp, color = JungleGreen),
+    items:List<String>,
+    selectedItem: String,
+    onItemSelected: (String) -> Unit
+) {
+
+    var expanded by remember { mutableStateOf(false) }
+    val focusRequester = remember { FocusRequester() }
+    val focusManager = LocalFocusManager.current
+
+    ExposedDropdownMenuBox(
+        modifier = modifier,
+        expanded = expanded,
+        onExpandedChange = { expanded = !expanded }
+    ) {
+        OutlinedTextField(
+            value = if (selectedItem.isEmpty()) "No item found" else selectedItem,
+            onValueChange = {},
+            singleLine = true,
+            textStyle = textStyle,
+            readOnly = true,
+
+            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+            modifier = modifier.menuAnchor().focusRequester(focusRequester),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedContainerColor = Color.Transparent,
+                unfocusedContainerColor = Color.Transparent,
+                disabledContainerColor = Color.Transparent,
+                cursorColor = JungleGreen,
+                focusedBorderColor = JungleGreen,
+                unfocusedBorderColor = LightGrey,
+            ),
+        )
+
+        ExposedDropdownMenu(
+            containerColor = dropDownColor,
+            border = BorderStroke(1.dp, VeryLightGrey),
+            shadowElevation = 0.dp,
+            tonalElevation = 0.dp,
+            expanded = expanded,
+            onDismissRequest = {
+                expanded = false
+                focusManager.clearFocus()
+            }
+        ) {
+            if(items.isNotEmpty()){
+                items.forEachIndexed { index, item ->
+                    DropdownMenuItem(
+                        text = {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Text(text = item, style = textStyle)
+                            }
+                        },
+                        onClick = {
+                            onItemSelected(item)
+                            expanded = false
+                            focusManager.clearFocus()
+                        }
+                    )
+                    if (index < items.lastIndex) {
+                        HorizontalDivider(modifier = Modifier.padding(horizontal = 12.dp), thickness = 1.dp, color = VeryLightGrey)
+                    }
+                }
+            }
+        }
+    }
+}

@@ -2,13 +2,12 @@ package com.satwik.transfertoinr.features.home
 
 import AutoSlidingCarousel
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -18,7 +17,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -39,14 +37,21 @@ fun HomeScreen(modifier: Modifier = Modifier) {
 @Composable
 internal fun Content(modifier: Modifier = Modifier) {
 
+
+
     val viewModel =  koinViewModel<HomeScreenViewModel>()
     val user = viewModel.userInfoState.value.userInfo
+    val rate = viewModel.exchangeRateState.value.rate
     val style = TextStyle(fontFamily = fontFamily, fontWeight = FontWeight.SemiBold, fontSize = 37.sp, color = JungleGreen)
     val images:List<String> = listOf(
         "https://as2.ftcdn.net/v2/jpg/04/86/72/71/1000_F_486727138_LIbtjQYhz2nwYFoziXPeUIFSpdz5tiHZ.jpg",
         "https://img.freepik.com/free-vector/flat-abstract-sales-banner-with-offer_23-2149020199.jpg",
         "https://img.freepik.com/premium-vector/extra-discount-3d-sale-banner-template-design-background_416835-474.jpg"
     )
+
+    LaunchedEffect(Unit) {
+        viewModel.getExchangeRates()
+    }
 
     Column (modifier = modifier){
         Text(text = "Hey ${user.name}", style=style, maxLines = 1, overflow = TextOverflow.Ellipsis)
@@ -71,8 +76,20 @@ internal fun Content(modifier: Modifier = Modifier) {
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )
         Spacer(modifier = Modifier.height(10.dp))
+        
+        RateTable(
+            ttiRate = rate.tti,
+            ttiFees = rate.tti,
+            wiseRate = rate.wise,
+            wiseFees = rate.wise,
+            skrillRate = rate.skrill,
+            skrillFees = rate.skrill,
+            paypalRate = rate.paypal,
+            paypalFees = rate.paypal,
+            bankRate = rate.bank,
+            bankFees = rate.bank
+        )
 
-        RateTable()
     }
 }
 

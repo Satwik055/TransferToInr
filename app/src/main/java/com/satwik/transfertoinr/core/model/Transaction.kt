@@ -19,7 +19,7 @@ data class Transaction(
     val transaction_code:String,
     val sent:Int,
     val receive:Int,
-    val currency:String,
+    val currency:CurrencyType,
     val status:TransactionStatus,
     val date:String
 )
