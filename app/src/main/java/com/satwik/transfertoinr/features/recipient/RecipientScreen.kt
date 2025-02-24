@@ -66,7 +66,7 @@ private fun Content(modifier: Modifier = Modifier, navController: NavController)
         }
         else{
             LazyColumn (
-                verticalArrangement = Arrangement.spacedBy(12.dp)
+                verticalArrangement = Arrangement.spacedBy(5.dp)
             ){
                 items(state.recipients){recipient->
                     RecipientListItem(name = recipient.name, accountNumber = recipient.account_number, bankName = recipient.bank, deleteOnClick = { viewModel.deleteRecipientById(recipient.id) })
@@ -89,9 +89,10 @@ fun RecipientListItem(modifier: Modifier = Modifier, name:String, accountNumber:
     val style3 = TextStyle(fontFamily = fontFamily, fontWeight = FontWeight.Normal, fontSize = 13.sp)
 
     Surface(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp),
         color = Color.White,
-        border = BorderStroke(width = 1.dp, color = Color.LightGray),
+        shadowElevation = 3.dp,
+//        border = BorderStroke(width = 1.dp, color = Color.LightGray),
         shape = RoundedCornerShape(8.dp)
     ) {
         Row (

@@ -15,18 +15,6 @@ import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 
 @Serializable
-enum class TransactionStatus {
-    @SerialName("PENDING")
-    PENDING,
-
-    @SerialName("FAILED")
-    FAILED,
-
-    @SerialName("SUCCESS")
-    SUCCESS
-}
-
-@Serializable
 data class Transaction(
     val transaction_code:String,
     val sent:Int,

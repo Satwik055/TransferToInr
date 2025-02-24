@@ -50,7 +50,6 @@ internal fun Content(modifier: Modifier = Modifier) {
         viewModel.getAllTransaction()
     }
 
-
     Box (modifier = modifier){
         if(viewModel.transactionState.value.isLoading){
             CircularProgressIndicator(color = JungleGreen, modifier = Modifier.align(Alignment.Center))

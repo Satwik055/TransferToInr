@@ -1,37 +1,61 @@
 package com.satwik.transfertoinr.features.transfer
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import com.satwik.transfertoinr.core.designsystem.components.TTFButton
 import com.satwik.transfertoinr.core.designsystem.components.TTFDropdown
 import com.satwik.transfertoinr.core.designsystem.components.TTFTextField
+import com.satwik.transfertoinr.core.designsystem.theme.JungleGreen
 import com.satwik.transfertoinr.core.designsystem.theme.LightGrey
 import com.satwik.transfertoinr.core.designsystem.theme.VeryLightGrey
 import com.satwik.transfertoinr.core.designsystem.theme.fontFamily
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun TransferScreen(modifier: Modifier = Modifier) {
+fun TransferScreen() {
     Content(modifier = Modifier.fillMaxSize())
 }
 
@@ -44,7 +68,15 @@ internal fun Content(modifier: Modifier = Modifier) {
     val viewModel = koinViewModel<TransferScreenViewModel>()
     var amount by remember { mutableStateOf("") }
     var selectedCurrency by remember { mutableStateOf("Euro" to "EUR") }
-    val transactionCode = generateTransactionCode()
+    var transactionCode by remember { mutableStateOf("") }
+
+    //For snackbar
+    val snackbarHostState = remember { SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
+
+    LaunchedEffect (Unit){
+        transactionCode = generateTransactionCode()
+    }
 
     val recipientList = viewModel.recipientsState.value.recipients.map { it.name to it.bank }
 
@@ -110,8 +142,20 @@ internal fun Content(modifier: Modifier = Modifier) {
             Text(text = "Enter this ID in  description while making payment", style = style)
             TransactionIDBox(id = transactionCode, modifier = Modifier.fillMaxWidth())
         }
-        
-        TTFButton(text = "Submit", onClick = {viewModel.addTransaction(transactionCode, amount.toInt(), amount.toInt().inc(), "USD", "email")})
+
+        SnackbarHost(
+            snackbar = { TTFSnackbar(text = "Transfer started", color = JungleGreen)},
+            hostState = snackbarHostState,
+        )
+
+        TTFButton(
+            text = "Submit",
+            onClick = {
+//                coroutineScope.launch { snackbarHostState.showSnackbar("This is a Snackbar!", duration = SnackbarDuration.Short) }
+                viewModel.addTransaction(transactionCode, amount.toInt(), amount.toInt().inc(), "USD", "email")
+                transactionCode = generateTransactionCode() //new code after submitting
+                amount = ""
+            })
     }
 }
 
@@ -158,3 +202,29 @@ fun generateTransactionCode(): String {
         .joinToString("")
 }
 
+
+@Composable
+fun TTFSnackbar(modifier: Modifier = Modifier, text:String, color: Color) {
+    val style = TextStyle(fontWeight = FontWeight.Normal, fontFamily = fontFamily, fontSize = 13.sp, color = JungleGreen)
+
+    Surface (
+        color = Color.White,
+        border = BorderStroke(width = 1.dp, color = color),
+        modifier = modifier
+            .fillMaxWidth()
+            .height(45.dp)
+            .graphicsLayer {
+                shadowElevation = 5.dp.toPx()
+                translationY = 40f },
+        shape = RoundedCornerShape(5.dp))
+    {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(10.dp)
+        ){
+            Icon(imageVector = Icons.Filled.Info, contentDescription = null, tint = color )
+            Spacer(modifier = Modifier.width(5.dp))
+            Text(text = text, style = style, modifier = Modifier)
+        }
+    }
+}
