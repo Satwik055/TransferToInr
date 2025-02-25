@@ -96,6 +96,15 @@ class SignupScreenViewModel(
         }
     }
 
+    fun resetFormErrors(){
+        _formState.value = _formState.value.copy(
+            emailError = null,
+            passwordError = null,
+            nameError = null,
+            phoneError = null
+        )
+    }
+
     sealed class ValidationEvent{
         object Success:ValidationEvent()
     }

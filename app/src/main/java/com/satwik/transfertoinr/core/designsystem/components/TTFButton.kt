@@ -30,24 +30,30 @@ enum class ButtonType{
 @Composable
 fun TTFButton(
     modifier: Modifier = Modifier,
-    type: ButtonType = ButtonType.REGULAR,
     color: Color = JungleGreen,
     textColor: Color = White,
     text:String,
     fontSize: TextUnit = 18.sp,
     fontWeight: FontWeight = FontWeight.Normal,
     onClick: () -> Unit,
+    isLoading:Boolean = false
 ){
     Button(
         onClick = onClick,
+        enabled = !isLoading,
         shape = RoundedCornerShape(10.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = color),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = color,
+            disabledContainerColor = color.copy(alpha = 0.6f),
+            disabledContentColor = Color.White.copy(alpha = 0.5f)
+        ),
         modifier= modifier
             .fillMaxWidth()
             .height(55.dp)
     ) {
-        when(type){
-            ButtonType.REGULAR ->
+
+        when(isLoading){
+            false ->
                 Text(
                     text = text,
                     fontFamily = fontFamily,
@@ -56,7 +62,7 @@ fun TTFButton(
                     color = textColor,
                     fontSize = fontSize
                 )
-            ButtonType.LOADING ->
+            true ->
                 CircularProgressIndicator(color = White, modifier = Modifier.size(25.dp), strokeWidth = 2.dp)
         }
     }

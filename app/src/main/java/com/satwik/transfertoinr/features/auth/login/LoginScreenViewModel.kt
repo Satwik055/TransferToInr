@@ -30,17 +30,13 @@ class LoginScreenViewModel(
 
     fun login(email:String, password:String){
         viewModelScope.launch {
-
             _loginScreenState.value = LoginScreenState(isLoading = true)
-
             try{
                 authRepository.login(email, password)
                 _loginScreenState.value = LoginScreenState(success = true)
-
             }
             catch (e:Exception){
                 _loginScreenState.value = LoginScreenState(error = e.message.toString())
-
             }
 
         }

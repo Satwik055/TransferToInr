@@ -2,7 +2,7 @@ package com.satwik.transfertoinr.features.auth.signup
 
 data class SignupFormState(
     val email:String = "",
-    val emailError:String? = null,
+    var emailError:String? = null,
     val password:String = "",
     val passwordError:String? = null,
     val name:String = "",

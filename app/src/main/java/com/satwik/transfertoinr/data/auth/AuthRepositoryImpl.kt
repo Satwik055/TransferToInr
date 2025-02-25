@@ -2,6 +2,8 @@ package com.satwik.transfertoinr.data.auth
 
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.auth
+import io.github.jan.supabase.auth.exception.AuthErrorCode
+import io.github.jan.supabase.auth.exception.AuthRestException
 import io.github.jan.supabase.auth.providers.builtin.Email
 import io.github.jan.supabase.postgrest.postgrest
 import kotlinx.coroutines.runBlocking
@@ -11,16 +13,28 @@ import kotlinx.serialization.json.put
 
 class AuthRepositoryImpl(private val client: SupabaseClient) :AuthRepository {
     override suspend fun login(email: String, password: String) {
-        client.auth.signInWith(Email) {
-            this.email = email
-            this.password = password
+
+        try{
+            client.auth.signInWith(Email) {
+                this.email = email
+                this.password = password
+            }
+        }
+        catch (authException:AuthRestException){
+            throw Exception(authException.errorCode?.name ?: "")
         }
     }
 
     override suspend fun signup(email: String, password: String, name: String, phone: String) {
-        val user = client.auth.signUpWith(Email) {
-            this.email = email
-            this.password = password
+
+        try{
+            client.auth.signUpWith(Email) {
+                this.email = email
+                this.password = password
+            }
+        }
+        catch (authException:AuthRestException){
+            throw Exception(authException.errorCode?.name ?: "")
         }
 
             val response = client.postgrest.rpc(
