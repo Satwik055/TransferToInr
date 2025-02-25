@@ -1,5 +1,6 @@
 package com.satwik.transfertoinr.data.auth
 
+import android.util.Log
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.exception.AuthErrorCode
@@ -36,8 +37,7 @@ class AuthRepositoryImpl(private val client: SupabaseClient) :AuthRepository {
         catch (authException:AuthRestException){
             throw Exception(authException.errorCode?.name ?: "")
         }
-
-            val response = client.postgrest.rpc(
+            client.postgrest.rpc(
                 function = "addttfuser",
                 parameters = buildJsonObject {
                     put("p_name", name)
