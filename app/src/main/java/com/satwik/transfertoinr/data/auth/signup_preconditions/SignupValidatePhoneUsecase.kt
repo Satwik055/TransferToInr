@@ -1,6 +1,8 @@
 package com.satwik.transfertoinr.data.auth.signup_preconditions
 
-class ValidatePhoneUsecase{
+import com.satwik.transfertoinr.core.model.ValidationResult
+
+class SignupValidatePhoneUsecase{
     fun execute(phone:String): ValidationResult {
         if(phone.isBlank()){
             return ValidationResult(false, errorMessage = "Please enter your phone number")

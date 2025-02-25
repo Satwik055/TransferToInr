@@ -1,6 +1,8 @@
 package com.satwik.transfertoinr.data.auth.signup_preconditions
 
-class ValidatePasswordUsecase{
+import com.satwik.transfertoinr.core.model.ValidationResult
+
+class SignupValidatePasswordUsecase{
 
     fun execute(password:String): ValidationResult {
         if(password.isBlank()){

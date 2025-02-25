@@ -1,8 +1,10 @@
-package com.satwik.transfertoinr.data.auth.signup_preconditions
+package com.satwik.transfertoinr.data.auth.login_preconditions
 
 import android.util.Patterns
+import com.satwik.transfertoinr.core.model.ValidationResult
 
-class ValidateEmailUsecase{
+class LoginValidateEmailUsecase{
+
     fun execute(email:String): ValidationResult {
         if(email.isBlank()){
             return ValidationResult(false, errorMessage = "Please enter an email")

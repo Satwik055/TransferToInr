@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -17,6 +19,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -29,27 +32,35 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.satwik.transfertoinr.R
+import com.satwik.transfertoinr.core.designsystem.components.ButtonType
 import com.satwik.transfertoinr.core.designsystem.components.TTFButton
 import com.satwik.transfertoinr.core.designsystem.components.TTFTextField
 import com.satwik.transfertoinr.core.designsystem.theme.JungleGreen
 import com.satwik.transfertoinr.core.designsystem.theme.fontFamily
+import com.satwik.transfertoinr.core.main.ScreenSignup
 import com.satwik.transfertoinr.features.auth.signup.SignupScreenViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun LoginScreen(modifier: Modifier = Modifier) {
+fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
 
-//    val systemUiController = rememberSystemUiController()
-//    systemUiController.setStatusBarColor(
-//        color = Color.White,
-//        darkIcons = true
-//    )
-
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
 
     val viewModel = koinViewModel<LoginScreenViewModel>()
     val state = viewModel.loginScreenState.value
+    val formState = viewModel.formState.value
+    val context = LocalContext.current
+    var isFormValidated by remember { mutableStateOf(false) }
+
+
+    LaunchedEffect(context) {
+        viewModel.validationEvents.collect{ event->
+            when(event){
+                is LoginScreenViewModel.ValidationEvent.Success ->{
+                    isFormValidated = true
+                }
+            }
+        }
+    }
 
     if(state.success){
         println("Login Done")
@@ -62,8 +73,7 @@ fun LoginScreen(modifier: Modifier = Modifier) {
     }
 
 
-    Column{
-
+    Column(modifier = modifier.background(Color.White)){
         Spacer(modifier = Modifier.height(10.dp))
         Icon(painter = painterResource(id = R.drawable.ic_carret), tint = JungleGreen, contentDescription = null, modifier = Modifier.padding(start = 16.dp, end = 25.dp, top = 16.dp, bottom = 16.dp))
         Column(Modifier.padding(horizontal = 16.dp)){
@@ -72,19 +82,46 @@ fun LoginScreen(modifier: Modifier = Modifier) {
             Text(text = "Please login to continue", fontFamily = fontFamily, fontSize = 15.sp, fontWeight = FontWeight.SemiBold, color = JungleGreen)
             Spacer(modifier = Modifier.height(40.dp))
             Column(verticalArrangement = Arrangement.spacedBy(1.dp)){
-                TTFTextField(text = email, onValueChange = {email=it}, placeholder = "Email", keyboardType = KeyboardType.Email)
-                TTFTextField(text = password, onValueChange = {password=it}, placeholder = "Password", keyboardType = KeyboardType.Password)
+                TTFTextField(
+                    text = formState.email,
+                    onValueChange ={viewModel.onEvent(LoginFormEvent.EmailChanged(it))},
+                    placeholder = "Email",
+                    errorText = formState.emailError?:"",
+                    isError = formState.emailError != null,
+                    keyboardType = KeyboardType.Email
+                )
+                TTFTextField(
+                    text = formState.password,
+                    onValueChange ={viewModel.onEvent(LoginFormEvent.PasswordChanged(it))},
+                    placeholder = "Password",
+                    isError = formState.passwordError != null,
+                    errorText = formState.passwordError?:"",
+                    keyboardType = KeyboardType.Password
+                )
             }
 
             Spacer(modifier = Modifier.height(100.dp))
 
-            TTFButton(text = "Submit", onClick = {viewModel.login(email, password)})
+            TTFButton(
+                text = "Submit",
+                type =
+                when(state.isLoading) {
+                    true -> ButtonType.LOADING
+                    false-> ButtonType.REGULAR
+                },
+                onClick = {
+                    viewModel.onEvent(LoginFormEvent.Submit)
+                    if(isFormValidated){
+                        viewModel.login(formState.email, formState.password)
+                    }
+                }
+            )
             Spacer(modifier = Modifier.weight(1f))
-            SignupText(onClick = { /*TODO*/ }, modifier = Modifier.align(Alignment.CenterHorizontally).padding(bottom = 12.dp))
+            SignupText(onClick = { navController.navigate(ScreenSignup) }, modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(bottom = 12.dp))
         }
-
     }
-
 }
 
 @Composable
@@ -97,7 +134,7 @@ internal fun SignupText(
         modifier = modifier.clickable { onClick.invoke() },
         style = style,
         text = buildAnnotatedString {
-            append("Don't have an account ? ")
+            append("Don't have an account ?")
             withStyle(style = SpanStyle(color = JungleGreen, fontWeight = FontWeight.SemiBold)){
                 append("Signup")
             }

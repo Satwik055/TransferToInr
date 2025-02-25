@@ -1,11 +1,12 @@
 package com.satwik.transfertoinr.data.auth
 
 import com.satwik.transfertoinr.core.main.MainActivityViewModel
-import com.satwik.transfertoinr.data.auth.signup_preconditions.ValidateEmailUsecase
-import com.satwik.transfertoinr.data.auth.signup_preconditions.ValidateNameUsecase
-import com.satwik.transfertoinr.data.auth.signup_preconditions.ValidatePasswordUsecase
-import com.satwik.transfertoinr.data.auth.signup_preconditions.ValidatePhoneUsecase
-import com.satwik.transfertoinr.features.account.AccountsScreenViewModel
+import com.satwik.transfertoinr.data.auth.login_preconditions.LoginValidateEmailUsecase
+import com.satwik.transfertoinr.data.auth.login_preconditions.LoginValidatePasswordUsecase
+import com.satwik.transfertoinr.data.auth.signup_preconditions.SignupValidateEmailUsecase
+import com.satwik.transfertoinr.data.auth.signup_preconditions.SignupValidateNameUsecase
+import com.satwik.transfertoinr.data.auth.signup_preconditions.SignupValidatePasswordUsecase
+import com.satwik.transfertoinr.data.auth.signup_preconditions.SignupValidatePhoneUsecase
 import com.satwik.transfertoinr.features.auth.login.LoginScreenViewModel
 import com.satwik.transfertoinr.features.auth.signup.SignupScreenViewModel
 import org.koin.core.module.dsl.viewModel
@@ -17,16 +18,22 @@ val authModule = module {
     }
 
     single {
-        ValidateNameUsecase()
+        SignupValidateNameUsecase()
     }
     single {
-        ValidateEmailUsecase()
+        SignupValidateEmailUsecase()
     }
     single {
-        ValidatePasswordUsecase()
+        SignupValidatePasswordUsecase()
     }
     single {
-        ValidatePhoneUsecase()
+        SignupValidatePhoneUsecase()
+    }
+    single {
+        LoginValidateEmailUsecase()
+    }
+    single {
+        LoginValidatePasswordUsecase()
     }
 
     viewModel {
@@ -34,7 +41,7 @@ val authModule = module {
     }
 
     viewModel {
-        LoginScreenViewModel(get())
+        LoginScreenViewModel(get(), get(), get())
     }
 
     viewModel {

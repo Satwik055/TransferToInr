@@ -1,4 +1,4 @@
-package com.satwik.transfertoinr.data.auth.signup_preconditions
+package com.satwik.transfertoinr.core.model
 
 data class ValidationResult(
     val successfull:Boolean,

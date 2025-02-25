@@ -5,21 +5,20 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.satwik.transfertoinr.data.auth.AuthRepository
-import com.satwik.transfertoinr.data.auth.AuthRepositoryImpl
-import com.satwik.transfertoinr.data.auth.signup_preconditions.ValidateEmailUsecase
-import com.satwik.transfertoinr.data.auth.signup_preconditions.ValidateNameUsecase
-import com.satwik.transfertoinr.data.auth.signup_preconditions.ValidatePasswordUsecase
-import com.satwik.transfertoinr.data.auth.signup_preconditions.ValidatePhoneUsecase
+import com.satwik.transfertoinr.data.auth.signup_preconditions.SignupValidateEmailUsecase
+import com.satwik.transfertoinr.data.auth.signup_preconditions.SignupValidateNameUsecase
+import com.satwik.transfertoinr.data.auth.signup_preconditions.SignupValidatePasswordUsecase
+import com.satwik.transfertoinr.data.auth.signup_preconditions.SignupValidatePhoneUsecase
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class SignupScreenViewModel(
     private val authRepository: AuthRepository,
-    private val validateEmailUsecase: ValidateEmailUsecase,
-    private val validatePasswordUsecase: ValidatePasswordUsecase,
-    private val validateNameUsecase: ValidateNameUsecase,
-    private val validatePhoneUsecase: ValidatePhoneUsecase
+    private val signupValidateEmailUsecase: SignupValidateEmailUsecase,
+    private val signupValidatePasswordUsecase: SignupValidatePasswordUsecase,
+    private val signupValidateNameUsecase: SignupValidateNameUsecase,
+    private val signupValidatePhoneUsecase: SignupValidatePhoneUsecase
 
 ):ViewModel() {
 
@@ -69,10 +68,10 @@ class SignupScreenViewModel(
 
 
     private fun submitData() {
-        val emailResult = validateEmailUsecase.execute(_formState.value.email)
-        val passwordResult = validatePasswordUsecase.execute(_formState.value.password)
-        val nameResult = validateNameUsecase.execute(_formState.value.name)
-        val phoneResult = validatePhoneUsecase.execute(_formState.value.phone)
+        val emailResult = signupValidateEmailUsecase.execute(_formState.value.email)
+        val passwordResult = signupValidatePasswordUsecase.execute(_formState.value.password)
+        val nameResult = signupValidateNameUsecase.execute(_formState.value.name)
+        val phoneResult = signupValidatePhoneUsecase.execute(_formState.value.phone)
 
 
         val hasError = listOf(

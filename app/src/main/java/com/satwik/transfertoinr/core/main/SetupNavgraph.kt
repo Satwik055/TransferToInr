@@ -39,7 +39,7 @@ fun SetupNavgraph(navController:NavHostController, startDestination:Any, activit
             MainScreen(navController = navController, activity = activity)
         }
         composable<ScreenLogin> {
-            LoginScreen()
+            LoginScreen(navController=navController)
         }
         composable<ScreenRecipient> {
             RecipientScreen(navController = navController)

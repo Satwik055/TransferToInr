@@ -63,7 +63,7 @@ fun SignupScreen(modifier: Modifier = Modifier, navController: NavController) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
-    Column(Modifier.background(Color.White)){
+    Column(modifier.background(Color.White)){
 
         LaunchedEffect(context) {
             viewModel.validationEvents.collect{ event->
@@ -89,11 +89,6 @@ fun SignupScreen(modifier: Modifier = Modifier, navController: NavController) {
             Text(text = "Please signup to continue", fontFamily = fontFamily, fontSize = 15.sp, fontWeight = FontWeight.SemiBold, color = JungleGreen)
             Spacer(modifier = Modifier.height(40.dp))
             Column(verticalArrangement = Arrangement.spacedBy(5.dp)){
-//                TTFTextField(text = name, onValueChange = {name=it}, placeholder = "Name")
-//                TTFTextField(text = phone, onValueChange = {phone=it}, placeholder = "Phone", keyboardType = KeyboardType.Phone)
-//                TTFTextField(text = email, onValueChange = {email=it}, placeholder = "Email", keyboardType = KeyboardType.Email)
-//                TTFTextField(text = password, onValueChange = {password=it}, placeholder = "Password", keyboardType = KeyboardType.Password, isPassword = true)
-
                 TTFTextField(
                     text = formState.name,
                     onValueChange = { viewModel.onEvent(SignupFormEvent.NameChanged(it)) },
@@ -137,7 +132,6 @@ fun SignupScreen(modifier: Modifier = Modifier, navController: NavController) {
                     false-> ButtonType.REGULAR
             },
                 onClick = {
-//                viewModel.signup(email, password, name, phone)
                     viewModel.onEvent(SignupFormEvent.Submit)
                     if(isFormValidated){
                         viewModel.signup(
