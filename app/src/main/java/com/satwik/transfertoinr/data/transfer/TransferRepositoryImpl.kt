@@ -12,6 +12,7 @@ class TransferRepositoryImpl(private val client: SupabaseClient): TransferReposi
         transactionCode: String,
         sent: Int,
         currency: CurrencyType,
+        reason:String
     ) {
         val email = client.auth.currentUserOrNull()?.email
         val response = client.postgrest.rpc(
@@ -21,6 +22,7 @@ class TransferRepositoryImpl(private val client: SupabaseClient): TransferReposi
                 put("p_sent", sent)
                 put("p_currency", currency.name)
                 put("p_email", email)
+                put("p_reason", reason)
             }
         )
     }

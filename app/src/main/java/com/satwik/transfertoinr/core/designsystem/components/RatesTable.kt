@@ -20,9 +20,12 @@ import com.satwik.transfertoinr.R
 import com.satwik.transfertoinr.core.designsystem.theme.JungleGreen
 import com.satwik.transfertoinr.core.designsystem.theme.VeryLightGrey
 import com.satwik.transfertoinr.core.designsystem.theme.fontFamily
+import com.satwik.transfertoinr.core.model.CurrencyType
+import com.satwik.transfertoinr.core.utils.getCurrencySymbol
 
 @Composable
 fun RateTable(
+    currency: CurrencyType,
     ttiRate:Double,
     ttiFees:Double,
     wiseRate:Double,
@@ -35,6 +38,7 @@ fun RateTable(
     bankFees:Double
 
 ) {
+    val currencySymbol = getCurrencySymbol(currency)
     val providerLogos = listOf(
         R.drawable.ic_ttf,
         R.drawable.ic_wise,
@@ -45,11 +49,11 @@ fun RateTable(
 
     val tableData = listOf(
         listOf("Send", "Receive", "Fees"),
-        listOf("1 €", ttiRate.toString(), ttiFees.toString()),
-        listOf("1 €", wiseRate.toString(), wiseFees.toString()),
-        listOf("1 €", skrillRate.toString(), skrillFees.toString()),
-        listOf("1 €", paypalRate.toString(), paypalFees.toString()),
-        listOf("1 €", bankRate.toString(), bankFees.toString()),
+        listOf("1", ttiRate.toString(), ttiFees.toString()),
+        listOf("1", wiseRate.toString(), wiseFees.toString()),
+        listOf("1", skrillRate.toString(), skrillFees.toString()),
+        listOf("1", paypalRate.toString(), paypalFees.toString()),
+        listOf("1", bankRate.toString(), bankFees.toString()),
     )
 
     val textStyle = TextStyle(fontSize = 13.sp, fontWeight = FontWeight.Normal, fontFamily = fontFamily)
@@ -96,7 +100,7 @@ fun RateTable(
                 )
                 row.forEach { cell ->
                     Text(
-                        text = cell,
+                        text = cell+currencySymbol,
                         style = textStyle,
                         modifier = Modifier.weight(1f).padding(vertical = 16.dp, horizontal = 20.dp),
                         color = JungleGreen

@@ -19,11 +19,7 @@ class HomeScreenViewModel(
     private val _exchangeRateState = mutableStateOf(ExchangeRateState())
     val exchangeRateState: State<ExchangeRateState> = _exchangeRateState
 
-    init {
-        getUserInfo()
-    }
-
-    private fun getUserInfo(){
+    fun getUserInfo(){
         viewModelScope.launch {
             _userInfoState.value = UserInfoStateHome(isLoading = true)
             try {
@@ -41,7 +37,7 @@ class HomeScreenViewModel(
         viewModelScope.launch {
             _exchangeRateState.value = ExchangeRateState(isLoading = true)
             try{
-                val prefferedCurrency = accountRepository.getUserInfo().preffered_currency
+                val prefferedCurrency = accountRepository.getUserInfo().preferred_currency
                 val rate = exchangeRateRepository.getExchangeRates(prefferedCurrency)
                 _exchangeRateState.value = ExchangeRateState(rate = rate)
             }

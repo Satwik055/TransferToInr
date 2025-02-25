@@ -7,4 +7,5 @@ import com.satwik.transfertoinr.core.model.UserInfo
 interface AccountRepository {
     suspend fun getUserInfo():UserInfo
     suspend fun getExchangeRates(currency:CurrencyType):ExchangeRate
+    suspend fun updatePrefferedCurrency(email:String, currency: CurrencyType)
 }

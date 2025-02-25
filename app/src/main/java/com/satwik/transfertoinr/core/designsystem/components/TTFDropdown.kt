@@ -130,19 +130,19 @@ fun NewTTFDropdown(
     val focusManager = LocalFocusManager.current
 
     ExposedDropdownMenuBox(
-        modifier = modifier,
+        modifier = modifier.fillMaxWidth(),
         expanded = expanded,
         onExpandedChange = { expanded = !expanded }
     ) {
         OutlinedTextField(
-            value = if (selectedItem.isEmpty()) "No item found" else selectedItem,
+            value = selectedItem,
             onValueChange = {},
             singleLine = true,
             textStyle = textStyle,
             readOnly = true,
 
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-            modifier = modifier.menuAnchor().focusRequester(focusRequester),
+            modifier = modifier.menuAnchor().focusRequester(focusRequester).fillMaxWidth(),
             colors = OutlinedTextFieldDefaults.colors(
                 focusedContainerColor = Color.Transparent,
                 unfocusedContainerColor = Color.Transparent,
@@ -164,26 +164,24 @@ fun NewTTFDropdown(
                 focusManager.clearFocus()
             }
         ) {
-            if(items.isNotEmpty()){
-                items.forEachIndexed { index, item ->
-                    DropdownMenuItem(
-                        text = {
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween
-                            ) {
-                                Text(text = item, style = textStyle)
-                            }
-                        },
-                        onClick = {
-                            onItemSelected(item)
-                            expanded = false
-                            focusManager.clearFocus()
+            items.forEachIndexed { index, item ->
+                DropdownMenuItem(
+                    text = {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text(text = item, style = textStyle)
                         }
-                    )
-                    if (index < items.lastIndex) {
-                        HorizontalDivider(modifier = Modifier.padding(horizontal = 12.dp), thickness = 1.dp, color = VeryLightGrey)
+                    },
+                    onClick = {
+                        onItemSelected(item)
+                        expanded = false
+                        focusManager.clearFocus()
                     }
+                )
+                if (index < items.lastIndex) {
+                    HorizontalDivider(modifier = Modifier.padding(horizontal = 12.dp), thickness = 1.dp, color = VeryLightGrey)
                 }
             }
         }

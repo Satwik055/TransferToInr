@@ -23,6 +23,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.satwik.transfertoinr.core.designsystem.components.RateTable
 import com.satwik.transfertoinr.core.designsystem.theme.JungleGreen
 import com.satwik.transfertoinr.core.designsystem.theme.fontFamily
+import com.satwik.transfertoinr.core.model.CurrencyType
 import org.koin.androidx.compose.koinViewModel
 
 
@@ -37,8 +38,6 @@ fun HomeScreen(modifier: Modifier = Modifier) {
 @Composable
 internal fun Content(modifier: Modifier = Modifier) {
 
-
-
     val viewModel =  koinViewModel<HomeScreenViewModel>()
     val user = viewModel.userInfoState.value.userInfo
     val rate = viewModel.exchangeRateState.value.rate
@@ -51,6 +50,7 @@ internal fun Content(modifier: Modifier = Modifier) {
 
     LaunchedEffect(Unit) {
         viewModel.getExchangeRates()
+        viewModel.getUserInfo()
     }
 
     Column (modifier = modifier){
@@ -78,6 +78,7 @@ internal fun Content(modifier: Modifier = Modifier) {
         Spacer(modifier = Modifier.height(10.dp))
         
         RateTable(
+            currency = user.preferred_currency,
             ttiRate = rate.tti,
             ttiFees = rate.tti,
             wiseRate = rate.wise,
@@ -92,7 +93,6 @@ internal fun Content(modifier: Modifier = Modifier) {
 
     }
 }
-
 
 
 

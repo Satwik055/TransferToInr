@@ -12,10 +12,6 @@ import kotlinx.serialization.json.put
 
 class AccountRepositoryImpl(private val client: SupabaseClient):AccountRepository {
     override suspend fun getUserInfo():UserInfo {
-
-        val foo = client.auth.sessionManager.loadSession()?.user?.email
-        println("SHEESH: $foo")
-
         val email = client.auth.currentUserOrNull()?.email
         val response = client.postgrest.rpc(
             function = "get_user_details_by_email",
@@ -23,8 +19,11 @@ class AccountRepositoryImpl(private val client: SupabaseClient):AccountRepositor
                 put("p_email", email)
             }
         )
+//        println("RESPONSE: ${response}")
         val jsonString = response.data
         val userInfo= Json.decodeFromString<List<UserInfo>>(jsonString)
+
+        println("BOOYAHH ${ userInfo.first() }")
         return userInfo.first()
     }
 
@@ -45,5 +44,15 @@ class AccountRepositoryImpl(private val client: SupabaseClient):AccountRepositor
             println(exchangeRates)
             return exchangeRates.first()
         }
+    }
+
+    override suspend fun updatePrefferedCurrency(email:String, currency: CurrencyType) {
+        val response = client.postgrest.rpc(
+            function = "update_preferred_currency",
+            parameters = buildJsonObject {
+                put("p_email", email)
+                put("p_currency", currency.name)
+            }
+        )
     }
 }

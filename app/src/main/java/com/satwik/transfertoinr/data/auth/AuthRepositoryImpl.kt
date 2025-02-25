@@ -29,7 +29,6 @@ class AuthRepositoryImpl(private val client: SupabaseClient) :AuthRepository {
                     put("p_name", name)
                     put("p_email", email)
                     put("p_phone", phone)
-                    put("p_uid",user?.id)
                 }
             )
         }

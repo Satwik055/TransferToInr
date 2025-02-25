@@ -28,8 +28,10 @@ import androidx.compose.ui.unit.sp
 import com.satwik.transfertoinr.core.designsystem.theme.JungleGreen
 import com.satwik.transfertoinr.core.designsystem.theme.Mustard
 import com.satwik.transfertoinr.core.designsystem.theme.fontFamily
+import com.satwik.transfertoinr.core.model.CurrencyType
 import com.satwik.transfertoinr.core.model.TransactionStatus
 import com.satwik.transfertoinr.core.utils.formatTimestamp
+import com.satwik.transfertoinr.core.utils.getCurrencySymbol
 import org.koin.androidx.compose.koinViewModel
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
@@ -48,7 +50,10 @@ internal fun Content(modifier: Modifier = Modifier) {
 
     LaunchedEffect(Unit) {
         viewModel.getAllTransaction()
+        viewModel.getPreferredCurrency()
     }
+
+    val preferredCurrency = viewModel.prefferedCurrency.value
 
     Box (modifier = modifier){
         if(viewModel.transactionState.value.isLoading){
@@ -70,7 +75,8 @@ internal fun Content(modifier: Modifier = Modifier) {
                             sent = it.sent.toString(),
                             received = it.receive.toString(),
                             status = it.status,
-                            style = style1
+                            style = style1,
+                            currency = it.currency
                         )
                     }
                 }
@@ -80,7 +86,8 @@ internal fun Content(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun TransactionEntry(modifier: Modifier = Modifier, date:String, id:String,sent:String, received:String, style:TextStyle, status: TransactionStatus) {
+fun TransactionEntry(modifier: Modifier = Modifier, date:String, id:String,sent:String, received:String, style:TextStyle, status: TransactionStatus, currency: CurrencyType) {
+    val symbol = getCurrencySymbol(currency)
     Row(
         modifier = modifier.fillMaxWidth(),
     ) {
@@ -90,17 +97,17 @@ fun TransactionEntry(modifier: Modifier = Modifier, date:String, id:String,sent:
         Text(text = id, style = style,modifier = Modifier
             .weight(1f)
             .padding(vertical = 8.dp, horizontal = 5.dp))
-        Text(text = sent, style = style, modifier = Modifier
+        Text(text = sent+symbol, style = style, modifier = Modifier
             .weight(1f)
             .padding(vertical = 8.dp, horizontal = 8.dp))
-        Text(text = received, style = style, modifier = Modifier
+        Text(text = "₹$received", style = style, modifier = Modifier
             .weight(1f)
             .padding(8.dp))
         Text(text = status.name, style = style.copy(fontWeight = FontWeight.Medium),modifier = Modifier
             .weight(1f)
             .padding(vertical = 8.dp, horizontal = 7.dp),
             color = when(status){
-                TransactionStatus.SUCCESS -> JungleGreen
+                TransactionStatus.SUCCESS -> Color.Green
                 TransactionStatus.FAILED -> Color.Red
                 TransactionStatus.PENDING -> Mustard
 

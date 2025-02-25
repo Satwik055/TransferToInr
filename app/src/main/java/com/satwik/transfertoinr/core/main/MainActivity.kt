@@ -1,9 +1,11 @@
 package com.satwik.transfertoinr.core.main
 
 import android.app.Activity
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -20,6 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.core.content.getSystemService
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
@@ -47,6 +50,7 @@ class MainActivity : ComponentActivity() {
             val startDestination:Any = if(isLoggedIn){ ScreenMain } else{ ScreenSignup }
             val navController = rememberNavController()
 
+            this@MainActivity.getSystemService(CLIPBOARD_SERVICE)
             if(!isInitializing){
                 SetupNavgraph(
                     navController = navController,
@@ -59,6 +63,7 @@ class MainActivity : ComponentActivity() {
 }
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MainScreen(navController: NavController, activity: Activity) {
     var selectedIndex by remember { mutableIntStateOf(0) }

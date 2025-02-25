@@ -43,7 +43,12 @@ class AccountsScreenViewModel(
         }
     }
 
-
+    fun updatePreferredCurrency(currency: CurrencyType){
+        viewModelScope.launch {
+            val email = accountRepository.getUserInfo().email
+            accountRepository.updatePrefferedCurrency(email, currency)
+        }
+    }
 
 
 //    private val customTheme = SNSTheme{

@@ -13,6 +13,6 @@ val transactionModule = module {
     }
 
     viewModel {
-        TransactionViewModel(get())
+        TransactionViewModel(get(), get())
     }
 }

@@ -9,5 +9,5 @@ data class UserInfo(
     val email:String = "",
     val phone:String = "",
     val kyc_status:Boolean = false,
-    val preffered_currency:CurrencyType = CurrencyType.EUR
+    val preferred_currency:CurrencyType = CurrencyType.EUR
 )
