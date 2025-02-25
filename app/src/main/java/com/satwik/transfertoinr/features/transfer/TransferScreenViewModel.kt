@@ -26,6 +26,10 @@ class TransferScreenViewModel(
     private val _ttiRate = MutableStateFlow(0.0)
     val ttiRate = _ttiRate.asStateFlow()
 
+    private val _kycStatus = MutableStateFlow(false)
+    val kycStatus = _kycStatus.asStateFlow()
+
+
     private val _preferredCurrency = MutableStateFlow(CurrencyType.EUR)
     val prefferedCurrency = _preferredCurrency.asStateFlow()
 
@@ -72,4 +76,10 @@ class TransferScreenViewModel(
         }
     }
 
+    fun getKycStatus(){
+        viewModelScope.launch {
+            val status = accountRepository.getUserInfo().kyc_status
+            _kycStatus.value = status
+        }
+    }
 }

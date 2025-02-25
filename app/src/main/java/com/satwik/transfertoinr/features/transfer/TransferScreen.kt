@@ -94,6 +94,8 @@ internal fun Content(modifier: Modifier = Modifier) {
     val ttirate = viewModel.ttiRate.collectAsState().value
     val amountReceive = ttirate * (amount.toIntOrNull() ?: 0)
     val context = LocalContext.current
+    val kycStatus= viewModel.kycStatus.collectAsState().value
+
 
     val preferredCurrency = viewModel.prefferedCurrency.collectAsState().value
 
@@ -203,17 +205,24 @@ internal fun Content(modifier: Modifier = Modifier) {
             TTFButton(
                 text = "Submit",
                 onClick = {
-//                coroutineScope.launch { snackbarHostState.showSnackbar("This is a Snackbar!", duration = SnackbarDuration.Short) }
-                    viewModel.addTransaction(transactionCode, amount.toInt(), reason = selectedReason)
-                    transactionCode = generateTransactionCode() //new code after submitting
-                    amount = "0"
+                    if(!kycStatus){
+                        Toast.makeText(context, "Please verify your KYC", Toast.LENGTH_SHORT).show()
+                    }
+                    else{
+                        viewModel.addTransaction(transactionCode, amount.toInt(), reason = selectedReason)
+                        transactionCode = generateTransactionCode() //new code after submitting
+                        amount = "0"
+                    }
                 })
         }
 
         SnackbarHost(
-            snackbar = { TTFSnackbar(text = "Transfer started", color = JungleGreen)},
+            snackbar = { TTFSnackbar(text = "error", color = Color.Red)},
             hostState = snackbarHostState,
         )
+
+//        coroutineScope.launch { snackbarHostState.showSnackbar("", duration = SnackbarDuration.Short) }
+
     }
 }
 

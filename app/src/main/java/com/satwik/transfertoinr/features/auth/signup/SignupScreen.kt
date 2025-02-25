@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -21,6 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -52,12 +54,27 @@ fun SignupScreen(modifier: Modifier = Modifier, navController: NavController) {
     val viewModel = koinViewModel<SignupScreenViewModel>()
     val state = viewModel.signupScreenState.value
 
+    val formState = viewModel.formState.value
+    val context = LocalContext.current
+    var isFormValidated by remember { mutableStateOf(false) }
+
     var name by remember { mutableStateOf("") }
     var phone by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
     Column(Modifier.background(Color.White)){
+
+        LaunchedEffect(context) {
+            viewModel.validationEvents.collect{ event->
+                when(event){
+                    is SignupScreenViewModel.ValidationEvent.Success ->{
+                        isFormValidated = true
+                    }
+                }
+            }
+        }
+
         when {
             state.isLoading -> println("Loading...")
             state.error.isNotEmpty() -> println("Error: ${state.error}")
@@ -72,10 +89,43 @@ fun SignupScreen(modifier: Modifier = Modifier, navController: NavController) {
             Text(text = "Please signup to continue", fontFamily = fontFamily, fontSize = 15.sp, fontWeight = FontWeight.SemiBold, color = JungleGreen)
             Spacer(modifier = Modifier.height(40.dp))
             Column(verticalArrangement = Arrangement.spacedBy(5.dp)){
-                TTFTextField(text = name, onValueChange = {name=it}, placeholder = "Name")
-                TTFTextField(text = phone, onValueChange = {phone=it}, placeholder = "Phone", keyboardType = KeyboardType.Phone)
-                TTFTextField(text = email, onValueChange = {email=it}, placeholder = "Email", keyboardType = KeyboardType.Email)
-                TTFTextField(text = password, onValueChange = {password=it}, placeholder = "Password", keyboardType = KeyboardType.Password, isPassword = true)
+//                TTFTextField(text = name, onValueChange = {name=it}, placeholder = "Name")
+//                TTFTextField(text = phone, onValueChange = {phone=it}, placeholder = "Phone", keyboardType = KeyboardType.Phone)
+//                TTFTextField(text = email, onValueChange = {email=it}, placeholder = "Email", keyboardType = KeyboardType.Email)
+//                TTFTextField(text = password, onValueChange = {password=it}, placeholder = "Password", keyboardType = KeyboardType.Password, isPassword = true)
+
+                TTFTextField(
+                    text = formState.name,
+                    onValueChange = { viewModel.onEvent(SignupFormEvent.NameChanged(it)) },
+                    placeholder = "Name",
+                    isError = formState.nameError != null,
+                    errorText = formState.nameError ?: "",
+                )
+                TTFTextField(
+                    text = formState.phone,
+                    onValueChange = { viewModel.onEvent(SignupFormEvent.PhoneChanged(it)) },
+                    placeholder = "Phone",
+                    errorText = formState.phoneError?:"",
+                    isError = formState.phoneError != null,
+                    keyboardType = KeyboardType.Phone
+                )
+                TTFTextField(
+                    text = formState.email,
+                    onValueChange = { viewModel.onEvent(SignupFormEvent.EmailChanged(it)) },
+                    isError = formState.emailError != null,
+                    errorText = formState.emailError?:"",
+                    placeholder = "Email",
+                    keyboardType = KeyboardType.Email
+                )
+                TTFTextField(
+                    text = formState.password,
+                    onValueChange = { viewModel.onEvent(SignupFormEvent.PasswordChanged(it)) },
+                    placeholder = "Password",
+                    errorText = formState.passwordError?:"",
+                    isError = formState.passwordError != null,
+                    keyboardType = KeyboardType.Password,
+                    isPassword = true
+                )
             }
 
             Spacer(modifier = Modifier.height(40.dp))
@@ -87,7 +137,16 @@ fun SignupScreen(modifier: Modifier = Modifier, navController: NavController) {
                     false-> ButtonType.REGULAR
             },
                 onClick = {
-                viewModel.signup(email, password, name, phone)
+//                viewModel.signup(email, password, name, phone)
+                    viewModel.onEvent(SignupFormEvent.Submit)
+                    if(isFormValidated){
+                        viewModel.signup(
+                            email = formState.email,
+                            password = formState.password,
+                            name = formState.name,
+                            phone = formState.phone
+                        )
+                    }
             })
 
             Spacer(modifier = Modifier.height(5.dp))
