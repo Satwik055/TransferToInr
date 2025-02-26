@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.Color
 import android.graphics.Typeface
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,13 +29,22 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.satwik.transfertoinr.R
 import com.satwik.transfertoinr.core.designsystem.theme.JungleGreen
 import com.satwik.transfertoinr.core.designsystem.theme.White
 import com.satwik.transfertoinr.core.designsystem.theme.fontFamily
+import com.sumsub.sns.core.SNSActionResult
 import com.sumsub.sns.core.SNSMobileSDK
+import com.sumsub.sns.core.data.listener.SNSActionResultHandler
+import com.sumsub.sns.core.data.listener.SNSCompleteHandler
+import com.sumsub.sns.core.data.listener.SNSErrorHandler
+import com.sumsub.sns.core.data.listener.SNSEvent
+import com.sumsub.sns.core.data.listener.SNSEventHandler
 import com.sumsub.sns.core.data.listener.SNSStateChangedHandler
 import com.sumsub.sns.core.data.listener.TokenExpirationHandler
+import com.sumsub.sns.core.data.model.SNSCompletionResult
+import com.sumsub.sns.core.data.model.SNSException
 import com.sumsub.sns.core.data.model.SNSSDKState
 import com.sumsub.sns.core.theme.SNSTheme
 import com.sumsub.sns.core.theme.SNSThemeColor
@@ -46,7 +56,7 @@ import java.util.Locale
 
 
 @Composable
-fun KycScreen(activity: Activity) {
+fun KycScreen(activity: Activity, navController: NavController) {
 
     val viewModel = koinViewModel<KycScreenViewModel>()
     val accessTokenState = viewModel.accessTokenState.value
@@ -61,14 +71,14 @@ fun KycScreen(activity: Activity) {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
             }
             else -> {
-                Content(viewModel = viewModel, activity = activity)
+                Content(viewModel = viewModel, activity = activity, navController = navController)
             }
         }
     }
 }
 
 @Composable
-private fun Content(activity: Activity, viewModel: KycScreenViewModel) {
+private fun Content(activity: Activity, viewModel: KycScreenViewModel, navController: NavController) {
 
     val tokenExpirationHandler = object : TokenExpirationHandler {
         override fun onTokenExpired(): String {
@@ -83,7 +93,26 @@ private fun Content(activity: Activity, viewModel: KycScreenViewModel) {
 
     LaunchedEffect(kycStatus) { println(kycStatus) }
 
-    val stateChangedHandler = object : SNSStateChangedHandler {
+
+
+
+    val onSDKCompletedHandler: (SNSCompletionResult, SNSSDKState) -> Unit = { result, state ->
+        when (result) {
+            is SNSCompletionResult.SuccessTermination -> {
+                println("POO")
+                navController.popBackStack()
+
+            }
+            is SNSCompletionResult.AbnormalTermination -> {
+                println("BOO")
+                navController.popBackStack()
+            }
+        }
+    }
+
+
+
+        val stateChangedHandler = object : SNSStateChangedHandler {
         override fun onStateChanged(previousState: SNSSDKState, currentState: SNSSDKState) {
             when (currentState) {
                 is SNSSDKState.Approved -> {
@@ -130,11 +159,20 @@ private fun Content(activity: Activity, viewModel: KycScreenViewModel) {
     }
 
     val snsSdk = remember {
-        SNSMobileSDK.Builder(activity).withDebug(true).withTheme(customTheme)
+        SNSMobileSDK.Builder(context as Activity)
+//            .withDebug(true)
+            .withHandlers(onCompleted = onSDKCompletedHandler)
+            .withTheme(customTheme)
             .withAccessToken(accessToken, onTokenExpiration = tokenExpirationHandler)
             .withStateChangedHandler(stateChangedHandler)
             .withLocale(Locale("en"))
             .build()
+    }
+
+
+    BackHandler {
+        println("Back pressed")
+        snsSdk.dismiss()
     }
 
     LaunchedEffect(Unit) {

@@ -80,15 +80,15 @@ internal fun Content(modifier: Modifier = Modifier) {
         RateTable(
             currency = user.preferred_currency,
             ttiRate = rate.tti,
-            ttiFees = rate.tti,
+            ttiFees = rate.tti_fees,
             wiseRate = rate.wise,
-            wiseFees = rate.wise,
+            wiseFees = rate.wise_fees,
             skrillRate = rate.skrill,
-            skrillFees = rate.skrill,
+            skrillFees = rate.skrill_fees,
             paypalRate = rate.paypal,
-            paypalFees = rate.paypal,
+            paypalFees = rate.paypal_fees,
             bankRate = rate.bank,
-            bankFees = rate.bank
+            bankFees = rate.bank_fees
         )
 
     }

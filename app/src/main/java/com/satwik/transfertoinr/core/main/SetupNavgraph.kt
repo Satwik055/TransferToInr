@@ -67,7 +67,7 @@ fun SetupNavgraph(navController:NavHostController, startDestination:Any, activit
             AddRecipientScreen(navController = navController)
         }
         composable<ScreenKyc> {
-            KycScreen(activity)
+            KycScreen(activity, navController)
         }
     }
 }

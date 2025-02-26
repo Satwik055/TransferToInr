@@ -109,9 +109,6 @@ internal fun Content(modifier: Modifier = Modifier) {
         viewModel.getPreferredCurrency()
     }
 
-    //For snackbar
-    val snackbarHostState = remember { SnackbarHostState() }
-    val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect (Unit){
         transactionCode = generateTransactionCode()
@@ -215,14 +212,6 @@ internal fun Content(modifier: Modifier = Modifier) {
                     }
                 })
         }
-
-        SnackbarHost(
-            snackbar = { TTFSnackbar(text = "error", color = Color.Red)},
-            hostState = snackbarHostState,
-        )
-
-//        coroutineScope.launch { snackbarHostState.showSnackbar("", duration = SnackbarDuration.Short) }
-
     }
 }
 
