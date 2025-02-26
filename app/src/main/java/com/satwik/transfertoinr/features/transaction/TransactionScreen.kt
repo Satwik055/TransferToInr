@@ -2,11 +2,9 @@ package com.satwik.transfertoinr.features.transaction
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -33,8 +31,6 @@ import com.satwik.transfertoinr.core.model.TransactionStatus
 import com.satwik.transfertoinr.core.utils.formatTimestamp
 import com.satwik.transfertoinr.core.utils.getCurrencySymbol
 import org.koin.androidx.compose.koinViewModel
-import java.time.OffsetDateTime
-import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable

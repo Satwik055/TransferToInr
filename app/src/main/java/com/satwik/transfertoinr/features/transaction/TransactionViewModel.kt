@@ -7,9 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.satwik.transfertoinr.core.model.CurrencyType
 import com.satwik.transfertoinr.data.account.AccountRepository
 import com.satwik.transfertoinr.data.transaction.TransactionRepository
-import com.satwik.transfertoinr.features.recipient.RecipientsState
 import kotlinx.coroutines.launch
-import java.lang.AutoCloseable
 
 class TransactionViewModel(
     private val transactionRepository: TransactionRepository,

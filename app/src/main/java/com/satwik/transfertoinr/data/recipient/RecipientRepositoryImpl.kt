@@ -1,7 +1,6 @@
 package com.satwik.transfertoinr.data.recipient
 
 import com.satwik.transfertoinr.core.model.Recipient
-import com.satwik.transfertoinr.core.model.UserInfo
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.postgrest.postgrest

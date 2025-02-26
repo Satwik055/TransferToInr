@@ -1,7 +1,6 @@
 package com.satwik.transfertoinr.core.designsystem.components
 
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.Indication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -20,7 +19,6 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,23 +27,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import androidx.navigation.compose.currentBackStackEntryAsState
 import com.satwik.transfertoinr.R
 import com.satwik.transfertoinr.core.designsystem.theme.JungleGreen
 import com.satwik.transfertoinr.core.designsystem.theme.LightGrey
 import com.satwik.transfertoinr.core.designsystem.theme.fontFamily
-import com.satwik.transfertoinr.core.main.ScreenAccount
-import com.satwik.transfertoinr.core.main.ScreenAddRecipient
-import com.satwik.transfertoinr.core.main.ScreenHelp
-import com.satwik.transfertoinr.core.main.ScreenHome
-import com.satwik.transfertoinr.core.main.ScreenLogin
-import com.satwik.transfertoinr.core.main.ScreenMain
-import com.satwik.transfertoinr.core.main.ScreenPrivacyPolicy
-import com.satwik.transfertoinr.core.main.ScreenRecipient
-import com.satwik.transfertoinr.core.main.ScreenSignup
-import com.satwik.transfertoinr.core.main.ScreenTransaction
-import com.satwik.transfertoinr.core.main.ScreenTransfer
 
 
 @Composable

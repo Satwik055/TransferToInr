@@ -23,7 +23,6 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.satwik.transfertoinr.core.designsystem.components.RateTable
 import com.satwik.transfertoinr.core.designsystem.theme.JungleGreen
 import com.satwik.transfertoinr.core.designsystem.theme.fontFamily
-import com.satwik.transfertoinr.core.model.CurrencyType
 import org.koin.androidx.compose.koinViewModel
 
 

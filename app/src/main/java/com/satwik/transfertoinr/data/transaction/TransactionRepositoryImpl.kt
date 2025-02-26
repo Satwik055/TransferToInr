@@ -1,6 +1,5 @@
 package com.satwik.transfertoinr.data.transaction
 
-import com.satwik.transfertoinr.core.model.Recipient
 import com.satwik.transfertoinr.core.model.Transaction
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.auth

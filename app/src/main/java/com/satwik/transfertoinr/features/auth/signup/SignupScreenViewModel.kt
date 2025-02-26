@@ -106,6 +106,6 @@ class SignupScreenViewModel(
     }
 
     sealed class ValidationEvent{
-        object Success:ValidationEvent()
+        data object Success:ValidationEvent()
     }
 }

@@ -5,13 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.satwik.transfertoinr.data.account.AccountRepository
-import com.satwik.transfertoinr.data.auth.AuthRepository
 import com.satwik.transfertoinr.data.kyc.KycRepository
-import com.satwik.transfertoinr.features.recipient.RecipientsState
-import com.sumsub.sns.core.SNSMobileSDK
-import com.sumsub.sns.core.data.listener.TokenExpirationHandler
 import kotlinx.coroutines.launch
-import java.util.Locale
 
 class KycScreenViewModel(
     private val kycRepository: KycRepository,

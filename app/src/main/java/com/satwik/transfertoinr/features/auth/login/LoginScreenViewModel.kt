@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.satwik.transfertoinr.data.auth.AuthRepository
 import com.satwik.transfertoinr.data.auth.login_preconditions.LoginValidateEmailUsecase
 import com.satwik.transfertoinr.data.auth.login_preconditions.LoginValidatePasswordUsecase
-import com.satwik.transfertoinr.features.auth.signup.SignupScreenViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch

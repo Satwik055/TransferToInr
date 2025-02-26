@@ -4,7 +4,6 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.satwik.transfertoinr.core.model.Recipient
 import com.satwik.transfertoinr.data.recipient.RecipientRepository
 import kotlinx.coroutines.launch
 

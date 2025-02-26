@@ -1,6 +1,5 @@
 package com.satwik.transfertoinr.features.transaction
 
-import com.satwik.transfertoinr.core.model.Recipient
 import com.satwik.transfertoinr.core.model.Transaction
 
 data class TransactionState(

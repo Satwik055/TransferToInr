@@ -8,5 +8,5 @@ sealed class SignupFormEvent {
 
 
 
-    object Submit:SignupFormEvent()
+    data object Submit:SignupFormEvent()
 }

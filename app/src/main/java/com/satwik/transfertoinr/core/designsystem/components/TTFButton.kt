@@ -21,11 +21,6 @@ import com.satwik.transfertoinr.core.designsystem.theme.JungleGreen
 import com.satwik.transfertoinr.core.designsystem.theme.White
 import com.satwik.transfertoinr.core.designsystem.theme.fontFamily
 
-enum class ButtonType{
-    REGULAR,
-    LOADING
-}
-
 
 @Composable
 fun TTFButton(

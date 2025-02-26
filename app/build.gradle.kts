@@ -22,6 +22,12 @@ android {
         }
     }
 
+
+    // Excludes heavy TF *.so files from the APK
+    packagingOptions {
+        exclude("lib/**/libtensorflowlite_jni.so")
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -86,10 +92,6 @@ dependencies {
     val sumsubSDK = "1.34.1"
     // SumSub core
     implementation("com.sumsub.sns:idensic-mobile-sdk:$sumsubSDK")
-    // Video Identification module
-    implementation ("com.sumsub.sns:idensic-mobile-sdk-videoident:$sumsubSDK")
-    // eID module
-    implementation ("com.sumsub.sns:idensic-mobile-sdk-eid:$sumsubSDK")
 
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlinx.serialization.json)

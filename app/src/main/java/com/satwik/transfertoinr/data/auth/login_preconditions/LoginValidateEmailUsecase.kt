@@ -1,6 +1,5 @@
 package com.satwik.transfertoinr.data.auth.login_preconditions
 
-import android.util.Patterns
 import com.satwik.transfertoinr.core.model.ValidationResult
 
 class LoginValidateEmailUsecase{

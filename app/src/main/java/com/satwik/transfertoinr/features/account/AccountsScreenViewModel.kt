@@ -1,18 +1,12 @@
 package com.satwik.transfertoinr.features.account
 
-import android.view.View
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.satwik.transfertoinr.core.model.CurrencyType
 import com.satwik.transfertoinr.data.account.AccountRepository
 import com.satwik.transfertoinr.data.auth.AuthRepository
-import com.satwik.transfertoinr.features.transfer.RecipientsStateTransferScreen
-import com.sumsub.sns.core.theme.SNSTheme
-import com.sumsub.sns.core.theme.SNSThemeColor
-import com.sumsub.sns.core.theme.colors
 import kotlinx.coroutines.launch
 
 class AccountsScreenViewModel(
