@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.satwik.transfertoinr.R
+import com.satwik.transfertoinr.core.designsystem.components.CustomAlertDialog
 import com.satwik.transfertoinr.core.designsystem.components.NewTTFDropdown
 import com.satwik.transfertoinr.core.designsystem.theme.VeryLightGrey
 import com.satwik.transfertoinr.core.designsystem.theme.fontFamily
@@ -52,6 +53,22 @@ private fun Content(modifier: Modifier = Modifier, navController: NavController,
     val viewModel = koinViewModel<AccountsScreenViewModel>()
     val state = viewModel.userInfoState.value
     val user = state.userInfo
+    val isLogoutClicked = remember { mutableStateOf(false) }
+
+
+    if(isLogoutClicked.value){
+        CustomAlertDialog(
+            title = "Confirm Logout",
+            message = "Are you sure you want to logout?",
+            onDismissRequest = { isLogoutClicked.value = false },
+            onConfirm = {
+                viewModel.logout()
+                isLogoutClicked.value = false
+                navController.navigate(ScreenSignup)
+                        },
+            onCancel = {isLogoutClicked.value = false}
+        )
+    }
 
     LaunchedEffect(Unit){
         viewModel.getUserInfo()
@@ -68,7 +85,11 @@ private fun Content(modifier: Modifier = Modifier, navController: NavController,
             println(viewModel.userInfoState.value.userInfo)
         }
 
-        UserInfoSection(profilePic = R.drawable.profile_pic, name = viewModel.userInfoState.value.userInfo.name, email = viewModel.userInfoState.value.userInfo.email)
+        UserInfoSection(
+            profilePic = R.drawable.profile_pic,
+            name = viewModel.userInfoState.value.userInfo.name,
+            email = viewModel.userInfoState.value.userInfo.email
+        )
         Spacer(modifier = Modifier.height(50.dp))
         Column{
             KycButton(
@@ -80,10 +101,7 @@ private fun Content(modifier: Modifier = Modifier, navController: NavController,
             TTFBarButtons(
                 text = "Logout",
                 icon = R.drawable.ic_logout,
-                onClick = {
-                    viewModel.logout()
-                    navController.navigate(ScreenSignup)
-                          }
+                onClick = { isLogoutClicked.value = true }
             )
             HorizontalDivider(color = VeryLightGrey)
             TTFBarButtons(

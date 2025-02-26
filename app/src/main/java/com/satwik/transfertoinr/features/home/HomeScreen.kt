@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.google.accompanist.pager.ExperimentalPagerApi
+import com.satwik.transfertoinr.core.designsystem.components.CustomAlertDialog
 import com.satwik.transfertoinr.core.designsystem.components.RateTable
 import com.satwik.transfertoinr.core.designsystem.theme.JungleGreen
 import com.satwik.transfertoinr.core.designsystem.theme.fontFamily
@@ -75,7 +76,7 @@ internal fun Content(modifier: Modifier = Modifier) {
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )
         Spacer(modifier = Modifier.height(10.dp))
-        
+
         RateTable(
             currency = user.preferred_currency,
             ttiRate = rate.tti,
