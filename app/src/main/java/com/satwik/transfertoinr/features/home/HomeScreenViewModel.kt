@@ -32,10 +32,8 @@ class HomeScreenViewModel(
         viewModelScope.launch {
             _userInfoState.value = UserInfoStateHome(isLoading = true)
             try {
-                accountRepository.getProfile().collectLatest{
-                    _userInfoState.value = UserInfoStateHome(profile = it)
-                }
-
+                val profile = accountRepository.getProfile()
+                _userInfoState.value = UserInfoStateHome(profile = profile)
             }
             catch (e:Exception){
                 _userInfoState.value = UserInfoStateHome(error = e.message.toString())
@@ -47,12 +45,10 @@ class HomeScreenViewModel(
         viewModelScope.launch {
             _exchangeRateState.value = ExchangeRateState(isLoading = true)
             try{
-                accountRepository.getProfile().collectLatest {profile->
-                    exchangeRateRepository.getExchangeRates(profile.preferred_currency).collectLatest{rate->
-                        _exchangeRateState.value = ExchangeRateState(rate = rate)
-                    }
+                val profile = accountRepository.getProfile()
+                exchangeRateRepository.getExchangeRates(profile.preferred_currency).collectLatest{rate->
+                    _exchangeRateState.value = ExchangeRateState(rate = rate)
                 }
-
             }
             catch (e:Exception){
                 _exchangeRateState.value = ExchangeRateState(error = e.message.toString())

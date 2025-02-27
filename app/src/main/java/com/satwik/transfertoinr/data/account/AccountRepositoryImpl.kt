@@ -10,39 +10,37 @@ import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.realtime.selectSingleValueAsFlow
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.onEach
+import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.decodeFromJsonElement
 import kotlinx.serialization.json.put
 
 class AccountRepositoryImpl(private val client: SupabaseClient):AccountRepository {
     @OptIn(SupabaseExperimental::class)
-    override suspend fun getProfile(): Flow<Profile> {
+    override suspend fun getProfile(): Profile {
         val email = client.auth.currentUserOrNull()?.email
-        val flow: Flow<Profile> = supabaseClient.from("ttfuser").selectSingleValueAsFlow(Profile::email){
+        client.from("ttfuser").selectSingleValueAsFlow(Profile::email) {
             eq("email", email!!)
         }
-        return flow
-    }
-
-    override suspend fun getExchangeRates(currency:CurrencyType): ExchangeRate {
-        val response = client.postgrest.rpc(
-            function = "get_exchange_rate",
-            parameters = buildJsonObject {
-                put("p_currency_name", currency.name)
+            .onEach { profile ->
+                client.auth.updateUser {
+                    data {
+                        put("name", profile.name)
+                        put("email", profile.email)
+                        put("phone", profile.phone)
+                        put("kyc_status", profile.kyc_status)
+                        put("preferred_currency", profile.preferred_currency.name)
+                    }
+                }
             }
-        )
-        val jsonString = response.data
-        val exchangeRates = Json.decodeFromString<List<ExchangeRate>>(jsonString)
-
-        if(exchangeRates.isEmpty()){
-            throw Exception("Currency does not exist")
-        }
-        else{
-            println(exchangeRates)
-            return exchangeRates.first()
-        }
+        val metadata = client.auth.currentUserOrNull()?.userMetadata
+        val profile = metadata?.let { Json.decodeFromJsonElement<Profile>(it) }
+        return profile!!
     }
-
+    
     override suspend fun updatePrefferedCurrency(email:String, currency: CurrencyType) {
         client.postgrest.rpc(
             function = "update_preferred_currency",

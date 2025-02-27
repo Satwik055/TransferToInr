@@ -61,41 +61,36 @@ class TransferScreenViewModel(
 
     fun addTransaction(transactionCode:String, sent:Int, reason:String){
         viewModelScope.launch {
-            accountRepository.getProfile().collectLatest {profile->
-                transferRepository.createTransfer(
-                    transactionCode = transactionCode,
-                    sent = sent,
-                    currency = profile.preferred_currency,
-                    reason = reason
-                )
-            }
+            val profile = accountRepository.getProfile()
+            transferRepository.createTransfer(
+                transactionCode = transactionCode,
+                sent = sent,
+                currency = profile.preferred_currency,
+                reason = reason
+            )
         }
     }
 
     private fun getTtiRate(){
         viewModelScope.launch {
-            accountRepository.getProfile().collectLatest {profile->
-                exchangeRatesRepository.getExchangeRates(profile.preferred_currency).collect{
-                    _ttiRate.value = it.tti
-                }
+            val profile = accountRepository.getProfile()
+            exchangeRatesRepository.getExchangeRates(profile.preferred_currency).collect{
+                _ttiRate.value = it.tti
             }
         }
     }
 
     private fun getPreferredCurrency() {
         viewModelScope.launch {
-            accountRepository.getProfile().collectLatest {
-                _preferredCurrency.value = it.preferred_currency
-            }
+            val profile = accountRepository.getProfile()
+            _preferredCurrency.value = profile.preferred_currency
         }
     }
 
     fun getKycStatus(){
         viewModelScope.launch {
-            accountRepository.getProfile().collectLatest {
-                _kycStatus.value = it.kyc_status
-
-            }
+            val profile = accountRepository.getProfile()
+            _kycStatus.value = profile.kyc_status
         }
     }
 }

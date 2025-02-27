@@ -25,9 +25,8 @@ class KycScreenViewModel(
     fun updateKycStatus(status:Boolean){
         viewModelScope.launch {
             try{
-                accountRepository.getProfile().collectLatest {profile->
-                    kycRepository.updateKycStatus(status = status, id = profile.ttf_user_id)
-                }
+                val profile = accountRepository.getProfile()
+                kycRepository.updateKycStatus(status = status, id = profile.ttf_user_id)
             }
             catch (e:Exception){
                 println("KYC ERROR"+ e.message)
@@ -39,10 +38,9 @@ class KycScreenViewModel(
         viewModelScope.launch {
             _accessTokenState.value = AccessTokenState(isLoading = true)
             try {
-                accountRepository.getProfile().collectLatest { profile ->
-                    val accessToken = kycRepository.getAccessToken(profile.email, profile.phone, profile.name)
-                    _accessTokenState.value = AccessTokenState(accessToken= accessToken)
-                }
+                val profile = accountRepository.getProfile()
+                val accessToken = kycRepository.getAccessToken(profile.email, profile.phone, profile.name)
+                _accessTokenState.value = AccessTokenState(accessToken= accessToken)
             }
             catch (e:Exception){
                 _accessTokenState.value = AccessTokenState(error = e.message.toString())

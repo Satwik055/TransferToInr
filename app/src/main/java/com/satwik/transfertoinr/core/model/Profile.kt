@@ -9,5 +9,8 @@ data class Profile(
     val email:String = "",
     val phone:String = "",
     val kyc_status:Boolean = false,
+    val email_verified: Boolean = true,
+    val phone_verified: Boolean =false,
+    val sub: String = "",
     val preferred_currency:CurrencyType = CurrencyType.EUR
 )

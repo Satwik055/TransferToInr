@@ -30,13 +30,12 @@ class AccountsScreenViewModel(
         }
     }
 
-    fun getUserInfo(){
+    private fun getUserInfo(){
         viewModelScope.launch {
             _userInfoState.value = UserInfoState(isLoading = true)
             try {
-                accountRepository.getProfile().collect{
-                    _userInfoState.value = UserInfoState(profile = it)
-                }
+                val profile = accountRepository.getProfile()
+                _userInfoState.value = UserInfoState(profile = profile)
             }
             catch (e:Exception){
                 _userInfoState.value = UserInfoState(error = e.message.toString())
@@ -46,9 +45,8 @@ class AccountsScreenViewModel(
 
     fun updatePreferredCurrency(currency: CurrencyType){
         viewModelScope.launch {
-            accountRepository.getProfile().collect{
-                accountRepository.updatePrefferedCurrency(it.email, currency)
-            }
+            val profile = accountRepository.getProfile()
+            accountRepository.updatePrefferedCurrency(profile.email, currency)
         }
     }
 

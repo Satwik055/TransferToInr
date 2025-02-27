@@ -6,10 +6,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,12 +39,14 @@ fun HomeScreen(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier.fillMaxSize()
     ) {
-        if(userState.isLoading || rateState.isLoading){
-            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center), color = JungleGreen)
-        }
-        else{
-            Content(user = userState.profile, rate = rateState.rate)
-        }
+//        if(userState.isLoading || rateState.isLoading){
+//            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center), color = JungleGreen)
+//        }
+//        else{
+//            Content(user = userState.metadata, rate = rateState.rate)
+//        }
+        Content(user = userState.profile, rate = rateState.rate)
+
     }
 }
 

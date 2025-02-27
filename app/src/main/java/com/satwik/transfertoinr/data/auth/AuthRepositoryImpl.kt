@@ -1,5 +1,6 @@
 package com.satwik.transfertoinr.data.auth
 
+import com.satwik.transfertoinr.core.model.CurrencyType
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.exception.AuthRestException
@@ -28,6 +29,13 @@ class AuthRepositoryImpl(private val client: SupabaseClient) :AuthRepository {
             client.auth.signUpWith(Email) {
                 this.email = email
                 this.password = password
+                this.data = buildJsonObject {
+                    put("name", name)
+                    put("email", email)
+                    put("phone", phone)
+                    put("kyc_status", false)
+                    put("preferred_currency", CurrencyType.EUR.name)
+                }
             }
         }
         catch (authException:AuthRestException){
