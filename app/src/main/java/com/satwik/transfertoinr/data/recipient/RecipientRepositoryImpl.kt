@@ -2,8 +2,14 @@ package com.satwik.transfertoinr.data.recipient
 
 import com.satwik.transfertoinr.core.model.Recipient
 import io.github.jan.supabase.SupabaseClient
+import io.github.jan.supabase.annotations.SupabaseExperimental
 import io.github.jan.supabase.auth.auth
+import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.postgrest
+import io.github.jan.supabase.postgrest.query.filter.FilterOperation
+import io.github.jan.supabase.postgrest.query.filter.FilterOperator
+import io.github.jan.supabase.realtime.selectAsFlow
+import kotlinx.coroutines.flow.Flow
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
@@ -19,32 +25,18 @@ class RecipientRepositoryImpl(private val client:SupabaseClient):RecipientReposi
                 put("p_ifsc_code", ifscCode)
                 put("p_email", email)
                 put("p_bank", bank)
-
             }
         )
     }
 
-    override suspend fun getAllRecipients(): List<Recipient> {
-
-        val email = client.auth.currentUserOrNull()?.email
-
-        val response = client.postgrest.rpc(
-            function = "get_recipient_by_email",
-            parameters = buildJsonObject {
-                put("p_email", email)
-            }
+    @OptIn(SupabaseExperimental::class)
+    override suspend fun getAllRecipients(): Flow<List<Recipient>> {
+        val email = client.auth.currentUserOrNull()!!.email
+        val flow: Flow<List<Recipient>> = client.from("recipient").selectAsFlow(
+            primaryKey = Recipient::email,
+            filter = FilterOperation("email", FilterOperator.EQ, email!!)
         )
-
-        val jsonString = response.data
-        val recipients: List<Recipient> = Json.decodeFromString(jsonString)
-
-        if(recipients.isEmpty()){
-            throw Exception("No Recipients Found")
-        }
-        else{
-            return recipients
-        }
-
+        return flow
     }
 
     override suspend fun deleteRecipientById(id: Int) {

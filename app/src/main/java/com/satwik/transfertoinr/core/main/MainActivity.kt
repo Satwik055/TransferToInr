@@ -75,7 +75,7 @@ fun MainScreen(navController: NavController, activity: Activity) {
                 1 -> TransferScreen()
                 2 -> TransactionScreen()
                 3 -> RecipientScreen(navController = navController)
-                4 -> AccountScreen(navController = navController, activity = activity)
+                4 -> AccountScreen(navController = navController)
             }
         }
     }

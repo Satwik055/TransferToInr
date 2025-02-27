@@ -1,7 +1,5 @@
 package com.satwik.transfertoinr.features.transfer
 
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.satwik.transfertoinr.core.model.CurrencyType
@@ -10,7 +8,9 @@ import com.satwik.transfertoinr.data.exchange_rate.ExchangeRateRepository
 import com.satwik.transfertoinr.data.recipient.RecipientRepository
 import com.satwik.transfertoinr.data.transfer.TransferRepository
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class TransferScreenViewModel(
@@ -20,8 +20,8 @@ class TransferScreenViewModel(
     private val exchangeRatesRepository: ExchangeRateRepository
 ):ViewModel() {
 
-    private val _recipientsState = mutableStateOf(RecipientsStateTransferScreen())
-    val recipientsState: State<RecipientsStateTransferScreen> = _recipientsState
+    private val _recipientsState = MutableStateFlow(RecipientsStateTransferScreen())
+    val recipientsState: StateFlow<RecipientsStateTransferScreen> = _recipientsState
 
     private val _ttiRate = MutableStateFlow(0.0)
     val ttiRate = _ttiRate.asStateFlow()
@@ -29,21 +29,31 @@ class TransferScreenViewModel(
     private val _kycStatus = MutableStateFlow(false)
     val kycStatus = _kycStatus.asStateFlow()
 
-
     private val _preferredCurrency = MutableStateFlow(CurrencyType.EUR)
     val prefferedCurrency = _preferredCurrency.asStateFlow()
 
 
-    fun getAllRecipients(){
+    init {
+        getTtiRate()
+        getAllRecipients()
+        getPreferredCurrency()
+    }
+
+    private fun getAllRecipients() {
         viewModelScope.launch {
             _recipientsState.value = RecipientsStateTransferScreen(isLoading = true)
-            try {
-                val recipients = recipientRepository.getAllRecipients()
-                println(recipients)
-                _recipientsState.value = RecipientsStateTransferScreen(recipients = recipients)
 
-            }
-            catch (e:Exception){
+            try {
+                recipientRepository.getAllRecipients().collect { newRecipients ->
+                    val currentRecipients = _recipientsState.value.recipients
+                    val updatedRecipients = currentRecipients + newRecipients
+
+                    _recipientsState.value = _recipientsState.value.copy(
+                        recipients = updatedRecipients,
+                        isLoading = false
+                    )
+                }
+            } catch (e: Exception) {
                 _recipientsState.value = RecipientsStateTransferScreen(error = e.message.toString())
             }
         }
@@ -51,35 +61,41 @@ class TransferScreenViewModel(
 
     fun addTransaction(transactionCode:String, sent:Int, reason:String){
         viewModelScope.launch {
-            val prefferedCurrency= accountRepository.getUserInfo().preferred_currency
-            transferRepository.createTransfer(
-                transactionCode = transactionCode,
-                sent = sent,
-                currency = prefferedCurrency,
-                reason = reason
-            )
+            accountRepository.getProfile().collectLatest {profile->
+                transferRepository.createTransfer(
+                    transactionCode = transactionCode,
+                    sent = sent,
+                    currency = profile.preferred_currency,
+                    reason = reason
+                )
+            }
         }
     }
 
-    fun getTtiRate(){
+    private fun getTtiRate(){
         viewModelScope.launch {
-            val prefferedCurrency = accountRepository.getUserInfo().preferred_currency
-            val ttirate = exchangeRatesRepository.getExchangeRates(prefferedCurrency).tti
-            _ttiRate.value = ttirate
+            accountRepository.getProfile().collectLatest {profile->
+                exchangeRatesRepository.getExchangeRates(profile.preferred_currency).collect{
+                    _ttiRate.value = it.tti
+                }
+            }
         }
     }
 
-    fun getPreferredCurrency() {
+    private fun getPreferredCurrency() {
         viewModelScope.launch {
-            val currency = accountRepository.getUserInfo().preferred_currency
-            _preferredCurrency.value = currency
+            accountRepository.getProfile().collectLatest {
+                _preferredCurrency.value = it.preferred_currency
+            }
         }
     }
 
     fun getKycStatus(){
         viewModelScope.launch {
-            val status = accountRepository.getUserInfo().kyc_status
-            _kycStatus.value = status
+            accountRepository.getProfile().collectLatest {
+                _kycStatus.value = it.kyc_status
+
+            }
         }
     }
 }

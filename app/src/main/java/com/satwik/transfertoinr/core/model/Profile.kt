@@ -3,7 +3,7 @@ package com.satwik.transfertoinr.core.model
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class UserInfo(
+data class Profile(
     val ttf_user_id:Int = 0,
     val name:String = "",
     val email:String = "",

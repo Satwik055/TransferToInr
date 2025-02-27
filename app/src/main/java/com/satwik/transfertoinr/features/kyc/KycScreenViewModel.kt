@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.satwik.transfertoinr.data.account.AccountRepository
 import com.satwik.transfertoinr.data.kyc.KycRepository
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class KycScreenViewModel(
@@ -23,11 +24,10 @@ class KycScreenViewModel(
 
     fun updateKycStatus(status:Boolean){
         viewModelScope.launch {
-            val id = accountRepository.getUserInfo().ttf_user_id
-
             try{
-                kycRepository.updateKycStatus(status = status, id = id)
-                println("KYC SUCCESS")
+                accountRepository.getProfile().collectLatest {profile->
+                    kycRepository.updateKycStatus(status = status, id = profile.ttf_user_id)
+                }
             }
             catch (e:Exception){
                 println("KYC ERROR"+ e.message)
@@ -37,15 +37,12 @@ class KycScreenViewModel(
 
     private fun getAccessToken(){
         viewModelScope.launch {
-            val user = accountRepository.getUserInfo()
-            val email = user.email
-            val phone = user.phone
-            val userId = user.ttf_user_id.toString()
-
             _accessTokenState.value = AccessTokenState(isLoading = true)
             try {
-                val accessToken = kycRepository.getAccessToken(email, phone, userId)
-                _accessTokenState.value = AccessTokenState(accessToken= accessToken)
+                accountRepository.getProfile().collectLatest { profile ->
+                    val accessToken = kycRepository.getAccessToken(profile.email, profile.phone, profile.name)
+                    _accessTokenState.value = AccessTokenState(accessToken= accessToken)
+                }
             }
             catch (e:Exception){
                 _accessTokenState.value = AccessTokenState(error = e.message.toString())

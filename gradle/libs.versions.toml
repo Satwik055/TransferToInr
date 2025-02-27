@@ -31,22 +31,16 @@ splash-screen-api = {group = "androidx.core", name = "core-splashscreen", versio
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines-core" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines-core" }
 
-#Hilt
-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt-android" }
-hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt-android" }
-androidx-hilt-compiler = { module = "androidx.hilt:hilt-compiler", version.ref = "hilt-compiler" }
-androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hilt-navigation-compose" }
-
 #Ktor
 ktor-core = {group ="io.ktor", name= "ktor-client-core", version.ref = "ktor"}
 ktor-cio = {group="io.ktor", name = "ktor-client-cio", version.ref= "ktor" }
-ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktor" }
 ktor-utils = { module = "io.ktor:ktor-utils", version.ref = "ktor" }
 
 #Supabase
 supabase-postgrest = { module = "io.github.jan-tennert.supabase:postgrest-kt", version.ref = "supabase" }
 supabase-auth = { module = "io.github.jan-tennert.supabase:auth-kt", version.ref = "supabase" }
 supabase-storage = {module = "io.github.jan-tennert.supabase:storage-kt", version.ref = "supabase"}
+supabse-realtime = {module = "io.github.jan-tennert.supabase:realtime-kt", version.ref = "supabase"}
 
 #Navigation
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
@@ -59,7 +53,6 @@ accompanist = {module="com.google.accompanist:accompanist-systemuicontroller", v
 
 
 coil= { module = "io.coil-kt:coil-compose", version.ref = "coil" }
-
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
@@ -75,8 +68,6 @@ androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-man
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 
-
-
 [plugins]
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -84,8 +75,7 @@ jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = 
 google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
 kotiln-serializer-plugin = {id="org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin"}
 
-
 [bundles]
 coroutines = ["kotlinx-coroutines-android", "kotlinx-coroutines-core"]
-supabase = ["supabase-postgrest", "supabase-auth", "supabase-storage"]
-ktor = ["ktor-utils", "ktor-client-android", "ktor-core", "ktor-cio"]
+supabase = ["supabase-postgrest", "supabase-auth", "supabase-storage", "supabse-realtime"]
+ktor = ["ktor-utils", "ktor-core", "ktor-cio"]

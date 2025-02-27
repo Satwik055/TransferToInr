@@ -1,13 +1,16 @@
 package com.satwik.transfertoinr.features.home
 
 import AutoSlidingCarousel
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -20,27 +23,38 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.google.accompanist.pager.ExperimentalPagerApi
-import com.satwik.transfertoinr.core.designsystem.components.CustomAlertDialog
 import com.satwik.transfertoinr.core.designsystem.components.RateTable
 import com.satwik.transfertoinr.core.designsystem.theme.JungleGreen
 import com.satwik.transfertoinr.core.designsystem.theme.fontFamily
+import com.satwik.transfertoinr.core.model.ExchangeRate
+import com.satwik.transfertoinr.core.model.Profile
 import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier) {
-    Content(
+
+    val viewModel =  koinViewModel<HomeScreenViewModel>()
+    val userState = viewModel.userInfoState.collectAsState().value
+    val rateState = viewModel.exchangeRateState.collectAsState().value
+
+    Box(
         modifier = modifier.fillMaxSize()
-    )
+    ) {
+        if(userState.isLoading || rateState.isLoading){
+            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center), color = JungleGreen)
+        }
+        else{
+            Content(user = userState.profile, rate = rateState.rate)
+        }
+    }
 }
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-internal fun Content(modifier: Modifier = Modifier) {
+internal fun Content(modifier: Modifier = Modifier, user: Profile, rate:ExchangeRate) {
 
-    val viewModel =  koinViewModel<HomeScreenViewModel>()
-    val user = viewModel.userInfoState.value.userInfo
-    val rate = viewModel.exchangeRateState.value.rate
+
     val style = TextStyle(fontFamily = fontFamily, fontWeight = FontWeight.SemiBold, fontSize = 37.sp, color = JungleGreen)
     val images:List<String> = listOf(
         "https://as2.ftcdn.net/v2/jpg/04/86/72/71/1000_F_486727138_LIbtjQYhz2nwYFoziXPeUIFSpdz5tiHZ.jpg",
@@ -48,10 +62,6 @@ internal fun Content(modifier: Modifier = Modifier) {
         "https://img.freepik.com/premium-vector/extra-discount-3d-sale-banner-template-design-background_416835-474.jpg"
     )
 
-    LaunchedEffect(Unit) {
-        viewModel.getExchangeRates()
-        viewModel.getUserInfo()
-    }
 
     Column (modifier = modifier){
         Text(text = "Hey ${user.name}", style=style, maxLines = 1, overflow = TextOverflow.Ellipsis)
@@ -90,7 +100,6 @@ internal fun Content(modifier: Modifier = Modifier) {
             bankRate = rate.bank,
             bankFees = rate.bank_fees
         )
-
     }
 }
 

@@ -67,25 +67,17 @@ internal fun Content(modifier: Modifier = Modifier) {
     val context = LocalContext.current
     val kycStatus= viewModel.kycStatus.collectAsState().value
 
-
     val preferredCurrency = viewModel.prefferedCurrency.collectAsState().value
 
     val reasons = listOf("My NRE/NRO Account", "Savings & Family Support", "Real Estate/Housing Societies", "Educational Institutions", "Tax Payment", "Hospitals/Healthcare Providers", "Travel/Tourism Partners", "Utility Bill Payments", "Loan Account Payment")
     var selectedReason by remember { mutableStateOf(reasons.first()) }
 
 
-    LaunchedEffect(Unit) {
-        viewModel.getTtiRate()
-        viewModel.getAllRecipients()
-        viewModel.getPreferredCurrency()
-    }
-
-
     LaunchedEffect (Unit){
         transactionCode = generateTransactionCode()
     }
 
-    val recipientList = viewModel.recipientsState.value.recipients.map { it.name to it.bank }
+    val recipientList = viewModel.recipientsState.collectAsState().value.recipients.map { it.name to it.bank }
 
     var selectedRecipient by remember {
         mutableStateOf(
@@ -173,14 +165,17 @@ internal fun Content(modifier: Modifier = Modifier) {
             TTFButton(
                 text = "Submit",
                 onClick = {
-                    if(!kycStatus){
-                        Toast.makeText(context, "Please verify your KYC", Toast.LENGTH_SHORT).show()
-                    }
-                    else{
-                        viewModel.addTransaction(transactionCode, amount.toInt(), reason = selectedReason)
-                        transactionCode = generateTransactionCode() //new code after submitting
-                        amount = "0"
-                    }
+                    viewModel.addTransaction(transactionCode, amount.toInt(), reason = selectedReason)
+                    transactionCode = generateTransactionCode() //new code after submitting
+                    amount = "0"
+//                    if(!kycStatus){
+//                        Toast.makeText(context, "Please verify your KYC", Toast.LENGTH_SHORT).show()
+//                    }
+//                    else{
+//                        viewModel.addTransaction(transactionCode, amount.toInt(), reason = selectedReason)
+//                        transactionCode = generateTransactionCode() //new code after submitting
+//                        amount = "0"
+//                    }
                 })
         }
     }
@@ -251,6 +246,10 @@ private fun BankDetailsBox(
                     CopyableText(title = "Institution Number", copyableText = "621", context = context)
                     CopyableText(title = "Transit Number", copyableText = "16001", context = context)
                 }
+
+            CurrencyType.BANK -> {
+                CopyableText(title = "Name", copyableText = "Swathi Police", context = context)
+            }
         }
     }
 }

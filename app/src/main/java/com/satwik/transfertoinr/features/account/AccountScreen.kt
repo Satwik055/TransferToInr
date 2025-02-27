@@ -1,6 +1,5 @@
 package com.satwik.transfertoinr.features.account
 
-import android.app.Activity
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -16,6 +15,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,16 +43,18 @@ import com.satwik.transfertoinr.features.account.components.TTFBarButtons
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun AccountScreen(modifier: Modifier = Modifier, navController: NavController, activity: Activity) {
-    Content(modifier, navController, activity)
+fun AccountScreen(navController: NavController) {
+
+
+    Content(modifier = Modifier, navController)
 }
 
 @Composable
-private fun Content(modifier: Modifier = Modifier, navController: NavController, activity: Activity) {
+private fun Content(modifier: Modifier = Modifier, navController: NavController) {
 
     val viewModel = koinViewModel<AccountsScreenViewModel>()
-    val state = viewModel.userInfoState.value
-    val user = state.userInfo
+    val state = viewModel.userInfoState.collectAsState().value
+    val user = state.profile
     val isLogoutClicked = remember { mutableStateOf(false) }
 
 
@@ -70,9 +72,6 @@ private fun Content(modifier: Modifier = Modifier, navController: NavController,
         )
     }
 
-    LaunchedEffect(Unit){
-        viewModel.getUserInfo()
-    }
 
     Column (modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally){
         if(state.isLoading){
@@ -82,13 +81,13 @@ private fun Content(modifier: Modifier = Modifier, navController: NavController,
             println(viewModel.userInfoState.value.error)
         }
         else{
-            println(viewModel.userInfoState.value.userInfo)
+            println(viewModel.userInfoState.value.profile)
         }
 
         UserInfoSection(
             profilePic = R.drawable.profile_pic,
-            name = viewModel.userInfoState.value.userInfo.name,
-            email = viewModel.userInfoState.value.userInfo.email
+            name = viewModel.userInfoState.value.profile.name,
+            email = viewModel.userInfoState.value.profile.email
         )
         Spacer(modifier = Modifier.height(50.dp))
         Column{

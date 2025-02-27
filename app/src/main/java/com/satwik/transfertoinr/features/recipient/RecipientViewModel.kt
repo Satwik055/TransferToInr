@@ -5,14 +5,20 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.satwik.transfertoinr.data.recipient.RecipientRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class RecipientViewModel(
     private val recipientRepository: RecipientRepository
 ):ViewModel() {
 
-    private val _recipientsState = mutableStateOf(RecipientsState())
-    val recipientsState: State<RecipientsState> = _recipientsState
+    private val _recipientsState = MutableStateFlow(RecipientsState())
+    val recipientsState: StateFlow<RecipientsState> = _recipientsState
+
+    init {
+        getAllRecipients()
+    }
 
     fun addRecipient(name:String, accountNumber:String, ifscCode:String, bank:String){
         viewModelScope.launch {
@@ -35,15 +41,20 @@ class RecipientViewModel(
         }
     }
 
-    fun getAllRecipients(){
+    fun getAllRecipients() {
         viewModelScope.launch {
             _recipientsState.value = RecipientsState(isLoading = true)
             try {
-                val recipients = recipientRepository.getAllRecipients()
-                _recipientsState.value = RecipientsState(recipients = recipients)
+                recipientRepository.getAllRecipients().collect { newRecipients ->
+                    val currentRecipients = _recipientsState.value.recipients
+                    val updatedRecipients = currentRecipients + newRecipients
 
-            }
-            catch (e:Exception){
+                    _recipientsState.value = _recipientsState.value.copy(
+                        recipients = updatedRecipients,
+                        isLoading = false
+                    )
+                }
+            } catch (e: Exception) {
                 _recipientsState.value = RecipientsState(error = e.message.toString())
             }
         }

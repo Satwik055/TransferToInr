@@ -7,14 +7,21 @@ import androidx.lifecycle.viewModelScope
 import com.satwik.transfertoinr.core.model.CurrencyType
 import com.satwik.transfertoinr.data.account.AccountRepository
 import com.satwik.transfertoinr.data.auth.AuthRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class AccountsScreenViewModel(
     private val authRepository: AuthRepository,
     private val accountRepository: AccountRepository
 ):ViewModel() {
-    private val _userInfoState = mutableStateOf(UserInfoState())
-    val userInfoState: State<UserInfoState> = _userInfoState
+    private val _userInfoState = MutableStateFlow(UserInfoState())
+    val userInfoState: StateFlow<UserInfoState> = _userInfoState
+
+
+    init {
+        getUserInfo()
+    }
 
     fun logout(){
         viewModelScope.launch {
@@ -27,9 +34,9 @@ class AccountsScreenViewModel(
         viewModelScope.launch {
             _userInfoState.value = UserInfoState(isLoading = true)
             try {
-                val userInfo  = accountRepository.getUserInfo()
-                _userInfoState.value = UserInfoState(userInfo = userInfo)
-
+                accountRepository.getProfile().collect{
+                    _userInfoState.value = UserInfoState(profile = it)
+                }
             }
             catch (e:Exception){
                 _userInfoState.value = UserInfoState(error = e.message.toString())
@@ -39,14 +46,11 @@ class AccountsScreenViewModel(
 
     fun updatePreferredCurrency(currency: CurrencyType){
         viewModelScope.launch {
-            val email = accountRepository.getUserInfo().email
-            accountRepository.updatePrefferedCurrency(email, currency)
+            accountRepository.getProfile().collect{
+                accountRepository.updatePrefferedCurrency(it.email, currency)
+            }
         }
     }
 
-
-//    private val customTheme = SNSTheme{
-//        colors.alertTint = SNSThemeColor(Color())
-//    }
 }
 

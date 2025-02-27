@@ -19,6 +19,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -34,7 +35,7 @@ import com.satwik.transfertoinr.core.main.ScreenAddRecipient
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun RecipientScreen(modifier: Modifier = Modifier, navController: NavController) {
+fun RecipientScreen(navController: NavController) {
     Content(modifier = Modifier.fillMaxSize(), navController)
 }
 
@@ -45,11 +46,7 @@ private fun Content(modifier: Modifier = Modifier, navController: NavController)
         val style1 = TextStyle(fontWeight = FontWeight.Normal, fontFamily = fontFamily, fontSize = 14.sp, color = JungleGreen)
         val viewModel = koinViewModel<RecipientViewModel>()
 
-        LaunchedEffect(Unit) {
-            viewModel.getAllRecipients()
-        }
-
-        val state = viewModel.recipientsState.value
+        val state = viewModel.recipientsState.collectAsState().value
 
         if(state.isLoading){
             CircularProgressIndicator(color = JungleGreen, modifier = Modifier.align(Alignment.Center))
@@ -82,7 +79,9 @@ fun RecipientListItem(modifier: Modifier = Modifier, name:String, accountNumber:
     val style3 = TextStyle(fontFamily = fontFamily, fontWeight = FontWeight.Normal, fontSize = 13.sp)
 
     Surface(
-        modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 5.dp),
         color = Color.White,
         shadowElevation = 3.dp,
 //        border = BorderStroke(width = 1.dp, color = Color.LightGray),

@@ -16,6 +16,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -43,27 +44,27 @@ fun TransactionScreen() {
 internal fun Content(modifier: Modifier = Modifier) {
     val style1 = TextStyle(fontWeight = FontWeight.Normal, fontFamily = fontFamily, fontSize = 13.sp, color = JungleGreen)
     val viewModel = koinViewModel<TransactionViewModel>()
+    val state = viewModel.transactionState.collectAsState().value
 
     LaunchedEffect(Unit) {
-        viewModel.getAllTransaction()
         viewModel.getPreferredCurrency()
     }
 
     val preferredCurrency = viewModel.prefferedCurrency.value
 
     Box (modifier = modifier){
-        if(viewModel.transactionState.value.isLoading){
+        if(state.isLoading){
             CircularProgressIndicator(color = JungleGreen, modifier = Modifier.align(Alignment.Center))
         }
-        if(viewModel.transactionState.value.error.isNotEmpty()){
-            Text(text = viewModel.transactionState.value.error, style = style1.copy(fontSize = 14.sp), modifier = Modifier.align(Alignment.Center))
+        if(state.error.isNotEmpty()){
+            Text(text = state.error, style = style1.copy(fontSize = 14.sp), modifier = Modifier.align(Alignment.Center))
         }
         else{
             Column{
                 TableHeader()
                 HorizontalDivider(Modifier.padding(5.dp))
                 LazyColumn{
-                    items(viewModel.transactionState.value.transaction){
+                    items(state.transaction){
                         TransactionEntry(
                             modifier = Modifier.fillMaxWidth(),
                             date = formatTimestamp(it.date),

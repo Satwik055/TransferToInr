@@ -9,6 +9,7 @@ fun getCurrencySymbol(currency: CurrencyType): String {
         CurrencyType.GBP -> "£"
         CurrencyType.AUD -> "A$"
         CurrencyType.CAD -> "C$"
+        CurrencyType.BANK -> "BANK"
     }
 }
 

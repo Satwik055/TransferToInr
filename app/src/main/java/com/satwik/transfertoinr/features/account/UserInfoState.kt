@@ -1,9 +1,9 @@
 package com.satwik.transfertoinr.features.account
 
-import com.satwik.transfertoinr.core.model.UserInfo
+import com.satwik.transfertoinr.core.model.Profile
 
 data class UserInfoState(
-    val userInfo: UserInfo = UserInfo(),
+    val profile: Profile = Profile(),
     val isLoading: Boolean = false,
     val error: String = ""
 )

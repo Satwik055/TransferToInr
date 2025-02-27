@@ -6,6 +6,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.satwik.transfertoinr.data.account.AccountRepository
 import com.satwik.transfertoinr.data.exchange_rate.ExchangeRateRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class HomeScreenViewModel(
@@ -13,18 +17,24 @@ class HomeScreenViewModel(
     private val exchangeRateRepository: ExchangeRateRepository
 ):ViewModel() {
 
-    private val _userInfoState = mutableStateOf(UserInfoStateHome())
-    val userInfoState: State<UserInfoStateHome> = _userInfoState
+    private val _userInfoState = MutableStateFlow(UserInfoStateHome())
+    val userInfoState: StateFlow<UserInfoStateHome> = _userInfoState
 
-    private val _exchangeRateState = mutableStateOf(ExchangeRateState())
-    val exchangeRateState: State<ExchangeRateState> = _exchangeRateState
+    private val _exchangeRateState = MutableStateFlow(ExchangeRateState())
+    val exchangeRateState: StateFlow<ExchangeRateState> = _exchangeRateState
 
-    fun getUserInfo(){
+    init {
+        getUserInfo()
+        getExchangeRates()
+    }
+
+    private fun getUserInfo(){
         viewModelScope.launch {
             _userInfoState.value = UserInfoStateHome(isLoading = true)
             try {
-                val userInfo  = accountRepository.getUserInfo()
-                _userInfoState.value = UserInfoStateHome(userInfo = userInfo)
+                accountRepository.getProfile().collectLatest{
+                    _userInfoState.value = UserInfoStateHome(profile = it)
+                }
 
             }
             catch (e:Exception){
@@ -33,13 +43,16 @@ class HomeScreenViewModel(
         }
     }
 
-    fun getExchangeRates(){
+    private fun getExchangeRates(){
         viewModelScope.launch {
             _exchangeRateState.value = ExchangeRateState(isLoading = true)
             try{
-                val prefferedCurrency = accountRepository.getUserInfo().preferred_currency
-                val rate = exchangeRateRepository.getExchangeRates(prefferedCurrency)
-                _exchangeRateState.value = ExchangeRateState(rate = rate)
+                accountRepository.getProfile().collectLatest {profile->
+                    exchangeRateRepository.getExchangeRates(profile.preferred_currency).collectLatest{rate->
+                        _exchangeRateState.value = ExchangeRateState(rate = rate)
+                    }
+                }
+
             }
             catch (e:Exception){
                 _exchangeRateState.value = ExchangeRateState(error = e.message.toString())
