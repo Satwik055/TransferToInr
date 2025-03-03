@@ -96,6 +96,7 @@ fun AddRecipientScreen(modifier: Modifier = Modifier, navController: NavControll
             onClick = {
                 viewModel.onEvent(AddRecipientFormEvent.Submit)
                 if(isFormValidated){
+                    viewModel.resetFormErrors()
                     viewModel.addRecipient(
                         name = formState.name,
                         accountNumber = formState.accountNumber,

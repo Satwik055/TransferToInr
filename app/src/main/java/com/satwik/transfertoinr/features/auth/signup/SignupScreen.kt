@@ -116,16 +116,6 @@ fun SignupScreen(modifier: Modifier = Modifier, navController: NavController) {
                         keyboardType = KeyboardType.Password,
                         isPassword = true
                     )
-                    TTFTextField(
-                        text = formState.reEnterPassword,
-                        onValueChange = { viewModel.onEvent(SignupFormEvent.ReEnterPasswordChanged(it)) },
-                        placeholder = "Confirm Password",
-                        errorText = formState.reEnterPasswordError?:"",
-                        isError = formState.reEnterPasswordError != null,
-                        keyboardType = KeyboardType.Password,
-                        isPassword = true
-                    )
-
                 }
 
                 Spacer(modifier = Modifier.height(40.dp))
@@ -158,7 +148,8 @@ fun SignupScreen(modifier: Modifier = Modifier, navController: NavController) {
                 Text(text = "By signing up you agree our Privacy Policy and Terms and Conditions", fontFamily = fontFamily, fontSize = 12.sp, fontWeight = FontWeight.Normal, color = JungleGreen)
                 Spacer(modifier = Modifier.weight(1f))
                 LoginText(
-                    onClick = { navController.navigate(ScreenLogin) }, modifier = Modifier
+                    onClick = { navController.navigate(ScreenLogin) },
+                    modifier = Modifier
                         .align(Alignment.CenterHorizontally)
                         .padding(bottom = 12.dp))
             }

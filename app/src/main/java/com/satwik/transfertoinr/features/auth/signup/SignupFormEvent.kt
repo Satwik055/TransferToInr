@@ -5,10 +5,5 @@ sealed class SignupFormEvent {
     data class PasswordChanged(val password:String):SignupFormEvent()
     data class NameChanged(val name:String):SignupFormEvent()
     data class PhoneChanged(val phone:String):SignupFormEvent()
-    data class ReEnterPasswordChanged(val reEnterPassword:String):SignupFormEvent()
-
-
-
-
     data object Submit:SignupFormEvent()
 }

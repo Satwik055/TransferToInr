@@ -102,6 +102,16 @@ class RecipientViewModel(
         }
     }
 
+    fun resetFormErrors(){
+        _formState.value = _formState.value.copy(
+            nameError = null,
+            accountNumberError = null,
+            reEnterAccountNumberError = null,
+            bankError = null,
+            ifscError = null,
+        )
+    }
+
     private fun submitData() {
         val reEnterAccountNumberResult = validateReEnteredAccountNumberUsecase.execute(_formState.value.reEnterAccountNumber, _formState.value.accountNumber)
         val accountNumberResult = validateAccountNumberUsecase.execute(_formState.value.accountNumber)
