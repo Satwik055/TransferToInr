@@ -117,6 +117,16 @@ fun SignupScreen(modifier: Modifier = Modifier, navController: NavController) {
                         keyboardType = KeyboardType.Password,
                         isPassword = true
                     )
+                    TTFTextField(
+                        text = formState.reEnterPassword,
+                        onValueChange = { viewModel.onEvent(SignupFormEvent.ReEnterPasswordChanged(it)) },
+                        placeholder = "Confirm Password",
+                        errorText = formState.reEnterPasswordError?:"",
+                        isError = formState.reEnterPasswordError != null,
+                        keyboardType = KeyboardType.Password,
+                        isPassword = true
+                    )
+
                 }
 
                 Spacer(modifier = Modifier.height(40.dp))
@@ -174,7 +184,7 @@ internal fun LoginText(
         text = buildAnnotatedString {
             append("Already have an account ?")
             withStyle(style = SpanStyle(color = JungleGreen, fontWeight = FontWeight.SemiBold)){
-                append("Login")
+                append(" Login")
             }
         },
     )

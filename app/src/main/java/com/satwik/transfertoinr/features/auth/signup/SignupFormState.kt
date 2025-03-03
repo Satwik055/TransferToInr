@@ -8,5 +8,7 @@ data class SignupFormState(
     val name:String = "",
     val nameError:String? = null,
     val phone:String = "",
-    val phoneError:String? = null
+    val phoneError:String? = null,
+    val reEnterPassword:String = "",
+    val reEnterPasswordError:String? = null
 )

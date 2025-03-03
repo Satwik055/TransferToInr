@@ -9,6 +9,7 @@ import com.satwik.transfertoinr.data.auth.signup_preconditions.SignupValidateEma
 import com.satwik.transfertoinr.data.auth.signup_preconditions.SignupValidateNameUsecase
 import com.satwik.transfertoinr.data.auth.signup_preconditions.SignupValidatePasswordUsecase
 import com.satwik.transfertoinr.data.auth.signup_preconditions.SignupValidatePhoneUsecase
+import com.satwik.transfertoinr.data.auth.signup_preconditions.SignupValidateReEnterPasswordUsecase
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -18,8 +19,8 @@ class SignupScreenViewModel(
     private val signupValidateEmailUsecase: SignupValidateEmailUsecase,
     private val signupValidatePasswordUsecase: SignupValidatePasswordUsecase,
     private val signupValidateNameUsecase: SignupValidateNameUsecase,
-    private val signupValidatePhoneUsecase: SignupValidatePhoneUsecase
-
+    private val signupValidatePhoneUsecase: SignupValidatePhoneUsecase,
+    private val signupValidateReEnterPasswordUsecase: SignupValidateReEnterPasswordUsecase
 ):ViewModel() {
 
     private val _signupScreenState = mutableStateOf(SignupScreenState())
@@ -30,7 +31,6 @@ class SignupScreenViewModel(
 
     private val validationEventChannel = Channel<ValidationEvent>()
     val validationEvents = validationEventChannel.receiveAsFlow()
-
 
     fun signup(email:String, password:String, name:String, phone:String){
         viewModelScope.launch {
@@ -62,6 +62,9 @@ class SignupScreenViewModel(
             is SignupFormEvent.Submit -> {
                 submitData()
             }
+            is SignupFormEvent.ReEnterPasswordChanged -> {
+                _formState.value = _formState.value.copy(reEnterPassword = event.reEnterPassword)
+            }
         }
     }
 
@@ -72,13 +75,14 @@ class SignupScreenViewModel(
         val passwordResult = signupValidatePasswordUsecase.execute(_formState.value.password)
         val nameResult = signupValidateNameUsecase.execute(_formState.value.name)
         val phoneResult = signupValidatePhoneUsecase.execute(_formState.value.phone)
-
+        val reEnterPasswordResult = signupValidateReEnterPasswordUsecase.execute(_formState.value.reEnterPassword, _formState.value.password)
 
         val hasError = listOf(
             emailResult,
             passwordResult,
             nameResult,
-            phoneResult
+            phoneResult,
+            reEnterPasswordResult
         ).any{!it.successfull}
 
         if(hasError){
@@ -86,7 +90,8 @@ class SignupScreenViewModel(
                 emailError = emailResult.errorMessage,
                 passwordError = passwordResult.errorMessage,
                 nameError = nameResult.errorMessage,
-                phoneError = phoneResult.errorMessage
+                phoneError = phoneResult.errorMessage,
+                reEnterPasswordError = reEnterPasswordResult.errorMessage
             )
         }
         else{
@@ -101,7 +106,8 @@ class SignupScreenViewModel(
             emailError = null,
             passwordError = null,
             nameError = null,
-            phoneError = null
+            phoneError = null,
+            reEnterPasswordError = null
         )
     }
 
