@@ -9,6 +9,7 @@ import com.satwik.transfertoinr.data.account.AccountRepository
 import com.satwik.transfertoinr.data.auth.AuthRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class AccountsScreenViewModel(
@@ -17,7 +18,6 @@ class AccountsScreenViewModel(
 ):ViewModel() {
     private val _userInfoState = MutableStateFlow(UserInfoState())
     val userInfoState: StateFlow<UserInfoState> = _userInfoState
-
 
     init {
         getUserInfo()
@@ -34,10 +34,15 @@ class AccountsScreenViewModel(
         viewModelScope.launch {
             _userInfoState.value = UserInfoState(isLoading = true)
             try {
-                val profile = accountRepository.getProfile()
-                _userInfoState.value = UserInfoState(profile = profile)
+                val profileFlow = accountRepository.getProfile()
+                profileFlow.collectLatest { profile->
+                    _userInfoState.value = UserInfoState(profile = profile)
+                    println("CURRENCY:${profile.preferred_currency}")
+                }
             }
             catch (e:Exception){
+                println("ACCOUNT SCREEN PROFILE ERROR: ${e.message}")
+
                 _userInfoState.value = UserInfoState(error = e.message.toString())
             }
         }
@@ -45,8 +50,11 @@ class AccountsScreenViewModel(
 
     fun updatePreferredCurrency(currency: CurrencyType){
         viewModelScope.launch {
-            val profile = accountRepository.getProfile()
-            accountRepository.updatePrefferedCurrency(profile.email, currency)
+            val profileFlow = accountRepository.getProfile()
+            profileFlow.collectLatest { profile->
+                accountRepository.updatePrefferedCurrency(profile.email, currency)
+
+            }
         }
     }
 

@@ -6,6 +6,6 @@ import com.satwik.transfertoinr.core.model.Profile
 import kotlinx.coroutines.flow.Flow
 
 interface AccountRepository {
-    suspend fun getProfile():Profile
+    suspend fun getProfile():Flow<Profile>
     suspend fun updatePrefferedCurrency(email:String, currency: CurrencyType)
 }

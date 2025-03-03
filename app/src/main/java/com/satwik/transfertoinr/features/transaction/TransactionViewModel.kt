@@ -49,8 +49,11 @@ class TransactionViewModel(
 
     fun getPreferredCurrency(){
         viewModelScope.launch {
-            val profile = accountRepository.getProfile()
-            _preferredCurrency.value  = profile.preferred_currency
+            val profileFlow = accountRepository.getProfile()
+            profileFlow.collectLatest { profile->
+                _preferredCurrency.value  = profile.preferred_currency
+
+            }
         }
     }
 }

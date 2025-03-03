@@ -41,7 +41,7 @@ class RecipientViewModel(
         }
     }
 
-    fun getAllRecipients() {
+    private fun getAllRecipients() {
         viewModelScope.launch {
             _recipientsState.value = RecipientsState(isLoading = true)
             try {

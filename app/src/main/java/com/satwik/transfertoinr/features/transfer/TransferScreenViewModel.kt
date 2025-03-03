@@ -61,36 +61,45 @@ class TransferScreenViewModel(
 
     fun addTransaction(transactionCode:String, sent:Int, reason:String){
         viewModelScope.launch {
-            val profile = accountRepository.getProfile()
-            transferRepository.createTransfer(
-                transactionCode = transactionCode,
-                sent = sent,
-                currency = profile.preferred_currency,
-                reason = reason
-            )
+            val profileFlow = accountRepository.getProfile()
+            profileFlow.collectLatest { profile->
+                transferRepository.createTransfer(
+                    transactionCode = transactionCode,
+                    sent = sent,
+                    currency = profile.preferred_currency,
+                    reason = reason
+                )
+            }
+
         }
     }
 
     private fun getTtiRate(){
         viewModelScope.launch {
-            val profile = accountRepository.getProfile()
-            exchangeRatesRepository.getExchangeRates(profile.preferred_currency).collect{
-                _ttiRate.value = it.tti
+            val profileFlow = accountRepository.getProfile()
+            profileFlow.collectLatest { profile->
+                exchangeRatesRepository.getExchangeRates(profile.preferred_currency).collect{
+                    _ttiRate.value = it.tti
+                }
             }
         }
     }
 
     private fun getPreferredCurrency() {
         viewModelScope.launch {
-            val profile = accountRepository.getProfile()
-            _preferredCurrency.value = profile.preferred_currency
+            val profileFlow = accountRepository.getProfile()
+            profileFlow.collectLatest { profile->
+                _preferredCurrency.value = profile.preferred_currency
+            }
         }
     }
 
     fun getKycStatus(){
         viewModelScope.launch {
-            val profile = accountRepository.getProfile()
-            _kycStatus.value = profile.kyc_status
+            val profileFlow = accountRepository.getProfile()
+            profileFlow.collectLatest { profile->
+                _kycStatus.value = profile.kyc_status
+            }
         }
     }
 }

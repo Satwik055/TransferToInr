@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -39,21 +40,18 @@ fun HomeScreen(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier.fillMaxSize()
     ) {
-//        if(userState.isLoading || rateState.isLoading){
-//            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center), color = JungleGreen)
-//        }
-//        else{
-//            Content(user = userState.metadata, rate = rateState.rate)
-//        }
-        Content(user = userState.profile, rate = rateState.rate)
-
+        if(userState.isLoading || rateState.isLoading){
+            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center), color = JungleGreen)
+        }
+        else{
+            Content(user = userState.profile, rate = rateState.rate)
+        }
     }
 }
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 internal fun Content(modifier: Modifier = Modifier, user: Profile, rate:ExchangeRate) {
-
 
     val style = TextStyle(fontFamily = fontFamily, fontWeight = FontWeight.SemiBold, fontSize = 37.sp, color = JungleGreen)
     val images:List<String> = listOf(

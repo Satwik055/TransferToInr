@@ -78,16 +78,16 @@ private fun Content(modifier: Modifier = Modifier, navController: NavController)
             println("Loading...")
         }
         if(state.error.isNotEmpty()){
-            println(viewModel.userInfoState.value.error)
+            println(state.error)
         }
         else{
-            println(viewModel.userInfoState.value.profile)
+            println(state.profile)
         }
 
         UserInfoSection(
             profilePic = R.drawable.profile_pic,
-            name = viewModel.userInfoState.value.profile.name,
-            email = viewModel.userInfoState.value.profile.email
+            name = user.name,
+            email = user.email
         )
         Spacer(modifier = Modifier.height(50.dp))
         Column{
