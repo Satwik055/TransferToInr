@@ -105,7 +105,7 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                         placeholder = "Password",
                         isError = formState.passwordError != null,
                         errorText = formState.passwordError?:"",
-                        keyboardType = KeyboardType.Password
+                        isPassword = true
                     )
                 }
 
