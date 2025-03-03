@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -13,11 +14,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.satwik.transfertoinr.core.designsystem.components.TTFButton
 import com.satwik.transfertoinr.core.designsystem.components.headers.TTFTextHeader
 import com.satwik.transfertoinr.core.designsystem.components.TTFTextField
+import com.satwik.transfertoinr.features.auth.signup.SignupFormEvent
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -25,10 +28,23 @@ fun AddRecipientScreen(modifier: Modifier = Modifier, navController: NavControll
 
     val viewModel = koinViewModel<RecipientViewModel>()
 
-    var name by remember { mutableStateOf("") }
-    var accountNumber by remember { mutableStateOf("") }
-    var ifscCode by remember { mutableStateOf("") }
-    var bank by remember { mutableStateOf("") }
+    val formState = viewModel.formState.value
+    val context = LocalContext.current
+    var isFormValidated by remember { mutableStateOf(false) }
+    var errorText by remember { mutableStateOf("") }
+
+
+    LaunchedEffect(context) {
+        viewModel.validationEvents.collect{ event->
+            when(event){
+                is ValidationEvent.Success ->{
+                    isFormValidated = true
+                }
+            }
+        }
+    }
+
+
 
     Box(
         Modifier.fillMaxSize().padding(bottom = 16.dp).background(Color.White)){
@@ -36,11 +52,41 @@ fun AddRecipientScreen(modifier: Modifier = Modifier, navController: NavControll
 
         Column(
             Modifier.padding(vertical = 90.dp, horizontal = 16.dp).align(Alignment.TopCenter)){
-            TTFTextField(text = name, onValueChange = {name=it}, placeholder = "Recipient Name")
-            TTFTextField(text = accountNumber, onValueChange = {accountNumber=it}, placeholder = "Account Number")
-            TTFTextField(text = ifscCode, onValueChange = {ifscCode=it}, placeholder = "IFSC Code")
-            TTFTextField(text = bank, onValueChange = {bank=it}, placeholder = "Bank")
-
+            TTFTextField(
+                text = formState.name,
+                onValueChange = { viewModel.onEvent(AddRecipientFormEvent.NameChanged(it)) },
+                placeholder = "Recipient Name",
+                isError = formState.nameError!=null,
+                errorText = formState.nameError?:""
+            )
+            TTFTextField(
+                text = formState.accountNumber,
+                onValueChange = { viewModel.onEvent(AddRecipientFormEvent.AccountNumberChanged(it)) },
+                placeholder = "Account Number",
+                isError = formState.accountNumberError!=null,
+                errorText = formState.accountNumberError?:""
+            )
+            TTFTextField(
+                text = formState.reEnterAccountNumber,
+                onValueChange = { viewModel.onEvent(AddRecipientFormEvent.ReEnterAccountNumberChanged(it))},
+                placeholder = "Confirm account number",
+                isError = formState.reEnterAccountNumberError!=null,
+                errorText = formState.reEnterAccountNumberError?:""
+            )
+            TTFTextField(
+                text = formState.ifsc,
+                onValueChange = { viewModel.onEvent(AddRecipientFormEvent.IfscChanged(it)) },
+                placeholder = "IFSC Code",
+                isError = formState.ifscError!=null,
+                errorText = formState.ifscError?:""
+            )
+            TTFTextField(
+                text = formState.bank,
+                onValueChange = { viewModel.onEvent(AddRecipientFormEvent.BankChanged(it)) },
+                placeholder = "Bank",
+                isError = formState.bankError!=null,
+                errorText = formState.bankError?:""
+            )
         }
         TTFButton(
             modifier = Modifier
@@ -48,8 +94,16 @@ fun AddRecipientScreen(modifier: Modifier = Modifier, navController: NavControll
             .padding(vertical = 20.dp, horizontal = 16.dp),
             text = "Add",
             onClick = {
-                viewModel.addRecipient(name = name, accountNumber = accountNumber, ifscCode = ifscCode, bank = bank)
-                navController.popBackStack()
+                viewModel.onEvent(AddRecipientFormEvent.Submit)
+                if(isFormValidated){
+                    viewModel.addRecipient(
+                        name = formState.name,
+                        accountNumber = formState.accountNumber,
+                        ifscCode = formState.ifsc,
+                        bank = formState.bank
+                    )
+                    navController.popBackStack()
+                }
             }
         )
     }

@@ -20,9 +20,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -32,6 +37,7 @@ import com.satwik.transfertoinr.core.designsystem.components.TTFButton
 import com.satwik.transfertoinr.core.designsystem.theme.JungleGreen
 import com.satwik.transfertoinr.core.designsystem.theme.fontFamily
 import com.satwik.transfertoinr.core.main.ScreenAddRecipient
+import com.satwik.transfertoinr.features.auth.signup.SignupScreenViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -65,7 +71,11 @@ private fun Content(modifier: Modifier = Modifier, navController: NavController)
         }
 
 
-        TTFButton(text = "Add Recipient", onClick = {navController.navigate(ScreenAddRecipient)}, modifier = Modifier.align(Alignment.BottomCenter))
+        TTFButton(
+            text = "Add Recipient",
+            onClick = { navController.navigate(ScreenAddRecipient) },
+            modifier = Modifier.align(Alignment.BottomCenter)
+        )
 
     }
 }

@@ -60,7 +60,6 @@ fun SignupScreen(modifier: Modifier = Modifier, navController: NavController) {
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
 
-
     LaunchedEffect(context) {
         viewModel.validationEvents.collect{ event->
             when(event){

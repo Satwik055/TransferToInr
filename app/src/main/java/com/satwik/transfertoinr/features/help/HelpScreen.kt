@@ -55,14 +55,14 @@ private fun Content(modifier: Modifier = Modifier) {
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ){
             Text(text = "Email:", style = subheading)
-            Text(text = "support@transfertoinr.com", style = body)
+            Text(text = "hello@transfertoinr.com", style = body)
         }
         Row (
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ){
             Text(text = "Phone", style = subheading)
-            Text(text = "924932343", style = body)
+            Text(text = "8247500816", style = body)
         }
 
         Spacer(modifier = Modifier.height(30.dp))
