@@ -108,8 +108,6 @@ internal fun Content(modifier: Modifier = Modifier) {
                     .align(Alignment.End)
                     .offset(y = -(19.dp))
             )
-
-
         }
 
 
@@ -158,7 +156,7 @@ internal fun Content(modifier: Modifier = Modifier) {
                     NumberCircle(number = 5)
                     Text(text = "Select a reason for payment", style = style)
                 }
-                NewTTFDropdown(items = reasons, selectedItem = selectedReason, onItemSelected = { selectedReason =it} )
+                NewTTFDropdown(items = reasons, selectedItem = selectedReason, onItemSelected = { selectedReason =it})
             }
 
 

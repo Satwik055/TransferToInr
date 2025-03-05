@@ -38,13 +38,14 @@ class RecipientViewModel(
         getAllRecipients()
     }
 
-    fun addRecipient(name:String, accountNumber:String, ifscCode:String, bank:String){
+    fun addRecipient(name:String, accountNumber:String, ifscCode:String, bank:String, relation:String){
         viewModelScope.launch {
             recipientRepository.addRecipient(
                 name = name,
                 accountNumber = accountNumber,
                 ifscCode = ifscCode,
-                bank = bank
+                bank = bank,
+                relation = relation
             )
         }
     }

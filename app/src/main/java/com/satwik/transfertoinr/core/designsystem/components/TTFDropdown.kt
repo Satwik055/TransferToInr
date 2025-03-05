@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.Red
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -54,14 +55,16 @@ fun TTFDropdown(
         onExpandedChange = { expanded = !expanded }
     ) {
         OutlinedTextField(
-            value = if (selectedItem.first.isEmpty()) "No item found" else selectedItem.first,
+            value = selectedItem.first.ifEmpty { "No item found" },
             onValueChange = {},
             singleLine = true,
             textStyle = textStyle,
             readOnly = true,
 
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-            modifier = modifier.menuAnchor().focusRequester(focusRequester),
+            modifier = modifier
+                .menuAnchor()
+                .focusRequester(focusRequester),
             colors = OutlinedTextFieldDefaults.colors(
                 focusedContainerColor = Color.Transparent,
                 unfocusedContainerColor = Color.Transparent,
@@ -119,6 +122,9 @@ fun NewTTFDropdown(
     textStyle: TextStyle = TextStyle(fontFamily = fontFamily, fontWeight = FontWeight.Normal, fontSize = 15.sp, color = JungleGreen),
     items:List<String>,
     selectedItem: String,
+    isError:Boolean = false,
+    errorText:String = "",
+    placeholder:String = "",
     onItemSelected: (String) -> Unit
 ) {
 
@@ -137,9 +143,12 @@ fun NewTTFDropdown(
             singleLine = true,
             textStyle = textStyle,
             readOnly = true,
-
+            isError = isError,
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-            modifier = modifier.menuAnchor().focusRequester(focusRequester).fillMaxWidth(),
+            modifier = modifier
+                .menuAnchor()
+                .focusRequester(focusRequester)
+                .fillMaxWidth(),
             colors = OutlinedTextFieldDefaults.colors(
                 focusedContainerColor = Color.Transparent,
                 unfocusedContainerColor = Color.Transparent,
@@ -148,6 +157,12 @@ fun NewTTFDropdown(
                 focusedBorderColor = JungleGreen,
                 unfocusedBorderColor = LightGrey,
             ),
+            placeholder = {
+                Text(
+                    text = placeholder,
+                    style = textStyle.copy(color = LightGrey)
+                )
+            }
         )
 
         ExposedDropdownMenu(
@@ -182,5 +197,11 @@ fun NewTTFDropdown(
                 }
             }
         }
+
     }
+    if(isError){
+        val errorTextStyle = TextStyle(fontFamily = fontFamily, fontSize = 13.sp, color = Red, fontWeight = FontWeight.Medium)
+        Text(text = errorText, style = errorTextStyle, modifier = Modifier.padding(start = 10.dp))
+    }
+
 }

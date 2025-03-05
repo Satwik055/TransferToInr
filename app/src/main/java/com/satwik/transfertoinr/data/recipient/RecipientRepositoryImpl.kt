@@ -15,7 +15,7 @@ import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 
 class RecipientRepositoryImpl(private val client:SupabaseClient):RecipientRepository {
-    override suspend fun addRecipient(name: String, accountNumber: String, ifscCode: String, bank:String) {
+    override suspend fun addRecipient(name: String, accountNumber: String, ifscCode: String, bank:String, relation:String) {
         val email = client.auth.currentUserOrNull()?.email
         val response = client.postgrest.rpc(
             function = "add_recipient_by_email",

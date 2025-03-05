@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.satwik.transfertoinr.core.designsystem.components.NewTTFDropdown
 import com.satwik.transfertoinr.core.designsystem.components.TTFButton
 import com.satwik.transfertoinr.core.designsystem.components.headers.TTFTextHeader
 import com.satwik.transfertoinr.core.designsystem.components.TTFTextField
@@ -33,6 +34,8 @@ fun AddRecipientScreen(modifier: Modifier = Modifier, navController: NavControll
     var isFormValidated by remember { mutableStateOf(false) }
     var errorText by remember { mutableStateOf("") }
 
+    val relation = listOf("Father", "Mother", "Family", "Other")
+    var selectedRelation by remember { mutableStateOf("") }
 
     LaunchedEffect(context) {
         viewModel.validationEvents.collect{ event->
@@ -80,6 +83,7 @@ fun AddRecipientScreen(modifier: Modifier = Modifier, navController: NavControll
                 isError = formState.ifscError!=null,
                 errorText = formState.ifscError?:""
             )
+
             TTFTextField(
                 text = formState.bank,
                 onValueChange = { viewModel.onEvent(AddRecipientFormEvent.BankChanged(it)) },
@@ -87,7 +91,15 @@ fun AddRecipientScreen(modifier: Modifier = Modifier, navController: NavControll
                 isError = formState.bankError!=null,
                 errorText = formState.bankError?:""
             )
+            NewTTFDropdown(
+                items = relation,
+                selectedItem = selectedRelation,
+                onItemSelected = { selectedRelation = it },
+                placeholder = "Select a relation"
+            )
         }
+
+
         TTFButton(
             modifier = Modifier
             .align(Alignment.BottomCenter)
@@ -101,7 +113,8 @@ fun AddRecipientScreen(modifier: Modifier = Modifier, navController: NavControll
                         name = formState.name,
                         accountNumber = formState.accountNumber,
                         ifscCode = formState.ifsc,
-                        bank = formState.bank
+                        bank = formState.bank,
+                        relation = selectedRelation
                     )
                     navController.popBackStack()
                 }
