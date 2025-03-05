@@ -68,7 +68,7 @@ internal fun Content(modifier: Modifier = Modifier, navController: NavController
         if(state.error.isNotEmpty()){
             Text(text = state.error, style = style1.copy(fontSize = 14.sp), modifier = Modifier.align(Alignment.Center))
         }
-        else{
+        if(state.transaction.isNotEmpty()){
             Column{
                 TableHeader()
                 HorizontalDivider(Modifier.padding(5.dp))
@@ -87,9 +87,7 @@ internal fun Content(modifier: Modifier = Modifier, navController: NavController
                     }
                 }
             }
-
             ContactUsRibbon(modifier = Modifier.fillMaxWidth().align(Alignment.BottomCenter), onClick = {navController.navigate(ScreenHelp)})
-
         }
     }
 }

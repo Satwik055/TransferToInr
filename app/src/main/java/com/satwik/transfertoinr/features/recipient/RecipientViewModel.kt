@@ -66,6 +66,10 @@ class RecipientViewModel(
                     val currentRecipients = _recipientsState.value.recipients
                     val updatedRecipients = currentRecipients + newRecipients
 
+                    if(newRecipients.isEmpty()){
+                        throw Exception("No recipients found")
+                    }
+
                     _recipientsState.value = _recipientsState.value.copy(
                         recipients = updatedRecipients,
                         isLoading = false

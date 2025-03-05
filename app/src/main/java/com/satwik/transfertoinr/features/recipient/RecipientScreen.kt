@@ -60,7 +60,7 @@ private fun Content(modifier: Modifier = Modifier, navController: NavController)
         if(state.error.isNotEmpty()){
             Text(text = state.error, style = style1, modifier = Modifier.align(Alignment.Center))
         }
-        else{
+        if(state.recipients.isNotEmpty()){
             LazyColumn (
                 verticalArrangement = Arrangement.spacedBy(5.dp)
             ){
