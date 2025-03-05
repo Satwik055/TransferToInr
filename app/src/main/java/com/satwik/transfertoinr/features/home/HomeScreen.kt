@@ -17,6 +17,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -99,6 +100,12 @@ internal fun Content(modifier: Modifier = Modifier, user: Profile, rate:Exchange
             bankFees = rate.bank_fees
         )
     }
+}
+
+@Preview
+@Composable
+fun HomeScreenPreview(modifier: Modifier = Modifier) {
+    HomeScreen()
 }
 
 

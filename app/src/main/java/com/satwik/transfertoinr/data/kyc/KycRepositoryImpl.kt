@@ -1,5 +1,6 @@
 package com.satwik.transfertoinr.data.kyc
 
+import com.satwik.transfertoinr.core.utils.SumsubSecrets
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.postgrest.postgrest
 import kotlinx.coroutines.Dispatchers
@@ -24,8 +25,8 @@ class KycRepositoryImpl(private val client: SupabaseClient): KycRepository {
             val levelName = "id-and-liveness"
             val ttlInSecs = 3600
             val time = System.currentTimeMillis() / 1000
-            val appToken = "sbx:WN4xuyf3SQmqE0zwbJHH7dUk.GyNV2VpyFEED8NWId7eoH7L17t7kPNX2"
-            val secret = "szwbAQ6nc1n3F3PkhjuN8dNpAWriaqbw"
+            val appToken = SumsubSecrets.Production.APP_TOKEN
+            val secret = SumsubSecrets.Production.SECRET_KEY
             val body = "{\"applicantIdentifiers\":{\"email\":\"$email\",\"phone\":\"$phone\"},\"ttlInSecs\":$ttlInSecs,\"userId\":\"$userId\",\"levelName\":\"$levelName\"}"
 
             val signature = generateSignature(ts = time, key = secret, body = body)
