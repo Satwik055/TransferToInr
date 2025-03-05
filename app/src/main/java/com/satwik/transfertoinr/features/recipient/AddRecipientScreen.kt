@@ -25,13 +25,14 @@ import com.satwik.transfertoinr.features.auth.signup.SignupFormEvent
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun AddRecipientScreen(modifier: Modifier = Modifier, navController: NavController) {
+fun AddRecipientScreen(navController: NavController) {
 
     val viewModel = koinViewModel<RecipientViewModel>()
 
     val formState = viewModel.formState.value
     val context = LocalContext.current
     var isFormValidated by remember { mutableStateOf(false) }
+    var isError by remember { mutableStateOf(false) }
     var errorText by remember { mutableStateOf("") }
 
     val relation = listOf("Father", "Mother", "Family", "Other")
@@ -46,8 +47,6 @@ fun AddRecipientScreen(modifier: Modifier = Modifier, navController: NavControll
             }
         }
     }
-
-
 
     Box(
         Modifier.fillMaxSize().padding(bottom = 16.dp).background(Color.White)){
@@ -95,7 +94,9 @@ fun AddRecipientScreen(modifier: Modifier = Modifier, navController: NavControll
                 items = relation,
                 selectedItem = selectedRelation,
                 onItemSelected = { selectedRelation = it },
-                placeholder = "Select a relation"
+                placeholder = "Select a relation",
+                isError = isError,
+                errorText = errorText
             )
         }
 
@@ -106,18 +107,27 @@ fun AddRecipientScreen(modifier: Modifier = Modifier, navController: NavControll
             .padding(vertical = 20.dp, horizontal = 16.dp),
             text = "Add",
             onClick = {
-                viewModel.onEvent(AddRecipientFormEvent.Submit)
-                if(isFormValidated){
-                    viewModel.resetFormErrors()
-                    viewModel.addRecipient(
-                        name = formState.name,
-                        accountNumber = formState.accountNumber,
-                        ifscCode = formState.ifsc,
-                        bank = formState.bank,
-                        relation = selectedRelation
-                    )
-                    navController.popBackStack()
+                if(selectedRelation.isEmpty()){
+                    errorText = "Please select a relation"
+                    isError = true
                 }
+                else{
+                    errorText = ""
+                    isError = false
+                    viewModel.onEvent(AddRecipientFormEvent.Submit)
+                    if(isFormValidated){
+                        viewModel.resetFormErrors()
+                        viewModel.addRecipient(
+                            name = formState.name,
+                            accountNumber = formState.accountNumber,
+                            ifscCode = formState.ifsc,
+                            bank = formState.bank,
+                            relation = selectedRelation
+                        )
+                        navController.popBackStack()
+                    }
+                }
+
             }
         )
     }

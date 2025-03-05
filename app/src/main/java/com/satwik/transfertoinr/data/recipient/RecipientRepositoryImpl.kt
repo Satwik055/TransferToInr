@@ -25,6 +25,7 @@ class RecipientRepositoryImpl(private val client:SupabaseClient):RecipientReposi
                 put("p_ifsc_code", ifscCode)
                 put("p_email", email)
                 put("p_bank", bank)
+                put("p_relation", relation)
             }
         )
     }
