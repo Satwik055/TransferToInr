@@ -60,7 +60,7 @@ private fun Content(modifier: Modifier = Modifier, navController: NavController)
         if(state.error.isNotEmpty()){
             Text(text = state.error, style = style1, modifier = Modifier.align(Alignment.Center))
         }
-        if(state.recipients.isNotEmpty()){
+        else{
             LazyColumn (
                 verticalArrangement = Arrangement.spacedBy(5.dp)
             ){
@@ -69,7 +69,6 @@ private fun Content(modifier: Modifier = Modifier, navController: NavController)
                 }
             }
         }
-
 
         TTFButton(
             text = "Add Recipient",
@@ -83,7 +82,7 @@ private fun Content(modifier: Modifier = Modifier, navController: NavController)
 
 
 @Composable
-fun RecipientListItem(modifier: Modifier = Modifier, name:String, accountNumber:String, bankName:String, deleteOnClick:()->Unit) {
+fun RecipientListItem(name:String, accountNumber:String, bankName:String, deleteOnClick:()->Unit) {
     val style1 = TextStyle(fontFamily = fontFamily, fontWeight = FontWeight.SemiBold, fontSize = 16.sp)
     val style2 = TextStyle(fontFamily = fontFamily, fontWeight = FontWeight.Normal, fontSize = 13.sp)
     val style3 = TextStyle(fontFamily = fontFamily, fontWeight = FontWeight.Normal, fontSize = 13.sp)
@@ -94,7 +93,6 @@ fun RecipientListItem(modifier: Modifier = Modifier, name:String, accountNumber:
             .padding(vertical = 5.dp),
         color = Color.White,
         shadowElevation = 3.dp,
-//        border = BorderStroke(width = 1.dp, color = Color.LightGray),
         shape = RoundedCornerShape(8.dp)
     ) {
         Row (

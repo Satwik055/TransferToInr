@@ -54,11 +54,11 @@ fun RateTable(
 
     val tableData = listOf(
         listOf("Send", "Receive", "Fees"),
-        listOf("1", ttiRate.toString(), ttiFees.toString()),
-        listOf("1", wiseRate.toString(), wiseFees.toString()),
-        listOf("1", skrillRate.toString(), skrillFees.toString()),
-        listOf("1", paypalRate.toString(), paypalFees.toString()),
-        listOf("1", bankRate.toString(), bankFees.toString()),
+        listOf("1$currencySymbol", "₹$ttiRate", ttiFees.toString()+currencySymbol),
+        listOf("1$currencySymbol", "₹$wiseRate", wiseFees.toString()+currencySymbol),
+        listOf("1$currencySymbol", "₹$skrillRate", skrillFees.toString()+currencySymbol),
+        listOf("1$currencySymbol", "₹$paypalRate", paypalFees.toString()+currencySymbol),
+        listOf("1$currencySymbol", "₹$bankRate", bankFees.toString()+currencySymbol),
     )
 
     val textStyle = TextStyle(fontSize = 13.sp, fontWeight = FontWeight.Normal, fontFamily = fontFamily)
@@ -105,7 +105,7 @@ fun RateTable(
                 )
                 row.forEach { cell ->
                     Text(
-                        text = cell+currencySymbol,
+                        text = cell,
                         style = textStyle,
                         modifier = Modifier.weight(1f).padding(vertical = 16.dp, horizontal = 20.dp), //vertical padding 16.dp/12.dp
                         color = JungleGreen

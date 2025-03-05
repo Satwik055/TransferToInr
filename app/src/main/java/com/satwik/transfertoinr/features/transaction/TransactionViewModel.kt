@@ -36,9 +36,9 @@ class TransactionViewModel(
 
                     val currentTransactions = _transactionState.value.transaction
                     val updatedTransactions = currentTransactions + newTransaction
-                    if(newTransaction.isEmpty()){
-                        throw Exception("No transaction found")
-                    }
+//                    if(newTransaction.isEmpty()){
+//                        throw Exception("No transaction found")
+//                    }
                     _transactionState.value = _transactionState.value.copy(
                         transaction = updatedTransactions,
                         isLoading = false

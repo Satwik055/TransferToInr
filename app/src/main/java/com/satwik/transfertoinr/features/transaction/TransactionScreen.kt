@@ -68,7 +68,7 @@ internal fun Content(modifier: Modifier = Modifier, navController: NavController
         if(state.error.isNotEmpty()){
             Text(text = state.error, style = style1.copy(fontSize = 14.sp), modifier = Modifier.align(Alignment.Center))
         }
-        if(state.transaction.isNotEmpty()){
+        else{
             Column{
                 TableHeader()
                 HorizontalDivider(Modifier.padding(5.dp))
