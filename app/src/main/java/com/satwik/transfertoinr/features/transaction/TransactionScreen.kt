@@ -2,6 +2,8 @@ package com.satwik.transfertoinr.features.transaction
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
@@ -20,13 +23,19 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.satwik.transfertoinr.core.designsystem.theme.JungleGreen
 import com.satwik.transfertoinr.core.designsystem.theme.Mustard
 import com.satwik.transfertoinr.core.designsystem.theme.fontFamily
+import com.satwik.transfertoinr.core.main.ScreenHelp
 import com.satwik.transfertoinr.core.model.CurrencyType
 import com.satwik.transfertoinr.core.model.TransactionStatus
 import com.satwik.transfertoinr.core.utils.formatTimestamp
@@ -35,13 +44,13 @@ import org.koin.androidx.compose.koinViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun TransactionScreen() {
-    Content(modifier = Modifier.fillMaxSize())
+fun TransactionScreen(navController: NavController) {
+    Content(modifier = Modifier.fillMaxSize(), navController)
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-internal fun Content(modifier: Modifier = Modifier) {
+internal fun Content(modifier: Modifier = Modifier, navController: NavController) {
     val style1 = TextStyle(fontWeight = FontWeight.Normal, fontFamily = fontFamily, fontSize = 13.sp, color = JungleGreen)
     val viewModel = koinViewModel<TransactionViewModel>()
     val state = viewModel.transactionState.collectAsState().value
@@ -78,6 +87,9 @@ internal fun Content(modifier: Modifier = Modifier) {
                     }
                 }
             }
+
+            ContactUsRibbon(modifier = Modifier.fillMaxWidth().align(Alignment.BottomCenter), onClick = {navController.navigate(ScreenHelp)})
+
         }
     }
 }
@@ -129,3 +141,21 @@ fun TableHeader(modifier: Modifier = Modifier) {
 }
 
 
+@Composable
+fun ContactUsRibbon(modifier: Modifier = Modifier, onClick: () -> Unit) {
+    val style = TextStyle(fontFamily = fontFamily, fontSize = 13.sp, fontWeight = FontWeight.Normal, color = Color.White)
+    Box (
+        modifier = modifier.background(color = JungleGreen, shape = RoundedCornerShape(5.dp)).clickable { onClick.invoke() }
+    ){
+        Text(
+            modifier = modifier.padding(14.dp),
+            style = style,
+            text = buildAnnotatedString {
+                append("Having Issues ?")
+                withStyle(style = SpanStyle(fontWeight = FontWeight.SemiBold, textDecoration = TextDecoration.Underline)){
+                    append(" Contact Us")
+                }
+            },
+        )
+    }
+}

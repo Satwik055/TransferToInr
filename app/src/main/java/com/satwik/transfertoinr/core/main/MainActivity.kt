@@ -73,7 +73,7 @@ fun MainScreen(navController: NavController, activity: Activity) {
             when (selectedIndex) {
                 0 -> HomeScreen()
                 1 -> TransferScreen()
-                2 -> TransactionScreen()
+                2 -> TransactionScreen(navController)
                 3 -> RecipientScreen(navController = navController)
                 4 -> AccountScreen(navController = navController)
             }

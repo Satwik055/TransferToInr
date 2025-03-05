@@ -78,13 +78,13 @@ fun RateTable(
             Text(
                 text = "Provider",
                 style = textStyle.copy(fontWeight = FontWeight.Medium, color = Color.White),
-                modifier = Modifier.weight(1f).padding(vertical = 16.dp, horizontal = 18.dp)
+                modifier = Modifier.weight(1f).padding(vertical = 16.dp, horizontal = 17.dp)
             )
             tableData[0].forEach { header ->
                 Text(
                     text = header,
                     style = textStyle.copy(fontWeight = FontWeight.Medium, color = Color.White),
-                    modifier = Modifier.weight(1f).padding(vertical = 16.dp, horizontal = 20.dp)
+                    modifier = Modifier.weight(1f).padding(vertical = 16.dp, horizontal = 19.dp)
                 )
             }
         }
@@ -107,7 +107,7 @@ fun RateTable(
                     Text(
                         text = cell+currencySymbol,
                         style = textStyle,
-                        modifier = Modifier.weight(1f).padding(vertical = 16.dp, horizontal = 20.dp),
+                        modifier = Modifier.weight(1f).padding(vertical = 16.dp, horizontal = 20.dp), //vertical padding 16.dp/12.dp
                         color = JungleGreen
                     )
                 }
