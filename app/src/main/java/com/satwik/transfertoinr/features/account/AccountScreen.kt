@@ -3,14 +3,17 @@ package com.satwik.transfertoinr.features.account
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,6 +35,7 @@ import androidx.navigation.NavController
 import com.satwik.transfertoinr.R
 import com.satwik.transfertoinr.core.designsystem.components.CustomAlertDialog
 import com.satwik.transfertoinr.core.designsystem.components.NewTTFDropdown
+import com.satwik.transfertoinr.core.designsystem.theme.JungleGreen
 import com.satwik.transfertoinr.core.designsystem.theme.VeryLightGrey
 import com.satwik.transfertoinr.core.designsystem.theme.fontFamily
 import com.satwik.transfertoinr.core.main.ScreenKyc
@@ -45,18 +49,29 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun AccountScreen(navController: NavController) {
 
+    val viewModel = koinViewModel<AccountsScreenViewModel>()
+    val state = viewModel.userInfoState.collectAsState().value
 
-    Content(modifier = Modifier, navController)
+    Box(modifier = Modifier.fillMaxSize()) {
+        if(state.isLoading){
+            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center), color = JungleGreen)
+        }
+        if(state.error.isNotEmpty()){
+            val errorTextStyle = TextStyle(fontWeight = FontWeight.Normal, fontFamily = fontFamily, fontSize = 13.sp, color = JungleGreen)
+            Text(text = state.error, style = errorTextStyle)
+        }
+        if(state.profile.name.isNotEmpty()){
+            Content(modifier = Modifier, navController, viewModel)
+        }
+    }
 }
 
 @Composable
-private fun Content(modifier: Modifier = Modifier, navController: NavController) {
+internal fun Content(modifier: Modifier = Modifier, navController: NavController, viewModel: AccountsScreenViewModel) {
 
-    val viewModel = koinViewModel<AccountsScreenViewModel>()
     val state = viewModel.userInfoState.collectAsState().value
     val user = state.profile
     val isLogoutClicked = remember { mutableStateOf(false) }
-
 
     if(isLogoutClicked.value){
         CustomAlertDialog(
@@ -72,19 +87,9 @@ private fun Content(modifier: Modifier = Modifier, navController: NavController)
         )
     }
 
-
     Column (modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally){
-        if(state.isLoading){
-            println("Loading...")
-        }
-        if(state.error.isNotEmpty()){
-            println(state.error)
-        }
-        else{
-            println(state.profile)
-        }
 
-        UserInfoSection(
+        ProfileSection(
             profilePic = R.drawable.profile_pic,
             name = user.name,
             email = user.email
@@ -110,27 +115,24 @@ private fun Content(modifier: Modifier = Modifier, navController: NavController)
             )
             HorizontalDivider(color = VeryLightGrey)
 
-
             Spacer(modifier = Modifier.height(5.dp))
 
-            if(!state.isLoading){
-                val currency = listOf("EUR", "USD", "AUD", "CAD", "GBP")
-                var selectedCurrency by remember { mutableStateOf(user.preferred_currency.name)  }
+            val currency = listOf("EUR", "USD", "AUD", "CAD", "GBP")
+            var selectedCurrency by remember { mutableStateOf(user.preferred_currency.name)  }
 
-                LaunchedEffect(selectedCurrency) {
-                    viewModel.updatePreferredCurrency(CurrencyType.valueOf(selectedCurrency))
-                }
+            LaunchedEffect(selectedCurrency) {
+                viewModel.updatePreferredCurrency(CurrencyType.valueOf(selectedCurrency))
+            }
 
-                val style = TextStyle(fontFamily = fontFamily, fontSize = 16.sp, fontWeight = FontWeight.Medium)
+            val style = TextStyle(fontFamily = fontFamily, fontSize = 16.sp, fontWeight = FontWeight.Medium)
 
-                Row (verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 10.dp)){
-                    Text(text = "Currency", style = style)
-                    NewTTFDropdown(items = currency , selectedItem = selectedCurrency, onItemSelected = {selectedCurrency = it}, modifier = Modifier
-                        .width(150.dp)
-                        .height(50.dp))
-                }
+            Row (verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 10.dp)){
+                Text(text = "Currency", style = style)
+                NewTTFDropdown(items = currency , selectedItem = selectedCurrency, onItemSelected = {selectedCurrency = it}, modifier = Modifier
+                    .width(150.dp)
+                    .height(50.dp))
             }
         }
     }
@@ -138,7 +140,7 @@ private fun Content(modifier: Modifier = Modifier, navController: NavController)
 
 
 @Composable
-fun UserInfoSection(
+fun ProfileSection(
     modifier: Modifier = Modifier,
     @DrawableRes profilePic:Int,
     name:String, email:String

@@ -36,7 +36,7 @@ import java.util.Locale
 
 
 @Composable
-fun KycScreen(activity: Activity, navController: NavController) {
+fun KycScreen(navController: NavController) {
 
     val viewModel = koinViewModel<KycScreenViewModel>()
     val accessTokenState = viewModel.accessTokenState.value
@@ -51,14 +51,14 @@ fun KycScreen(activity: Activity, navController: NavController) {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
             }
             else -> {
-                Content(viewModel = viewModel, activity = activity, navController = navController)
+                Content(viewModel = viewModel, navController = navController)
             }
         }
     }
 }
 
 @Composable
-private fun Content(activity: Activity, viewModel: KycScreenViewModel, navController: NavController) {
+private fun Content(viewModel: KycScreenViewModel, navController: NavController) {
 
     val tokenExpirationHandler = object : TokenExpirationHandler {
         override fun onTokenExpired(): String {
@@ -79,12 +79,9 @@ private fun Content(activity: Activity, viewModel: KycScreenViewModel, navContro
     val onSDKCompletedHandler: (SNSCompletionResult, SNSSDKState) -> Unit = { result, state ->
         when (result) {
             is SNSCompletionResult.SuccessTermination -> {
-                println("POO")
                 navController.popBackStack()
-
             }
             is SNSCompletionResult.AbnormalTermination -> {
-                println("BOO")
                 navController.popBackStack()
             }
         }

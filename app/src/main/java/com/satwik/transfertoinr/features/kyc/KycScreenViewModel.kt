@@ -7,13 +7,13 @@ import androidx.lifecycle.viewModelScope
 import com.satwik.transfertoinr.data.account.AccountRepository
 import com.satwik.transfertoinr.data.kyc.KycRepository
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class KycScreenViewModel(
     private val kycRepository: KycRepository,
     private val accountRepository: AccountRepository
 ):ViewModel() {
-
 
     private val _accessTokenState = mutableStateOf(AccessTokenState())
     val accessTokenState: State<AccessTokenState> = _accessTokenState
@@ -26,9 +26,8 @@ class KycScreenViewModel(
         viewModelScope.launch {
             try{
                 val profileFlow = accountRepository.getProfile()
-                profileFlow.collectLatest { profile->
-                    kycRepository.updateKycStatus(status = status, id = profile.ttf_user_id)
-                }
+                val profile = profileFlow.first()
+                kycRepository.updateKycStatus(status = status, id = profile.ttf_user_id)
             }
             catch (e:Exception){
                 println("KYC ERROR"+ e.message)

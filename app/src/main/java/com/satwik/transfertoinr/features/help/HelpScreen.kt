@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.satwik.transfertoinr.core.designsystem.components.headers.TTFTextHeader
 import com.satwik.transfertoinr.core.designsystem.theme.JungleGreen
+import com.satwik.transfertoinr.core.designsystem.theme.White
 import com.satwik.transfertoinr.core.designsystem.theme.fontFamily
 
 @Composable
@@ -39,7 +40,7 @@ fun HelpScreen(navController: NavController) {
 
 @Composable
 private fun Content(modifier: Modifier = Modifier) {
-    Column (modifier = modifier){
+    Column (modifier = modifier.background(color = Color.White)){
 
         val heading = TextStyle(fontFamily = fontFamily, fontSize = 18.sp, fontWeight = FontWeight.SemiBold, color = JungleGreen)
         val subheading = TextStyle(fontFamily = fontFamily, fontSize = 15.sp, fontWeight = FontWeight.SemiBold, color = JungleGreen)

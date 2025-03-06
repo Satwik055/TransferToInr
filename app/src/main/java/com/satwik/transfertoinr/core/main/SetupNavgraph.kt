@@ -1,6 +1,8 @@
 package com.satwik.transfertoinr.core.main
 
 import android.app.Activity
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
@@ -18,6 +20,7 @@ import com.satwik.transfertoinr.features.privacypolicy.PrivacyPolicyScreen
 import com.satwik.transfertoinr.features.recipient.AddRecipientScreen
 import com.satwik.transfertoinr.features.recipient.RecipientScreen
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SetupNavgraph(navController:NavHostController, startDestination:Any, activity: Activity) {
     NavHost(navController =navController , startDestination = startDestination) {
@@ -56,7 +59,7 @@ fun SetupNavgraph(navController:NavHostController, startDestination:Any, activit
             AddRecipientScreen(navController = navController)
         }
         composable<ScreenKyc> {
-            KycScreen(activity, navController)
+            KycScreen(navController)
         }
     }
 }

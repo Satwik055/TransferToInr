@@ -10,6 +10,8 @@ import com.satwik.transfertoinr.data.auth.AuthRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
 class AccountsScreenViewModel(
@@ -42,21 +44,20 @@ class AccountsScreenViewModel(
             }
             catch (e:Exception){
                 println("ACCOUNT SCREEN PROFILE ERROR: ${e.message}")
-
                 _userInfoState.value = UserInfoState(error = e.message.toString())
             }
         }
     }
 
     fun updatePreferredCurrency(currency: CurrencyType){
-        viewModelScope.launch {
+        viewModelScope.launch{
             val profileFlow = accountRepository.getProfile()
-            profileFlow.collectLatest { profile->
-                accountRepository.updatePrefferedCurrency(profile.email, currency)
-
-            }
+            val profile = profileFlow.first()
+            accountRepository.updatePrefferedCurrency(profile.email, currency)
+//            profileFlow.collectLatest { profile->
+//                accountRepository.updatePrefferedCurrency(profile.email, currency)
+//            }
         }
     }
-
 }
 
