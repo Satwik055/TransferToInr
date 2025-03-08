@@ -88,6 +88,7 @@ dependencies {
     implementation("io.insert-koin:koin-android:4.0.2")
     implementation("io.insert-koin:koin-androidx-compose:4.0.2")
     implementation("io.insert-koin:koin-androidx-navigation:4.0.2")
+    implementation(libs.firebase.messaging)
 
     val sumsubSDK = "1.34.1"
     // SumSub core

@@ -48,7 +48,6 @@ private fun Content(modifier: Modifier = Modifier) {
 
         val scroll = rememberScrollState()
 
-
         Text(text = "Reach us at", style = heading)
         Spacer(modifier = Modifier.height(10.dp))
         Row (

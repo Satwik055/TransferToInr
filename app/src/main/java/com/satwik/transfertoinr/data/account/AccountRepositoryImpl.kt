@@ -29,6 +29,10 @@ class AccountRepositoryImpl(private val client: SupabaseClient):AccountRepositor
         return flow
     }
 
+
+
+
+
     override suspend fun updatePrefferedCurrency(email:String, currency: CurrencyType) {
         client.postgrest.rpc(
             function = "update_preferred_currency",
@@ -37,6 +41,10 @@ class AccountRepositoryImpl(private val client: SupabaseClient):AccountRepositor
                 put("p_currency", currency.name)
             }
         )
+    }
+
+    override suspend fun setFcmToken(token: String) {
+        client.from("ttfusers").postgrest
     }
 }
 

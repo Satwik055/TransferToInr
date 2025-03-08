@@ -47,6 +47,8 @@ fun RecipientScreen(navController: NavController) {
 
 @Composable
 private fun Content(modifier: Modifier = Modifier, navController: NavController) {
+
+    val context  = LocalContext.current
     Box(modifier=modifier){
 
         val style1 = TextStyle(fontWeight = FontWeight.Normal, fontFamily = fontFamily, fontSize = 14.sp, color = JungleGreen)
@@ -72,7 +74,9 @@ private fun Content(modifier: Modifier = Modifier, navController: NavController)
 
         TTFButton(
             text = "Add Recipient",
-            onClick = { navController.navigate(ScreenAddRecipient) },
+            onClick = {
+                navController.navigate(ScreenAddRecipient)
+                      },
             modifier = Modifier.align(Alignment.BottomCenter)
         )
 
