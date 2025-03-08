@@ -1,17 +1,26 @@
 package com.satwik.transfertoinr.data.auth
 
+import com.google.firebase.messaging.FirebaseMessaging
 import com.satwik.transfertoinr.core.model.CurrencyType
+import com.satwik.transfertoinr.core.model.Profile
+import com.satwik.transfertoinr.data.account.supabaseClient
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.exception.AuthRestException
 import io.github.jan.supabase.auth.providers.builtin.Email
+import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.postgrest
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 
 class AuthRepositoryImpl(private val client: SupabaseClient) :AuthRepository {
     override suspend fun login(email: String, password: String) {
-
         try{
             client.auth.signInWith(Email) {
                 this.email = email
@@ -24,7 +33,6 @@ class AuthRepositoryImpl(private val client: SupabaseClient) :AuthRepository {
     }
 
     override suspend fun signup(email: String, password: String, name: String, phone: String) {
-
         try{
             client.auth.signUpWith(Email) {
                 this.email = email
@@ -37,23 +45,44 @@ class AuthRepositoryImpl(private val client: SupabaseClient) :AuthRepository {
                     put("preferred_currency", CurrencyType.EUR.name)
                 }
             }
-        }
-        catch (authException:AuthRestException){
-            throw Exception(authException.errorCode?.name ?: "")
-        }
+            val token = FirebaseMessaging.getInstance().token.await()
             client.postgrest.rpc(
                 function = "addttfuser",
                 parameters = buildJsonObject {
                     put("p_name", name)
                     put("p_email", email)
                     put("p_phone", phone)
+                    put("p_fcm_token", token)
                 }
             )
         }
-
+        catch (authException:AuthRestException){
+            throw Exception(authException.errorCode?.name ?: "")
+        }
+        catch (e:Exception){
+            throw Exception(e.message)
+        }
+    }
 
     override suspend fun logout() {
         println("Logout Initiated")
         client.auth.clearSession()
+    }
+
+    //TODO: Poorly written function needs optimisation
+    override suspend fun updateFcmToken(token: String){
+        val email = client.auth.currentUserOrNull()?.email
+        try {
+            client.from("ttfuser")
+                .update(
+                    mapOf("fcm_token" to token)
+                ){filter {
+                    eq("email", email!!)
+                }}
+            println("FCM token updated successfully!")
+        }
+        catch(e: Exception) {
+            println("Error updating FCM token: ${e.message}")
+        }
     }
 }

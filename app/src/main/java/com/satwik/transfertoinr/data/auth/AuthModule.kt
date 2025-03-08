@@ -1,5 +1,6 @@
 package com.satwik.transfertoinr.data.auth
 
+import com.satwik.transfertoinr.core.di.MyApplication
 import com.satwik.transfertoinr.core.main.MainActivityViewModel
 import com.satwik.transfertoinr.data.auth.login_preconditions.LoginValidateEmailUsecase
 import com.satwik.transfertoinr.data.auth.login_preconditions.LoginValidatePasswordUsecase

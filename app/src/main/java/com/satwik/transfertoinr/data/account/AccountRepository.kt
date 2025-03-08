@@ -9,5 +9,4 @@ import kotlinx.coroutines.flow.Flow
 interface AccountRepository {
     suspend fun getProfile():Flow<Profile>
     suspend fun updatePrefferedCurrency(email:String, currency: CurrencyType)
-    suspend fun setFcmToken(token: String)
 }

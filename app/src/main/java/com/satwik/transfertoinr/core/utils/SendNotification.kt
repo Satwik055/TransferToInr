@@ -3,6 +3,7 @@ package com.satwik.transfertoinr.core.utils
 import android.annotation.SuppressLint
 import android.app.Application
 import android.app.NotificationChannel
+import androidx.lifecycle.lifecycleScope
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
@@ -13,34 +14,27 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.satwik.transfertoinr.R
 import com.satwik.transfertoinr.core.designsystem.theme.JungleGreen
+import com.satwik.transfertoinr.data.auth.AuthRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+
 @SuppressLint("MissingFirebaseInstanceTokenRefresh")
-class FirebasePushMessagingService:FirebaseMessagingService(){
+class FirebasePushMessagingService(private val authRepository: AuthRepository):FirebaseMessagingService(){
 
     override fun onNewToken(token: String) {
-        println("Refreshed token: $token")
-
-        // If you want to send messages to this application instance or
-        // manage this apps subscriptions on the server side, send the
-        // FCM registration token to your app server.
-        //sendRegistrationToServer(token)
-    }
-
-
-    companion object {
-        private const val CHANNEL_ID = "MyChannelId"
+        CoroutineScope(Dispatchers.IO).launch {
+            authRepository.updateFcmToken(token)
+        }
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
         sendNotification(message.notification!!.title!!, message.notification!!.body!!)
-        println(message)
-
     }
-
 
     private fun sendNotification(title:String, message: String) {
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 "transaction_update_channel",
