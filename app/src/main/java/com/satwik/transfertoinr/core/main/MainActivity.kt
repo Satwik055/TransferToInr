@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -31,6 +32,7 @@ import com.satwik.transfertoinr.features.transfer.TransferScreen
 import org.koin.android.ext.android.inject
 
 class MainActivity : ComponentActivity() {
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         actionBar?.hide()
@@ -44,7 +46,6 @@ class MainActivity : ComponentActivity() {
             val startDestination:Any = if(isLoggedIn){ ScreenMain } else{ ScreenSignup }
             val navController = rememberNavController()
 
-            this@MainActivity.getSystemService(CLIPBOARD_SERVICE)
             if(!isInitializing){
                 SetupNavgraph(
                     navController = navController,

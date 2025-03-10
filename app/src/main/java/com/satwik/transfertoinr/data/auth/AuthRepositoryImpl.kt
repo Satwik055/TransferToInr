@@ -2,25 +2,24 @@ package com.satwik.transfertoinr.data.auth
 
 import com.google.firebase.messaging.FirebaseMessaging
 import com.satwik.transfertoinr.core.model.CurrencyType
-import com.satwik.transfertoinr.core.model.Profile
-import com.satwik.transfertoinr.data.account.supabaseClient
 import io.github.jan.supabase.SupabaseClient
+import io.github.jan.supabase.auth.OtpType
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.exception.AuthRestException
 import io.github.jan.supabase.auth.providers.builtin.Email
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.postgrest
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 
 class AuthRepositoryImpl(private val client: SupabaseClient) :AuthRepository {
     override suspend fun login(email: String, password: String) {
+
+
+        client.auth.verifyEmailOtp(token = "324", type = OtpType.Email.EMAIL, email = "")
+
+
         try{
             client.auth.signInWith(Email) {
                 this.email = email
@@ -69,9 +68,11 @@ class AuthRepositoryImpl(private val client: SupabaseClient) :AuthRepository {
         client.auth.clearSession()
     }
 
-    //TODO: Poorly written function needs optimisation
+
     override suspend fun updateFcmToken(token: String){
         val email = client.auth.currentUserOrNull()?.email
+        println("Email: $email")
+
         try {
             client.from("ttfuser")
                 .update(
@@ -84,5 +85,13 @@ class AuthRepositoryImpl(private val client: SupabaseClient) :AuthRepository {
         catch(e: Exception) {
             println("Error updating FCM token: ${e.message}")
         }
+    }
+
+    override suspend fun verifyOtp(otp: String, email: String){
+        client.auth.verifyEmailOtp(type = OtpType.Email.EMAIL, email = email, token = otp)
+    }
+
+    override suspend fun resendEmailOtp(email:String) {
+        client.auth.resendEmail(type = OtpType.Email.SIGNUP, email = email)
     }
 }

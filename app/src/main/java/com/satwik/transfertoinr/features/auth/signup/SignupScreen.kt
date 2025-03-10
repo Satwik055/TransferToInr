@@ -40,6 +40,7 @@ import com.satwik.transfertoinr.core.designsystem.components.TTFSnackbar
 import com.satwik.transfertoinr.core.designsystem.components.TTFTextField
 import com.satwik.transfertoinr.core.designsystem.theme.JungleGreen
 import com.satwik.transfertoinr.core.designsystem.theme.fontFamily
+import com.satwik.transfertoinr.core.main.ScreenEmailVerification
 import com.satwik.transfertoinr.core.main.ScreenLogin
 import com.satwik.transfertoinr.core.utils.addSpacesToCamelCase
 import kotlinx.coroutines.launch
@@ -141,6 +142,7 @@ fun SignupScreen(modifier: Modifier = Modifier, navController: NavController) {
                                 name = formState.name,
                                 phone = formState.phone
                             )
+                            navController.navigate(ScreenEmailVerification(email = formState.email))
                         }
                     })
 

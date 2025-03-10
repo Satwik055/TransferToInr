@@ -35,6 +35,12 @@ object ScreenTransaction
 @Serializable
 object ScreenAccount
 
+
+@Serializable
+data class ScreenEmailVerification(
+    val email:String = ""
+)
+
 @Serializable
 object ScreenKyc
 

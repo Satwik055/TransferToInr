@@ -1,15 +1,12 @@
-package com.satwik.transfertoinr.core.utils
+package com.satwik.transfertoinr.core.service
 
 import android.annotation.SuppressLint
-import android.app.Application
 import android.app.NotificationChannel
-import androidx.lifecycle.lifecycleScope
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.app.NotificationCompat
-import androidx.core.content.ContextCompat.getSystemService
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.satwik.transfertoinr.R
@@ -18,9 +15,12 @@ import com.satwik.transfertoinr.data.auth.AuthRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 
 @SuppressLint("MissingFirebaseInstanceTokenRefresh")
-class FirebasePushMessagingService(private val authRepository: AuthRepository):FirebaseMessagingService(){
+class FirebasePushMessagingService:FirebaseMessagingService(){
+
+    private val authRepository: AuthRepository by inject()
 
     override fun onNewToken(token: String) {
         CoroutineScope(Dispatchers.IO).launch {

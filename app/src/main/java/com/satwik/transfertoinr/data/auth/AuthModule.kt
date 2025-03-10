@@ -10,6 +10,7 @@ import com.satwik.transfertoinr.data.auth.signup_preconditions.SignupValidatePas
 import com.satwik.transfertoinr.data.auth.signup_preconditions.SignupValidatePhoneUsecase
 import com.satwik.transfertoinr.features.auth.login.LoginScreenViewModel
 import com.satwik.transfertoinr.features.auth.signup.SignupScreenViewModel
+import com.satwik.transfertoinr.features.auth.verify_email.EmailVerificationViewModel
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
@@ -37,6 +38,7 @@ val authModule = module {
         LoginValidatePasswordUsecase()
     }
 
+
     viewModel {
         SignupScreenViewModel(get(), get(), get(), get(), get())
     }
@@ -47,6 +49,9 @@ val authModule = module {
 
     viewModel {
         MainActivityViewModel(get())
+    }
+    viewModel {
+        EmailVerificationViewModel(get())
     }
 
 }

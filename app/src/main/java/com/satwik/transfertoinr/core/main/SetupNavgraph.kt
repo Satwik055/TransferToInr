@@ -13,6 +13,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.satwik.transfertoinr.features.auth.login.LoginScreen
+import com.satwik.transfertoinr.features.auth.verify_email.EmailVerificationScreen
 import com.satwik.transfertoinr.features.auth.signup.SignupScreen
 import com.satwik.transfertoinr.features.help.HelpScreen
 import com.satwik.transfertoinr.features.kyc.KycScreen
@@ -23,11 +24,14 @@ import com.satwik.transfertoinr.features.recipient.RecipientScreen
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SetupNavgraph(navController:NavHostController, startDestination:Any, activity: Activity) {
+
+
     NavHost(navController =navController , startDestination = startDestination) {
         composable<ScreenSignup> {
             SignupScreen(navController = navController)
         }
         composable<ScreenMain> {
+//            EmailVerificationScreen(navController = navController)
             MainScreen(navController = navController, activity = activity)
         }
         composable<ScreenLogin> {
@@ -39,6 +43,11 @@ fun SetupNavgraph(navController:NavHostController, startDestination:Any, activit
         composable<ScreenAddRecipient> {
             AddRecipientScreen(navController = navController)
         }
+
+        composable<ScreenEmailVerification> {
+            EmailVerificationScreen(navController = navController)
+        }
+
         composable<ScreenHelp>(
             enterTransition = { slideInHorizontally(initialOffsetX = { it }, animationSpec = tween(300)) },
             exitTransition = { slideOutHorizontally(targetOffsetX = { -it }, animationSpec = tween(300)) },
