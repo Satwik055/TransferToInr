@@ -15,11 +15,6 @@ import kotlinx.serialization.json.put
 
 class AuthRepositoryImpl(private val client: SupabaseClient) :AuthRepository {
     override suspend fun login(email: String, password: String) {
-
-
-        client.auth.verifyEmailOtp(token = "324", type = OtpType.Email.EMAIL, email = "")
-
-
         try{
             client.auth.signInWith(Email) {
                 this.email = email
