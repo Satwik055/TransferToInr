@@ -2,7 +2,6 @@ package com.satwik.transfertoinr.features.transfer
 
 import android.app.Activity
 import android.content.Context
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -35,6 +34,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.satwik.transfertoinr.R
 import com.satwik.transfertoinr.core.designsystem.components.NewTTFDropdown
 import com.satwik.transfertoinr.core.designsystem.components.TTFButton
@@ -47,11 +47,15 @@ import com.satwik.transfertoinr.core.designsystem.theme.fontFamily
 import com.satwik.transfertoinr.core.model.CurrencyType
 import com.satwik.transfertoinr.core.utils.copyToClipboard
 import com.satwik.transfertoinr.core.utils.generateTransactionCode
+import com.satwik.transfertoinr.features.transfer.new.AmountScreen
+import com.satwik.transfertoinr.features.transfer.new.SelectRecipientScreen
+import com.satwik.transfertoinr.features.transfer.new.SummaryScreen
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun TransferScreen() {
-    Content(modifier = Modifier.fillMaxSize())
+fun TransferScreen(navController: NavController) {
+//    Content(modifier = Modifier.fillMaxSize())
+    AmountScreen(navController = navController)
 }
 
 private val style = TextStyle(fontFamily = fontFamily, fontSize = 15.sp, fontWeight = FontWeight.SemiBold)
@@ -84,7 +88,6 @@ internal fun Content(modifier: Modifier = Modifier) {
             if (recipientList.isEmpty()) Pair("", "") else recipientList.first()
         )
     }
-
 
     Column(
         modifier = modifier,
@@ -166,14 +169,6 @@ internal fun Content(modifier: Modifier = Modifier) {
                     viewModel.addTransaction(transactionCode, amount.toInt(), reason = selectedReason)
                     transactionCode = generateTransactionCode() //new code after submitting
                     amount = "0"
-//                    if(!kycStatus){
-//                        Toast.makeText(context, "Please verify your KYC", Toast.LENGTH_SHORT).show()
-//                    }
-//                    else{
-//                        viewModel.addTransaction(transactionCode, amount.toInt(), reason = selectedReason)
-//                        transactionCode = generateTransactionCode() //new code after submitting
-//                        amount = "0"
-//                    }
                 })
         }
 

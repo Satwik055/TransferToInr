@@ -15,6 +15,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.RadioButtonColors
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -86,7 +88,15 @@ private fun Content(modifier: Modifier = Modifier, navController: NavController)
 
 
 @Composable
-fun RecipientListItem(name:String, accountNumber:String, bankName:String, deleteOnClick:()->Unit) {
+fun RecipientListItem(
+    name: String,
+    accountNumber: String,
+    bankName: String,
+    isSelected:Boolean = false,
+    onSelect: () -> Unit = {},
+    radioEnabled: Boolean = false,
+    deleteOnClick: () -> Unit
+) {
     val style1 = TextStyle(fontFamily = fontFamily, fontWeight = FontWeight.SemiBold, fontSize = 16.sp)
     val style2 = TextStyle(fontFamily = fontFamily, fontWeight = FontWeight.Normal, fontSize = 13.sp)
     val style3 = TextStyle(fontFamily = fontFamily, fontWeight = FontWeight.Normal, fontSize = 13.sp)
@@ -109,7 +119,12 @@ fun RecipientListItem(name:String, accountNumber:String, bankName:String, delete
                 Text(text = accountNumber, style = style2)
                 Text(text = bankName, style = style3)
             }
-            Icon(imageVector = Icons.Filled.Delete, contentDescription = null, tint = Color.Red, modifier = Modifier.clickable { deleteOnClick.invoke() })
+            if(radioEnabled){
+                RadioButton(selected = isSelected, onClick = { onSelect.invoke() }, colors = RadioButtonColors(selectedColor = JungleGreen, unselectedColor = JungleGreen, disabledSelectedColor = JungleGreen, disabledUnselectedColor = JungleGreen))
+            }
+            else{
+                Icon(imageVector = Icons.Filled.Delete, contentDescription = null, tint = Color.Red, modifier = Modifier.clickable { deleteOnClick.invoke() })
+            }
         }
     }
 }

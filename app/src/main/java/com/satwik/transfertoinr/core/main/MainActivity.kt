@@ -73,7 +73,7 @@ fun MainScreen(navController: NavController, activity: Activity) {
             .padding(16.dp)) {
             when (selectedIndex) {
                 0 -> HomeScreen()
-                1 -> TransferScreen()
+                1 -> TransferScreen(navController = navController)
                 2 -> TransactionScreen(navController)
                 3 -> RecipientScreen(navController = navController)
                 4 -> AccountScreen(navController = navController)

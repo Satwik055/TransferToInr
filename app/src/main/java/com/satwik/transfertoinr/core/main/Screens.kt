@@ -37,6 +37,14 @@ object ScreenAccount
 
 
 @Serializable
+object ScreenSelectRecipient
+
+@Serializable
+object ScreenSummary
+
+
+
+@Serializable
 data class ScreenEmailVerification(
     val email:String = ""
 )

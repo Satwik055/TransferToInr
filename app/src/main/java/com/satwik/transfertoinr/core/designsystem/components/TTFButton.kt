@@ -28,7 +28,7 @@ fun TTFButton(
     color: Color = JungleGreen,
     textColor: Color = White,
     text:String,
-    fontSize: TextUnit = 18.sp,
+    fontSize: TextUnit = 16.sp,
     fontWeight: FontWeight = FontWeight.Normal,
     onClick: () -> Unit,
     isLoading:Boolean = false

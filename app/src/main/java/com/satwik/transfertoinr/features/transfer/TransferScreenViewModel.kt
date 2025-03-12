@@ -70,7 +70,6 @@ class TransferScreenViewModel(
                     reason = reason
                 )
             }
-
         }
     }
 

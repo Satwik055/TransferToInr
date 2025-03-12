@@ -3,7 +3,10 @@ package com.satwik.transfertoinr.core.main
 import android.app.Activity
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
@@ -20,6 +23,10 @@ import com.satwik.transfertoinr.features.kyc.KycScreen
 import com.satwik.transfertoinr.features.privacypolicy.PrivacyPolicyScreen
 import com.satwik.transfertoinr.features.recipient.AddRecipientScreen
 import com.satwik.transfertoinr.features.recipient.RecipientScreen
+import com.satwik.transfertoinr.features.transfer.TransferScreenViewModel
+import com.satwik.transfertoinr.features.transfer.new.SelectRecipientScreen
+import com.satwik.transfertoinr.features.transfer.new.SummaryScreen
+import org.koin.androidx.compose.koinViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -27,6 +34,7 @@ fun SetupNavgraph(navController:NavHostController, startDestination:Any, activit
 
 
     NavHost(navController =navController , startDestination = startDestination) {
+
         composable<ScreenSignup> {
             SignupScreen(navController = navController)
         }
@@ -47,6 +55,41 @@ fun SetupNavgraph(navController:NavHostController, startDestination:Any, activit
         composable<ScreenEmailVerification> {
             EmailVerificationScreen(navController = navController)
         }
+        composable<ScreenSelectRecipient>(
+            enterTransition = {
+                slideInHorizontally(
+                    initialOffsetX = { it },
+                    animationSpec = snap()
+                )
+            },
+            exitTransition = {
+                slideOutHorizontally(
+                    targetOffsetX = { -it },
+                    animationSpec = snap()
+                )
+            }
+        ) {
+
+            SelectRecipientScreen(navController = navController)
+        }
+
+        composable<ScreenSummary>(
+            enterTransition = {
+                slideInHorizontally(
+                    initialOffsetX = { it },
+                    animationSpec = snap()
+                )
+            },
+            exitTransition = {
+                slideOutHorizontally(
+                    targetOffsetX = { -it },
+                    animationSpec = snap()
+                )
+            }
+        ) {
+            SummaryScreen(navController = navController)
+        }
+
 
         composable<ScreenHelp>(
             enterTransition = { slideInHorizontally(initialOffsetX = { it }, animationSpec = tween(300)) },
