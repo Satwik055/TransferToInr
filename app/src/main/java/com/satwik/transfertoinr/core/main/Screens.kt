@@ -35,6 +35,8 @@ object ScreenTransaction
 @Serializable
 object ScreenAccount
 
+@Serializable
+object ScreenPayment
 
 @Serializable
 object ScreenSelectRecipient
@@ -42,6 +44,8 @@ object ScreenSelectRecipient
 @Serializable
 object ScreenSummary
 
+@Serializable
+object ScreenAmount
 
 
 @Serializable

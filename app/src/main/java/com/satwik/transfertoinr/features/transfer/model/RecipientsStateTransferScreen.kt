@@ -1,4 +1,4 @@
-package com.satwik.transfertoinr.features.transfer
+package com.satwik.transfertoinr.features.transfer.model
 
 import com.satwik.transfertoinr.core.model.Recipient
 

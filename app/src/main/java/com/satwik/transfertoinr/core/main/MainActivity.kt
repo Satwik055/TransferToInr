@@ -1,6 +1,5 @@
 package com.satwik.transfertoinr.core.main
 
-import android.app.Activity
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -10,7 +9,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -28,7 +26,8 @@ import com.satwik.transfertoinr.features.account.AccountScreen
 import com.satwik.transfertoinr.features.home.HomeScreen
 import com.satwik.transfertoinr.features.recipient.RecipientScreen
 import com.satwik.transfertoinr.features.transaction.TransactionScreen
-import com.satwik.transfertoinr.features.transfer.TransferScreen
+import com.satwik.transfertoinr.features.transfer.shared_viewmodel.TransferSharedViewModel
+import com.satwik.transfertoinr.features.transfer.amount_screen.AmountScreen
 import org.koin.android.ext.android.inject
 
 class MainActivity : ComponentActivity() {
@@ -50,7 +49,6 @@ class MainActivity : ComponentActivity() {
                 SetupNavgraph(
                     navController = navController,
                     startDestination = startDestination,
-                    activity = this@MainActivity
                 )
             }
         }
@@ -60,7 +58,7 @@ class MainActivity : ComponentActivity() {
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun MainScreen(navController: NavController, activity: Activity) {
+fun MainScreen(navController: NavController, viewModel: TransferSharedViewModel) {
     var selectedIndex by remember { mutableIntStateOf(0) }
 
     Scaffold(
@@ -73,7 +71,7 @@ fun MainScreen(navController: NavController, activity: Activity) {
             .padding(16.dp)) {
             when (selectedIndex) {
                 0 -> HomeScreen()
-                1 -> TransferScreen(navController = navController)
+                1 -> AmountScreen(navController = navController, viewModel = viewModel)
                 2 -> TransactionScreen(navController)
                 3 -> RecipientScreen(navController = navController)
                 4 -> AccountScreen(navController = navController)

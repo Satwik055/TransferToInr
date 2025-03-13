@@ -1,12 +1,9 @@
 package com.satwik.transfertoinr.core.main
 
-import android.app.Activity
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
@@ -23,27 +20,32 @@ import com.satwik.transfertoinr.features.kyc.KycScreen
 import com.satwik.transfertoinr.features.privacypolicy.PrivacyPolicyScreen
 import com.satwik.transfertoinr.features.recipient.AddRecipientScreen
 import com.satwik.transfertoinr.features.recipient.RecipientScreen
-import com.satwik.transfertoinr.features.transfer.TransferScreenViewModel
-import com.satwik.transfertoinr.features.transfer.new.SelectRecipientScreen
-import com.satwik.transfertoinr.features.transfer.new.SummaryScreen
-import org.koin.androidx.compose.koinViewModel
+import com.satwik.transfertoinr.features.transfer.shared_viewmodel.TransferSharedViewModel
+import com.satwik.transfertoinr.features.transfer.payment_screen.PaymentScreen
+import com.satwik.transfertoinr.features.transfer.amount_screen.AmountScreen
+import com.satwik.transfertoinr.features.transfer.select_recipient_screen.SelectRecipientScreen
+import com.satwik.transfertoinr.features.transfer.summary_screen.SummaryScreen
+import org.koin.java.KoinJavaComponent.inject
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun SetupNavgraph(navController:NavHostController, startDestination:Any, activity: Activity) {
+fun SetupNavgraph(navController:NavHostController, startDestination:Any) {
 
+    NavHost(navController = navController , startDestination = startDestination) {
 
-    NavHost(navController =navController , startDestination = startDestination) {
+        val transferViewmodel: TransferSharedViewModel by inject(TransferSharedViewModel::class.java)
 
         composable<ScreenSignup> {
             SignupScreen(navController = navController)
         }
         composable<ScreenMain> {
-//            EmailVerificationScreen(navController = navController)
-            MainScreen(navController = navController, activity = activity)
+            MainScreen(navController = navController, viewModel = transferViewmodel)
         }
         composable<ScreenLogin> {
             LoginScreen(navController=navController)
+        }
+        composable<ScreenPayment> {
+            PaymentScreen(navController=navController, viewModel = transferViewmodel)
         }
         composable<ScreenRecipient> {
             RecipientScreen(navController = navController)
@@ -70,7 +72,11 @@ fun SetupNavgraph(navController:NavHostController, startDestination:Any, activit
             }
         ) {
 
-            SelectRecipientScreen(navController = navController)
+            SelectRecipientScreen(navController = navController, transferSharedViewModel = transferViewmodel)
+        }
+
+        composable<ScreenAmount>{
+            AmountScreen(navController = navController, viewModel = transferViewmodel)
         }
 
         composable<ScreenSummary>(
@@ -87,7 +93,7 @@ fun SetupNavgraph(navController:NavHostController, startDestination:Any, activit
                 )
             }
         ) {
-            SummaryScreen(navController = navController)
+            SummaryScreen(navController = navController, viewModel = transferViewmodel )
         }
 
 

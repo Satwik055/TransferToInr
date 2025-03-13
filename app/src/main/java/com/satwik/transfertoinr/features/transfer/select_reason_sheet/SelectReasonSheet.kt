@@ -1,4 +1,4 @@
-package com.satwik.transfertoinr.features.transfer.new
+package com.satwik.transfertoinr.features.transfer.select_reason_sheet
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -27,9 +27,10 @@ import com.satwik.transfertoinr.core.designsystem.components.TTFButton
 import com.satwik.transfertoinr.core.designsystem.theme.JungleGreen
 import com.satwik.transfertoinr.core.designsystem.theme.fontFamily
 import com.satwik.transfertoinr.core.main.ScreenSummary
+import com.satwik.transfertoinr.features.transfer.shared_viewmodel.TransferSharedViewModel
 
 @Composable
-fun SelectReasonSheet(navController: NavController) {
+fun SelectReasonSheet(navController: NavController, viewModel: TransferSharedViewModel) {
     val reasons = listOf("My NRE/NRO Account", "Savings & Family Support", "Real Estate/Housing Societies", "Educational Institutions", "Tax Payment", "Hospitals/Healthcare Providers", "Travel/Tourism Partners", "Utility Bill Payments", "Loan Account Payment")
     var selectedReason by remember { mutableStateOf(reasons.first()) }
 
@@ -60,6 +61,7 @@ fun SelectReasonSheet(navController: NavController) {
 //                        showBottomSheet = false
 //                    }
 //                }
+                viewModel.setReason(selectedReason)
                 navController.navigate(ScreenSummary)
             }
         )

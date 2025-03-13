@@ -9,9 +9,6 @@ import com.satwik.transfertoinr.data.kyc.kycModule
 import com.satwik.transfertoinr.data.recipient.recipientModule
 import com.satwik.transfertoinr.data.transaction.transactionModule
 import com.satwik.transfertoinr.data.transfer.transferModule
-import io.github.jan.supabase.SupabaseClient
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.tasks.await
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -26,8 +23,8 @@ class MyApplication:Application(){
                 supabaseModule,
                 authModule,
                 recipientModule,
-                transferModule,
                 transactionModule,
+                transferModule,
                 accountModule,
                 kycModule,
                 exchangeRateModule

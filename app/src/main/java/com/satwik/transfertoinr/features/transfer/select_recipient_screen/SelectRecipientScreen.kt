@@ -1,88 +1,82 @@
-package com.satwik.transfertoinr.features.transfer.new
+package com.satwik.transfertoinr.features.transfer.select_recipient_screen
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.ModalBottomSheetProperties
+import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.satwik.transfertoinr.core.designsystem.components.TTFButton
 import com.satwik.transfertoinr.core.designsystem.components.headers.TTFTextHeader
-import com.satwik.transfertoinr.core.model.Recipient
+import com.satwik.transfertoinr.core.designsystem.theme.JungleGreen
+import com.satwik.transfertoinr.core.main.ScreenAddRecipient
 import com.satwik.transfertoinr.features.recipient.RecipientListItem
-import com.sumsub.sns.internal.features.presentation.preview.photo.SNSPreviewPhotoDocumentViewModel.Content
+import com.satwik.transfertoinr.features.transfer.shared_viewmodel.TransferSharedViewModel
+import com.satwik.transfertoinr.features.transfer.select_reason_sheet.SelectReasonSheet
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun SelectRecipientScreen(navController: NavController) {
-    Column(Modifier.background(color = Color.White)) {
+fun SelectRecipientScreen(navController: NavController, transferSharedViewModel: TransferSharedViewModel) {
+
+    val selectRecipientViewModel = koinViewModel<SelectRecipientViewModel>()
+    val state = selectRecipientViewModel.recipientsState.collectAsState().value
+
+    Column (modifier = Modifier
+        .fillMaxSize()
+    ){
         TTFTextHeader(text = "SELECT RECIPIENT", isBackButtonEnabled = true, onBackClick = {navController.popBackStack()})
-        Content(navController = navController)
+        if(state.isLoading){
+            CircularProgressIndicator(color = JungleGreen, modifier = Modifier.align(Alignment.CenterHorizontally))
+        }
+        if(state.error.isNotEmpty()){
+            Text(text = state.error, modifier = Modifier.align(Alignment.CenterHorizontally))
+        }
+        if(state.recipients.isNotEmpty()){
+            Content(
+                navController = navController,
+                selectRecipientViewModel = selectRecipientViewModel,
+                transferSharedViewModel = transferSharedViewModel,
+                modifier = Modifier.padding(16.dp)
+            )
+        }
     }
 }
 
 
-
-
-
-
-
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun Content(modifier: Modifier = Modifier, navController: NavController) {
+private fun Content(modifier: Modifier = Modifier, navController: NavController, transferSharedViewModel: TransferSharedViewModel, selectRecipientViewModel: SelectRecipientViewModel) {
 
+    val state = selectRecipientViewModel.recipientsState.collectAsState().value
 
-    val recipients = listOf(
-        Recipient(
-            1,
-            "Phillip Cameroon",
-            "3243 4343 3244 3242",
-            "DSS22A4",
-            "Axis Bank",
-            "cameroon@gmail.com"
-        ),
-        Recipient(
-            2,
-            "Rosie Melbourne",
-            "2932 6674 3244 3242",
-            "DSS22A4",
-            "HDFC Bank",
-            "cameroon@gmail.com"
-        ),
-        Recipient(
-            3,
-            "Pitcher Scallop",
-            "6788 4353 3244 3242",
-            "DSS22A4",
-            "Uco Bank",
-            "cameroon@gmail.com"
-        )
-    )
+    val recipients = state.recipients
     var selectedRecipient by remember { mutableStateOf(recipients.first()) }
 
-    // State to control the visibility of the bottom sheet
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }
 
     Column (
-        modifier = Modifier.padding(16.dp)
+        modifier = modifier
     ){
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(5.dp)
@@ -104,10 +98,16 @@ private fun Content(modifier: Modifier = Modifier, navController: NavController)
         TTFButton(
             text = "Add Recipient",
             onClick = {
-                showBottomSheet = true
+                navController.navigate(ScreenAddRecipient)
             })
         Spacer(modifier = Modifier.height(5.dp))
-        TTFButton(text = "Continue", onClick = {})
+        TTFButton(
+            text = "Continue",
+            onClick = {
+                transferSharedViewModel.setRecipient(selectedRecipient)
+                showBottomSheet = true
+            }
+        )
 
         if (showBottomSheet) {
             ModalBottomSheet(
@@ -117,7 +117,7 @@ private fun Content(modifier: Modifier = Modifier, navController: NavController)
                 },
                 sheetState = sheetState
             ) {
-                SelectReasonSheet(navController = navController)
+                SelectReasonSheet(navController = navController, viewModel = transferSharedViewModel)
             }
         }
     }

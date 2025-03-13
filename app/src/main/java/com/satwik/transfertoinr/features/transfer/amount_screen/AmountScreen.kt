@@ -1,4 +1,4 @@
-package com.satwik.transfertoinr.features.transfer.new
+package com.satwik.transfertoinr.features.transfer.amount_screen
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -29,42 +30,42 @@ import com.satwik.transfertoinr.core.designsystem.components.TTFTextField
 import com.satwik.transfertoinr.core.designsystem.theme.JungleGreen
 import com.satwik.transfertoinr.core.designsystem.theme.fontFamily
 import com.satwik.transfertoinr.core.main.ScreenSelectRecipient
+import com.satwik.transfertoinr.features.transfer.shared_viewmodel.TransferSharedViewModel
 
 @Composable
-fun AmountScreen(navController: NavController) {
+fun AmountScreen(navController: NavController, viewModel: TransferSharedViewModel) {
 
     val style = TextStyle(fontFamily = fontFamily, fontSize = 15.sp, fontWeight = FontWeight.SemiBold)
-
-    var amountSend by remember { mutableStateOf("") }
+    var amountSend by remember { mutableIntStateOf(0) }
     var amountReceive by remember { mutableStateOf("") }
 
     Column {
         Text(text = "You Send", style=style)
         Spacer(modifier = Modifier.height(5.dp))
-        TTFTextField(text = amountSend, onValueChange = {amountSend = it}, placeholder = "Eg: 100" )
 
+        TTFTextField(text = amountSend.toString(), onValueChange = {amountSend = it.toInt()}, placeholder = "Eg: 100")
         Column(verticalArrangement = Arrangement.spacedBy(10.dp)){
             OperationRow(symbol = "-", text = "Our Fees", amount = "1.00")
             OperationRow(symbol = "=", text = "Net Amount", amount = "900")
             OperationRow(symbol = "x", text = "Guaranteed Amount", amount = "10000")
         }
-        Spacer(modifier = Modifier.height(20.dp))
 
+        Spacer(modifier = Modifier.height(20.dp))
         Text(text = "Recipient Gets", style=style)
+
         Spacer(modifier = Modifier.height(5.dp))
         TTFTextField(text = amountReceive, onValueChange = {amountReceive = it}, placeholder = "Eg: 1000" )
 
         Spacer(modifier = Modifier.weight(1f))
-
-        TTFButton(text = "Continue", onClick = { navController.navigate(ScreenSelectRecipient) })
-
-
+        TTFButton(text = "Continue", onClick = {
+            viewModel.setAmount(amountSend)
+            navController.navigate(ScreenSelectRecipient) }
+        )
     }
-
 }
 
 @Composable
-fun SymbolCircle(modifier: Modifier = Modifier, symbol: String) {
+fun SymbolCircle(symbol: String) {
     val style = TextStyle(fontFamily = fontFamily, fontSize = 20.sp, fontWeight = FontWeight.SemiBold)
 
     Box (
@@ -79,7 +80,7 @@ fun SymbolCircle(modifier: Modifier = Modifier, symbol: String) {
 }
 
 @Composable
-fun OperationRow(modifier: Modifier = Modifier, symbol: String, text:String, amount:String) {
+fun OperationRow(symbol: String, text:String, amount:String) {
     
     val style2 = TextStyle(fontFamily = fontFamily, fontSize = 14.sp, fontWeight = FontWeight.Medium)
 

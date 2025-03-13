@@ -4,13 +4,13 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Transaction(
-    val id:Int,
-    val transaction_code:String,
-    val email:String,
-    val sent:Int,
-    val receive:Int,
-    val currency:CurrencyType,
-    val status:TransactionStatus,
-    val date:String
+    val id:Int = 0,
+    val transaction_code:String = "",
+    val email:String = "",
+    val sent:Int = 0,
+    val receive:Int = 0,
+    val currency:CurrencyType = CurrencyType.EUR,
+    val status:TransactionStatus = TransactionStatus.PENDING,
+    val date:String = ""
 )
 

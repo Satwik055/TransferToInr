@@ -53,7 +53,6 @@ class HomeScreenViewModel(
                         _exchangeRateState.value = ExchangeRateState(rate = rate)
                     }
                 }
-
             }
             catch (e:Exception){
                 _exchangeRateState.value = ExchangeRateState(error = e.message.toString())
