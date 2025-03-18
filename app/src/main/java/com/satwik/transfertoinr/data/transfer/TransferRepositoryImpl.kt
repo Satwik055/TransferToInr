@@ -2,6 +2,7 @@ package com.satwik.transfertoinr.data.transfer
 
 import com.satwik.transfertoinr.core.model.CurrencyType
 import com.satwik.transfertoinr.core.model.Profile
+import com.satwik.transfertoinr.core.model.Recipient
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.postgrest.from
@@ -14,7 +15,8 @@ class TransferRepositoryImpl(private val client: SupabaseClient): TransferReposi
         transactionCode: String,
         sent: Int,
         currency: CurrencyType,
-        reason:String
+        reason:String,
+        recipientId: Int
     ) {
 
         val email = client.auth.currentUserOrNull()?.email
@@ -33,6 +35,8 @@ class TransferRepositoryImpl(private val client: SupabaseClient): TransferReposi
                 put("p_email", email)
                 put("p_reason", reason)
                 put("p_sender_id", profile.ttf_user_id)
+                put("p_recipient_id", recipientId)
+
             }
         )
     }

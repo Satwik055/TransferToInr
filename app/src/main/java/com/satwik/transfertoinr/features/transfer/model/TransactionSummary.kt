@@ -5,6 +5,7 @@ import com.satwik.transfertoinr.core.model.Recipient
 
 data class TransactionSummary (
     val send:Int = 0,
+    val receive:Int = 0,
     val reason:String = "",
     val exchangeRate:Double = 0.0,
     val fee:Double = 0.0,

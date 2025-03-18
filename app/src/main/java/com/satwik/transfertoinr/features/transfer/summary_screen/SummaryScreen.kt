@@ -26,14 +26,15 @@ import com.satwik.transfertoinr.core.designsystem.theme.JungleGreen
 import com.satwik.transfertoinr.core.designsystem.theme.VeryLightGrey
 import com.satwik.transfertoinr.core.designsystem.theme.fontFamily
 import com.satwik.transfertoinr.core.main.ScreenPayment
+import com.satwik.transfertoinr.core.utils.getCurrencySymbol
 import com.satwik.transfertoinr.features.transfer.shared_viewmodel.TransferSharedViewModel
 
 @Composable
-fun SummaryScreen(navController: NavController, viewModel: TransferSharedViewModel) {
+fun SummaryScreen(navController: NavController, transferSharedViewModel: TransferSharedViewModel) {
 
     Column {
         TTFTextHeader(text = "SUMMARY", isBackButtonEnabled = true, onBackClick = {navController.popBackStack()})
-        Content(viewModel = viewModel, navController = navController)
+        Content(viewModel = transferSharedViewModel, navController = navController)
     }
 
 
@@ -123,6 +124,9 @@ fun ReviewTransactionTable(modifier: Modifier = Modifier, recipientName: String,
 @Composable
 private fun Content(modifier: Modifier = Modifier, viewModel: TransferSharedViewModel, navController: NavController) {
 
+    val user = viewModel.userInfoState.collectAsState().value
+    val symbol = getCurrencySymbol(user.profile.preferred_currency)
+
     Column (modifier = Modifier.padding(16.dp)){
 
         val transaction = viewModel.transactionSummary.collectAsState().value
@@ -132,15 +136,15 @@ private fun Content(modifier: Modifier = Modifier, viewModel: TransferSharedView
 
         Text(text = "Confirm Transfer Details", style = style)
         Text(text = "Please review all details carefully", style = style1)
-        Spacer(modifier = Modifier.weight(1f))
+        Spacer(modifier = Modifier.weight(0.3f))
         ReviewTransactionTable(
             recipientName = transaction.recipient.name,
             accountNumber = transaction.recipient.account_number,
             ifscCode = transaction.recipient.ifsc_code,
-            youSend = transaction.send.toString(),
-            recipientReceived = transaction.send.toString(),
-            exchangeRate = transaction.exchangeRate.toString(),
-            ourFee = transaction.fee.toString(),
+            youSend = transaction.send.toString()+symbol,
+            recipientReceived = transaction.receive.toString()+"₹",
+            exchangeRate = transaction.exchangeRate.toString()+"₹",
+            ourFee = transaction.fee.toString()+symbol,
             purpose = transaction.reason
         )
 

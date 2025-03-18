@@ -76,7 +76,7 @@ fun SetupNavgraph(navController:NavHostController, startDestination:Any) {
         }
 
         composable<ScreenAmount>{
-            AmountScreen(navController = navController, viewModel = transferViewmodel)
+            AmountScreen(navController = navController, transferSharedViewModel = transferViewmodel)
         }
 
         composable<ScreenSummary>(
@@ -93,7 +93,24 @@ fun SetupNavgraph(navController:NavHostController, startDestination:Any) {
                 )
             }
         ) {
-            SummaryScreen(navController = navController, viewModel = transferViewmodel )
+            SummaryScreen(navController = navController, transferSharedViewModel = transferViewmodel )
+        }
+
+        composable<ScreenPayment> (
+            enterTransition = {
+                slideInHorizontally(
+                    initialOffsetX = { it },
+                    animationSpec = snap()
+                )
+            },
+            exitTransition = {
+                slideOutHorizontally(
+                    targetOffsetX = { -it },
+                    animationSpec = snap()
+                )
+            }
+        ){
+            PaymentScreen(navController = navController, viewModel = transferViewmodel)
         }
 
 

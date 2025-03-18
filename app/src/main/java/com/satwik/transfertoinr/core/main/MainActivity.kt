@@ -71,7 +71,7 @@ fun MainScreen(navController: NavController, viewModel: TransferSharedViewModel)
             .padding(16.dp)) {
             when (selectedIndex) {
                 0 -> HomeScreen()
-                1 -> AmountScreen(navController = navController, viewModel = viewModel)
+                1 -> AmountScreen(navController = navController, transferSharedViewModel = viewModel)
                 2 -> TransactionScreen(navController)
                 3 -> RecipientScreen(navController = navController)
                 4 -> AccountScreen(navController = navController)

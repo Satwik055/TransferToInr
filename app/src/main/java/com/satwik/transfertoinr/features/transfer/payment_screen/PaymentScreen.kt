@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
@@ -22,6 +23,7 @@ import com.satwik.transfertoinr.core.model.CurrencyType
 import com.satwik.transfertoinr.core.designsystem.components.BankDetailsBox
 import com.satwik.transfertoinr.core.designsystem.components.TransactionIDBox
 import com.satwik.transfertoinr.core.main.ScreenMain
+import com.satwik.transfertoinr.core.utils.getCurrencySymbol
 import com.satwik.transfertoinr.features.transfer.shared_viewmodel.TransferSharedViewModel
 
 @Composable
@@ -34,6 +36,9 @@ fun PaymentScreen(navController: NavController, viewModel: TransferSharedViewMod
 
 @Composable
 private fun Content(modifier: Modifier = Modifier, viewModel: TransferSharedViewModel, navController: NavController) {
+
+    val user = viewModel.userInfoState.collectAsState().value
+
     Column (modifier = modifier){
 
         val style = TextStyle(fontFamily = fontFamily, fontWeight = FontWeight.SemiBold, fontSize = 17.sp, color = JungleGreen)
@@ -44,7 +49,7 @@ private fun Content(modifier: Modifier = Modifier, viewModel: TransferSharedView
         Text(text = "Make Payment", style = style)
         Text(text = "Make payment to below details", style = style1)
         Spacer(modifier = Modifier.height(10.dp))
-        BankDetailsBox(currency = CurrencyType.EUR, context = context, modifier = Modifier.fillMaxWidth())
+        BankDetailsBox(currency = user.profile.preferred_currency, context = context, modifier = Modifier.fillMaxWidth())
 
 
         Spacer(modifier = Modifier.height(30.dp))

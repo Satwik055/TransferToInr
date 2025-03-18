@@ -23,6 +23,7 @@ class AmountScreenViewModel(
 
     init {
         getTtiRate()
+        getKycStatus()
     }
 
     private fun getTtiRate(){

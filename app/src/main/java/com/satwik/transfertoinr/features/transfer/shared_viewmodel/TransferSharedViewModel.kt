@@ -9,6 +9,7 @@ import com.satwik.transfertoinr.core.utils.generateTransactionCode
 import com.satwik.transfertoinr.data.account.AccountRepository
 import com.satwik.transfertoinr.data.exchange_rate.ExchangeRateRepository
 import com.satwik.transfertoinr.data.transfer.TransferRepository
+import com.satwik.transfertoinr.features.home.UserInfoStateHome
 import com.satwik.transfertoinr.features.transfer.model.TransactionSummary
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,14 +22,22 @@ class TransferSharedViewModel(
     private val exchangeRatesRepository: ExchangeRateRepository
 ):ViewModel() {
 
-
     private val _transactionSummary = MutableStateFlow(TransactionSummary())
     val transactionSummary: StateFlow<TransactionSummary> = _transactionSummary
 
     private val _transactionCode = mutableStateOf("")
     val transactionCode:State<String> = _transactionCode
 
+    private val _userInfoState = MutableStateFlow(UserInfoStateHome())
+    val userInfoState: StateFlow<UserInfoStateHome> = _userInfoState
+
+
     init {
+        getUserInfo()
+        initTransactionSummary()
+    }
+
+    private fun initTransactionSummary(){
         setCurrency()
         setTransactionCode()
         setRateFee()
@@ -44,14 +53,18 @@ class TransferSharedViewModel(
                 transactionCode = transactionCode.value,
                 sent = transactionSummary.value.send,
                 currency = transactionSummary.value.currency,
-                reason = transactionSummary.value.reason
+                reason = transactionSummary.value.reason,
+                recipientId = transactionSummary.value.recipient.id
             )
         }
     }
 
-
-    fun setAmount(send:Int){
+    fun setSendAmount(send:Int){
         _transactionSummary.value = _transactionSummary.value.copy(send = send)
+    }
+
+    fun setReceiveAmount(send:Int){
+        _transactionSummary.value = _transactionSummary.value.copy(receive = send)
     }
 
     fun setReason(reason:String){
@@ -60,7 +73,6 @@ class TransferSharedViewModel(
 
     fun setRecipient(recipient: Recipient){
         _transactionSummary.value = _transactionSummary.value.copy(recipient = recipient)
-
     }
 
     private fun setRateFee(){
@@ -71,6 +83,21 @@ class TransferSharedViewModel(
                     _transactionSummary.value = _transactionSummary.value.copy(exchangeRate = rate.tti)
                     _transactionSummary.value = _transactionSummary.value.copy(fee = rate.tti_fees)
                 }
+            }
+        }
+    }
+
+    private fun getUserInfo(){
+        viewModelScope.launch {
+            _userInfoState.value = UserInfoStateHome(isLoading = true)
+            try {
+                val profileFlow = accountRepository.getProfile()
+                profileFlow.collectLatest { profile->
+                    _userInfoState.value = UserInfoStateHome(profile = profile)
+                }
+            }
+            catch (e:Exception){
+                _userInfoState.value = UserInfoStateHome(error = e.message.toString())
             }
         }
     }
