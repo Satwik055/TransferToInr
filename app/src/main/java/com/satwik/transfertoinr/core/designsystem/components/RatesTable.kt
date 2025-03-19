@@ -110,7 +110,7 @@ fun RateTable(
                     Text(
                         text = cell,
                         style = textStyle,
-                        modifier = Modifier.weight(1f).padding(vertical = 16.dp, horizontal = 20.dp), //vertical padding 16.dp/12.dp
+                        modifier = Modifier.weight(1f).padding(vertical = 12.dp, horizontal = 20.dp), //vertical padding 16.dp/12.dp
                         color = JungleGreen
                     )
                 }

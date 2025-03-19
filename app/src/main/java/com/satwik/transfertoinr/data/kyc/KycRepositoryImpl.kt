@@ -25,8 +25,8 @@ class KycRepositoryImpl(private val client: SupabaseClient): KycRepository {
             val levelName = "id-and-liveness"
             val ttlInSecs = 3600
             val time = System.currentTimeMillis() / 1000
-            val appToken = SumsubSecrets.Test.APP_TOKEN
-            val secret = SumsubSecrets.Test.SECRET_KEY
+            val appToken = SumsubSecrets.Production.APP_TOKEN
+            val secret = SumsubSecrets.Production.SECRET_KEY
             val body = "{\"applicantIdentifiers\":{\"email\":\"$email\",\"phone\":\"$phone\"},\"ttlInSecs\":$ttlInSecs,\"userId\":\"$userId\",\"levelName\":\"$levelName\"}"
 
             val signature = generateSignature(ts = time, key = secret, body = body)

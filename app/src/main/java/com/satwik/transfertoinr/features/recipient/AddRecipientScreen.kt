@@ -10,6 +10,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,6 +23,8 @@ import com.satwik.transfertoinr.core.designsystem.components.TTFButton
 import com.satwik.transfertoinr.core.designsystem.components.headers.TTFTextHeader
 import com.satwik.transfertoinr.core.designsystem.components.TTFTextField
 import com.satwik.transfertoinr.features.auth.signup.SignupFormEvent
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -38,6 +41,8 @@ fun AddRecipientScreen(navController: NavController) {
     val relation = listOf("Father", "Mother", "Family", "Other")
     var selectedRelation by remember { mutableStateOf("") }
 
+    val co = rememberCoroutineScope()
+
     LaunchedEffect(context) {
         viewModel.validationEvents.collect{ event->
             when(event){
@@ -49,11 +54,16 @@ fun AddRecipientScreen(navController: NavController) {
     }
 
     Box(
-        Modifier.fillMaxSize().padding(bottom = 16.dp).background(Color.White)){
+        Modifier
+            .fillMaxSize()
+            .padding(bottom = 16.dp)
+            .background(Color.White)){
         TTFTextHeader(text = "Add Recipient", isBackButtonEnabled = true, onBackClick = {navController.popBackStack()})
 
         Column(
-            Modifier.padding(vertical = 90.dp, horizontal = 16.dp).align(Alignment.TopCenter)){
+            Modifier
+                .padding(vertical = 90.dp, horizontal = 16.dp)
+                .align(Alignment.TopCenter)){
             TTFTextField(
                 text = formState.name,
                 onValueChange = { viewModel.onEvent(AddRecipientFormEvent.NameChanged(it)) },
@@ -103,8 +113,8 @@ fun AddRecipientScreen(navController: NavController) {
 
         TTFButton(
             modifier = Modifier
-            .align(Alignment.BottomCenter)
-            .padding(vertical = 20.dp, horizontal = 16.dp),
+                .align(Alignment.BottomCenter)
+                .padding(vertical = 20.dp, horizontal = 16.dp),
             text = "Add",
             onClick = {
                 if(selectedRelation.isEmpty()){
@@ -117,14 +127,18 @@ fun AddRecipientScreen(navController: NavController) {
                     viewModel.onEvent(AddRecipientFormEvent.Submit)
                     if(isFormValidated){
                         viewModel.resetFormErrors()
-                        viewModel.addRecipient(
-                            name = formState.name,
-                            accountNumber = formState.accountNumber,
-                            ifscCode = formState.ifsc,
-                            bank = formState.bank,
-                            relation = selectedRelation
-                        )
-                        navController.popBackStack()
+
+                        co.launch {
+                            viewModel.addRecipient(
+                                name = formState.name,
+                                accountNumber = formState.accountNumber,
+                                ifscCode = formState.ifsc,
+                                bank = formState.bank,
+                                relation = selectedRelation
+                            )
+                            delay(1000)
+                            navController.popBackStack()
+                        }
                     }
                 }
 

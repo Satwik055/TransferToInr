@@ -35,105 +35,103 @@ fun SetupNavgraph(navController:NavHostController, startDestination:Any) {
 
         val transferViewmodel: TransferSharedViewModel by inject(TransferSharedViewModel::class.java)
 
-        composable<ScreenSignup> {
+        composable<ScreenSignup>(
+            enterTransition = { slideInHorizontally(initialOffsetX = { it }, animationSpec = snap()) },
+            exitTransition = { slideOutHorizontally(targetOffsetX = { -it }, animationSpec = snap()) }
+        ) {
             SignupScreen(navController = navController)
         }
-        composable<ScreenMain> {
+        composable<ScreenMain>(
+            enterTransition = { slideInHorizontally(initialOffsetX = { it }, animationSpec = snap()) },
+            exitTransition = { slideOutHorizontally(targetOffsetX = { -it }, animationSpec = snap()) }
+        ) {
             MainScreen(navController = navController, viewModel = transferViewmodel)
         }
-        composable<ScreenLogin> {
+        composable<ScreenLogin>(
+            enterTransition = { slideInHorizontally(initialOffsetX = { it }, animationSpec = snap()) },
+            exitTransition = { slideOutHorizontally(targetOffsetX = { -it }, animationSpec = snap()) }
+        ) {
             LoginScreen(navController=navController)
         }
-        composable<ScreenPayment> {
+        composable<ScreenPayment>(
+            enterTransition = { slideInHorizontally(initialOffsetX = { it }, animationSpec = snap()) },
+            exitTransition = { slideOutHorizontally(targetOffsetX = { -it }, animationSpec = snap()) }
+        ) {
             PaymentScreen(navController=navController, viewModel = transferViewmodel)
         }
-        composable<ScreenRecipient> {
+        composable<ScreenRecipient>(
+            enterTransition = { slideInHorizontally(initialOffsetX = { it }, animationSpec = snap()) },
+            exitTransition = { slideOutHorizontally(targetOffsetX = { -it }, animationSpec = snap()) }
+        ){
             RecipientScreen(navController = navController)
         }
-        composable<ScreenAddRecipient> {
+        composable<ScreenAddRecipient> (
+            enterTransition = { slideInHorizontally(initialOffsetX = { it }, animationSpec = snap()) },
+            exitTransition = { slideOutHorizontally(targetOffsetX = { -it }, animationSpec = snap()) }
+        ){
             AddRecipientScreen(navController = navController)
         }
 
-        composable<ScreenEmailVerification> {
+        composable<ScreenEmailVerification> (
+            enterTransition = { slideInHorizontally(initialOffsetX = { it }, animationSpec = snap()) },
+            exitTransition = { slideOutHorizontally(targetOffsetX = { -it }, animationSpec = snap()) }
+        ){
             EmailVerificationScreen(navController = navController)
         }
-        composable<ScreenSelectRecipient>(
-            enterTransition = {
-                slideInHorizontally(
-                    initialOffsetX = { it },
-                    animationSpec = snap()
-                )
-            },
-            exitTransition = {
-                slideOutHorizontally(
-                    targetOffsetX = { -it },
-                    animationSpec = snap()
-                )
-            }
-        ) {
 
+        composable<ScreenSelectRecipient>(
+            enterTransition = { slideInHorizontally(initialOffsetX = { it }, animationSpec = snap()) },
+            exitTransition = { slideOutHorizontally(targetOffsetX = { -it }, animationSpec = snap()) }
+        ) {
             SelectRecipientScreen(navController = navController, transferSharedViewModel = transferViewmodel)
         }
 
-        composable<ScreenAmount>{
+        composable<ScreenAmount>(
+            enterTransition = { slideInHorizontally(initialOffsetX = { it }, animationSpec = snap()) },
+            exitTransition = { slideOutHorizontally(targetOffsetX = { -it }, animationSpec = snap()) }
+        ){
             AmountScreen(navController = navController, transferSharedViewModel = transferViewmodel)
         }
 
         composable<ScreenSummary>(
-            enterTransition = {
-                slideInHorizontally(
-                    initialOffsetX = { it },
-                    animationSpec = snap()
-                )
-            },
-            exitTransition = {
-                slideOutHorizontally(
-                    targetOffsetX = { -it },
-                    animationSpec = snap()
-                )
-            }
+            enterTransition = { slideInHorizontally(initialOffsetX = { it }, animationSpec = snap()) },
+            exitTransition = { slideOutHorizontally(targetOffsetX = { -it }, animationSpec = snap()) }
         ) {
             SummaryScreen(navController = navController, transferSharedViewModel = transferViewmodel )
         }
 
         composable<ScreenPayment> (
-            enterTransition = {
-                slideInHorizontally(
-                    initialOffsetX = { it },
-                    animationSpec = snap()
-                )
-            },
-            exitTransition = {
-                slideOutHorizontally(
-                    targetOffsetX = { -it },
-                    animationSpec = snap()
-                )
-            }
+            enterTransition = { slideInHorizontally(initialOffsetX = { it }, animationSpec = snap()) },
+            exitTransition = { slideOutHorizontally(targetOffsetX = { -it }, animationSpec = snap()) }
         ){
             PaymentScreen(navController = navController, viewModel = transferViewmodel)
         }
 
-
         composable<ScreenHelp>(
-            enterTransition = { slideInHorizontally(initialOffsetX = { it }, animationSpec = tween(300)) },
-            exitTransition = { slideOutHorizontally(targetOffsetX = { -it }, animationSpec = tween(300)) },
-            popEnterTransition = { slideInHorizontally(initialOffsetX = { -it }, animationSpec = tween(300)) },
-            popExitTransition = { slideOutHorizontally(targetOffsetX = { it }, animationSpec = tween(300)) }
+            enterTransition = { slideInHorizontally(initialOffsetX = { it }, animationSpec = snap()) },
+            exitTransition = { slideOutHorizontally(targetOffsetX = { -it }, animationSpec = snap()) }
         ){
             HelpScreen(navController = navController)
         }
-        composable<ScreenPrivacyPolicy> {
+
+        composable<ScreenPrivacyPolicy>(
+            enterTransition = { slideInHorizontally(initialOffsetX = { it }, animationSpec = snap()) },
+            exitTransition = { slideOutHorizontally(targetOffsetX = { -it }, animationSpec = snap()) }
+        ) {
             PrivacyPolicyScreen()
         }
+
         composable<ScreenAddRecipient>(
-            enterTransition = { slideInVertically(initialOffsetY = { it }, animationSpec = tween(400)) },
-            exitTransition = { slideOutVertically(targetOffsetY = { -it }, animationSpec = tween(400)) },
-            popEnterTransition = { slideInVertically(initialOffsetY = { -it }, animationSpec = tween(400)) },
-            popExitTransition = { slideOutVertically(targetOffsetY = { it }, animationSpec = tween(400)) }
+            enterTransition = { slideInHorizontally(initialOffsetX = { it }, animationSpec = snap()) },
+            exitTransition = { slideOutHorizontally(targetOffsetX = { -it }, animationSpec = snap()) }
         ){
             AddRecipientScreen(navController = navController)
         }
-        composable<ScreenKyc> {
+
+        composable<ScreenKyc>(
+            enterTransition = { slideInHorizontally(initialOffsetX = { it }, animationSpec = snap()) },
+            exitTransition = { slideOutHorizontally(targetOffsetX = { -it }, animationSpec = snap()) }
+        ) {
             KycScreen(navController)
         }
     }
