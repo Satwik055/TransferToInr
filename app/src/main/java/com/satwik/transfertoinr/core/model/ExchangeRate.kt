@@ -9,8 +9,6 @@ data class ExchangeRate(
     val currency_name: CurrencyType = CurrencyType.EUR,
     val tti: Double = 0.0,
     val tti_fees: Double = 0.0,
-    val stripe:Double = 0.0,
-    val stripe_fees:Double = 0.0,
     val wise:Double = 0.0,
     val wise_fees:Double = 0.0,
     val paypal:Double = 0.0,
