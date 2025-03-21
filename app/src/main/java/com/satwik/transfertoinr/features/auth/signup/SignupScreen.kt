@@ -134,17 +134,20 @@ fun SignupScreen(modifier: Modifier = Modifier, navController: NavController) {
                             }
                         }
                         viewModel.onEvent(SignupFormEvent.Submit)
-                        if(isFormValidated){
-                            viewModel.resetFormErrors()
-                            viewModel.signup(
-                                email = formState.email,
-                                password = formState.password,
-                                name = formState.name,
-                                phone = formState.phone
-                            )
-                            navController.navigate(ScreenEmailVerification(email = formState.email))
-                        }
                     })
+
+                LaunchedEffect(isFormValidated) {
+                    if(isFormValidated){
+                        viewModel.resetFormErrors()
+                        viewModel.signup(
+                            email = formState.email,
+                            password = formState.password,
+                            name = formState.name,
+                            phone = formState.phone
+                        )
+                        navController.navigate(ScreenEmailVerification(email = formState.email))
+                    }
+                }
 
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(text = "By signing up you agree our Privacy Policy and Terms and Conditions", fontFamily = fontFamily, fontSize = 12.sp, fontWeight = FontWeight.Normal, color = JungleGreen)

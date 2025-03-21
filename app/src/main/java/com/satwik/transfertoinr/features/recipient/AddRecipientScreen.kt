@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,7 +42,6 @@ fun AddRecipientScreen(navController: NavController) {
     val relation = listOf("Father", "Mother", "Family", "Other")
     var selectedRelation by remember { mutableStateOf("") }
 
-    val co = rememberCoroutineScope()
 
     LaunchedEffect(context) {
         viewModel.validationEvents.collect{ event->
@@ -110,12 +110,33 @@ fun AddRecipientScreen(navController: NavController) {
             )
         }
 
+        val recipientResult = viewModel.addRecipientResult.collectAsState().value
+        LaunchedEffect(recipientResult.success) {
+            if (recipientResult.success) {
+                navController.popBackStack()
+            }
+        }
 
+
+
+        LaunchedEffect(isFormValidated) {
+            if(isFormValidated){
+                viewModel.resetFormErrors()
+                viewModel.addRecipient(
+                    name = formState.name,
+                    accountNumber = formState.accountNumber,
+                    ifscCode = formState.ifsc,
+                    bank = formState.bank,
+                    relation = selectedRelation
+                )
+            }
+        }
         TTFButton(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(vertical = 20.dp, horizontal = 16.dp),
             text = "Add",
+            isLoading = recipientResult.isLoading,
             onClick = {
                 if(selectedRelation.isEmpty()){
                     errorText = "Please select a relation"
@@ -125,23 +146,7 @@ fun AddRecipientScreen(navController: NavController) {
                     errorText = ""
                     isError = false
                     viewModel.onEvent(AddRecipientFormEvent.Submit)
-                    if(isFormValidated){
-                        viewModel.resetFormErrors()
-
-                        co.launch {
-                            viewModel.addRecipient(
-                                name = formState.name,
-                                accountNumber = formState.accountNumber,
-                                ifscCode = formState.ifsc,
-                                bank = formState.bank,
-                                relation = selectedRelation
-                            )
-                            delay(1000)
-                            navController.popBackStack()
-                        }
-                    }
                 }
-
             }
         )
     }

@@ -116,7 +116,7 @@ fun EmailVerificationScreen(navController: NavController) {
 fun ResendOtpButton(
     modifier: Modifier = Modifier,
     onResendOtpClicked: () -> Unit,
-    cooldownDuration: Int = 2,
+    cooldownDuration: Int = 20,
 ) {
     var remainingTime by remember { mutableIntStateOf(cooldownDuration) }
     val isButtonEnabled by derivedStateOf { remainingTime == 0 }

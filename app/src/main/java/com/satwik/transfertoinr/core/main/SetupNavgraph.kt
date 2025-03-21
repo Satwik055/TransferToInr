@@ -12,6 +12,10 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.navigation
+import androidx.navigation.createGraph
+import androidx.navigation.navigation
+import com.satwik.transfertoinr.R
 import com.satwik.transfertoinr.features.auth.login.LoginScreen
 import com.satwik.transfertoinr.features.auth.verify_email.EmailVerificationScreen
 import com.satwik.transfertoinr.features.auth.signup.SignupScreen
@@ -25,20 +29,26 @@ import com.satwik.transfertoinr.features.transfer.payment_screen.PaymentScreen
 import com.satwik.transfertoinr.features.transfer.amount_screen.AmountScreen
 import com.satwik.transfertoinr.features.transfer.select_recipient_screen.SelectRecipientScreen
 import com.satwik.transfertoinr.features.transfer.summary_screen.SummaryScreen
+import org.koin.androidx.compose.koinViewModel
+import org.koin.androidx.compose.navigation.koinNavViewModel
+import org.koin.core.qualifier.Qualifier
 import org.koin.java.KoinJavaComponent.inject
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SetupNavgraph(navController:NavHostController, startDestination:Any) {
 
-    NavHost(navController = navController , startDestination = startDestination) {
+    NavHost(navController = navController , startDestination) {
 
+        
         val transferViewmodel: TransferSharedViewModel by inject(TransferSharedViewModel::class.java)
+
 
         composable<ScreenSignup>(
             enterTransition = { slideInHorizontally(initialOffsetX = { it }, animationSpec = snap()) },
             exitTransition = { slideOutHorizontally(targetOffsetX = { -it }, animationSpec = snap()) }
         ) {
+
             SignupScreen(navController = navController)
         }
         composable<ScreenMain>(
@@ -134,5 +144,48 @@ fun SetupNavgraph(navController:NavHostController, startDestination:Any) {
         ) {
             KycScreen(navController)
         }
+
+////        *************
+//        navigation(startDestination = ScreenAmount, route = ScreenAmount::class){
+//
+//            val backStackEntry = navController.getBackStackEntry(ScreenAmount)
+//            println("GRAPH ID: " + backStackEntry.id)
+//
+//
+//            composable<ScreenSelectRecipient>(
+//
+//                enterTransition = { slideInHorizontally(initialOffsetX = { it }, animationSpec = snap()) },
+//                exitTransition = { slideOutHorizontally(targetOffsetX = { -it }, animationSpec = snap()) }
+//            ) {
+//                val vm = koinViewModel<TransferSharedViewModel>(viewModelStoreOwner = backStackEntry )
+//
+//                SelectRecipientScreen(navController = navController, transferSharedViewModel = vm)
+//            }
+//
+//            composable<ScreenAmount>(
+//                enterTransition = { slideInHorizontally(initialOffsetX = { it }, animationSpec = snap()) },
+//                exitTransition = { slideOutHorizontally(targetOffsetX = { -it }, animationSpec = snap()) }
+//            ){
+//                val vm = koinViewModel<TransferSharedViewModel>(viewModelStoreOwner = backStackEntry )
+//                AmountScreen(navController = navController, transferSharedViewModel = vm)
+//            }
+//
+//            composable<ScreenSummary>(
+//                enterTransition = { slideInHorizontally(initialOffsetX = { it }, animationSpec = snap()) },
+//                exitTransition = { slideOutHorizontally(targetOffsetX = { -it }, animationSpec = snap()) }
+//            ) {
+//                val vm = koinViewModel<TransferSharedViewModel>(viewModelStoreOwner = backStackEntry )
+//                SummaryScreen(navController = navController, transferSharedViewModel = vm )
+//            }
+//
+//            composable<ScreenPayment> (
+//                enterTransition = { slideInHorizontally(initialOffsetX = { it }, animationSpec = snap()) },
+//                exitTransition = { slideOutHorizontally(targetOffsetX = { -it }, animationSpec = snap()) }
+//            ){
+//                val vm = koinViewModel<TransferSharedViewModel>(viewModelStoreOwner = backStackEntry)
+//                PaymentScreen(navController = navController, viewModel = vm)
+//            }
+//        }
+            //**************
+        }
     }
-}

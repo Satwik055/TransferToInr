@@ -23,8 +23,6 @@ object ScreenHelp
 @Serializable
 object ScreenPrivacyPolicy
 
-
-
 @Serializable
 object ScreenHome
 
@@ -48,7 +46,6 @@ object ScreenSummary
 
 @Serializable
 object ScreenAmount
-
 
 @Serializable
 data class ScreenEmailVerification(

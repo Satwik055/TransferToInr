@@ -84,7 +84,9 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
     Box{
         Column(modifier = modifier.background(Color.White)){
             Spacer(modifier = Modifier.height(10.dp))
-            Icon(painter = painterResource(id = R.drawable.ic_carret), tint = JungleGreen, contentDescription = null, modifier = Modifier.padding(start = 16.dp, end = 25.dp, top = 16.dp, bottom = 16.dp).clickable { navController.popBackStack() },)
+            Icon(painter = painterResource(id = R.drawable.ic_carret), tint = JungleGreen, contentDescription = null, modifier = Modifier
+                .padding(start = 16.dp, end = 25.dp, top = 16.dp, bottom = 16.dp)
+                .clickable { navController.popBackStack() },)
             Column(Modifier.padding(horizontal = 16.dp)){
 
                 Text(text = "LOGIN", fontFamily = fontFamily, fontSize = 35.sp, fontWeight = FontWeight.Bold, color = JungleGreen)
@@ -126,15 +128,22 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                         }
 
                         viewModel.onEvent(LoginFormEvent.Submit)
-                        if(isFormValidated){
-                            viewModel.login(formState.email, formState.password)
-                        }
                     }
                 )
+
+                LaunchedEffect(isFormValidated) {
+                    if (isFormValidated) {
+                        viewModel.login(formState.email, formState.password)
+                    }
+                }
+
+
                 Spacer(modifier = Modifier.weight(1f))
                 SignupText(
                     onClick = { navController.navigate(ScreenSignup) },
-                    modifier = Modifier.align(Alignment.CenterHorizontally).padding(bottom = 12.dp)
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(bottom = 12.dp)
                 )
             }
         }

@@ -6,16 +6,20 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.satwik.transfertoinr.data.account.AccountRepository
 import com.satwik.transfertoinr.data.exchange_rate.ExchangeRateRepository
+import com.satwik.transfertoinr.features.transfer.shared_viewmodel.TransferSharedViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
+import org.koin.androidx.compose.navigation.koinNavViewModel
 
 class HomeScreenViewModel(
     private val accountRepository: AccountRepository,
     private val exchangeRateRepository: ExchangeRateRepository
 ):ViewModel() {
+
 
     private val _userInfoState = MutableStateFlow(UserInfoStateHome())
     val userInfoState: StateFlow<UserInfoStateHome> = _userInfoState

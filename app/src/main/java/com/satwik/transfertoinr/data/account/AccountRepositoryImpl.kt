@@ -11,6 +11,8 @@ import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.realtime.selectSingleValueAsFlow
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.onEach
 import kotlinx.serialization.decodeFromString
@@ -20,6 +22,7 @@ import kotlinx.serialization.json.decodeFromJsonElement
 import kotlinx.serialization.json.put
 
 class AccountRepositoryImpl(private val client: SupabaseClient):AccountRepository {
+
     @OptIn(SupabaseExperimental::class)
     override suspend fun getProfile(): Flow<Profile> {
         val email = client.auth.currentUserOrNull()?.email

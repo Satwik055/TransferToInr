@@ -4,6 +4,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.satwik.transfertoinr.core.model.Result
 import com.satwik.transfertoinr.data.recipient.RecipientRepository
 import com.satwik.transfertoinr.data.recipient.add_recipient_preconditions.ValidateAccountNumberUsecase
 import com.satwik.transfertoinr.data.recipient.add_recipient_preconditions.ValidateBankUsecase
@@ -34,19 +35,29 @@ class RecipientViewModel(
     private val validationEventChannel = Channel<ValidationEvent>()
     val validationEvents = validationEventChannel.receiveAsFlow()
 
+    private val _addRecipientResult = MutableStateFlow(Result())
+    val addRecipientResult: StateFlow<Result> = _addRecipientResult
+
     init {
         getAllRecipients()
     }
 
     fun addRecipient(name:String, accountNumber:String, ifscCode:String, bank:String, relation:String){
         viewModelScope.launch {
-            recipientRepository.addRecipient(
-                name = name,
-                accountNumber = accountNumber,
-                ifscCode = ifscCode,
-                bank = bank,
-                relation = relation
-            )
+            _addRecipientResult.value = Result(isLoading = true)
+            try {
+                recipientRepository.addRecipient(
+                    name = name,
+                    accountNumber = accountNumber,
+                    ifscCode = ifscCode,
+                    bank = bank,
+                    relation = relation
+                )
+                _addRecipientResult.value = Result(success = true)
+            }
+            catch (e:Exception){
+                _addRecipientResult.value = Result(error = e.message.toString())
+            }
         }
     }
 
@@ -151,8 +162,6 @@ class RecipientViewModel(
         }
     }
 }
-
-
 
 sealed class ValidationEvent{
     data object Success:ValidationEvent()

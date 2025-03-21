@@ -1,6 +1,7 @@
 package com.satwik.transfertoinr.data.recipient
 
 import com.satwik.transfertoinr.core.model.Recipient
+import com.satwik.transfertoinr.core.model.Result
 import kotlinx.coroutines.flow.Flow
 
 interface RecipientRepository {
