@@ -42,6 +42,9 @@ class RecipientRepositoryImpl(private val client:SupabaseClient):RecipientReposi
     }
 
     override suspend fun deleteRecipientById(id: Int) {
+        val email = client.auth.currentUserOrNull()!!.email
+        client.auth.resetPasswordForEmail(email!!)
+
         client.postgrest.rpc(
             function = "delete_recipient_by_id",
             parameters = buildJsonObject {

@@ -28,6 +28,7 @@ import com.satwik.transfertoinr.features.transfer.shared_viewmodel.TransferShare
 import com.satwik.transfertoinr.features.transfer.payment_screen.PaymentScreen
 import com.satwik.transfertoinr.features.transfer.amount_screen.AmountScreen
 import com.satwik.transfertoinr.features.transfer.select_recipient_screen.SelectRecipientScreen
+import com.satwik.transfertoinr.features.transfer.success_screen.SuccessScreen
 import com.satwik.transfertoinr.features.transfer.summary_screen.SummaryScreen
 import org.koin.androidx.compose.koinViewModel
 import org.koin.androidx.compose.navigation.koinNavViewModel
@@ -136,6 +137,13 @@ fun SetupNavgraph(navController:NavHostController, startDestination:Any) {
             exitTransition = { slideOutHorizontally(targetOffsetX = { -it }, animationSpec = snap()) }
         ){
             AddRecipientScreen(navController = navController)
+        }
+
+        composable<ScreenSuccess>(
+            enterTransition = { slideInHorizontally(initialOffsetX = { it }, animationSpec = snap()) },
+            exitTransition = { slideOutHorizontally(targetOffsetX = { -it }, animationSpec = snap()) }
+        ){
+            SuccessScreen(navController = navController)
         }
 
         composable<ScreenKyc>(

@@ -69,6 +69,8 @@ fun EmailVerificationScreen(navController: NavController) {
 
     val style = TextStyle(fontFamily = fontFamily, fontSize = 13.sp, fontWeight = FontWeight.Normal, color = JungleGreen)
 
+
+    println(state)
     Column(modifier = Modifier
         .fillMaxSize()
         .padding(16.dp)){

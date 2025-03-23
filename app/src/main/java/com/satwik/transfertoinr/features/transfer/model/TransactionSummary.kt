@@ -10,5 +10,6 @@ data class TransactionSummary (
     val exchangeRate:Double = 0.0,
     val fee:Double = 0.0,
     val currency:CurrencyType = CurrencyType.EUR,
-    val recipient: Recipient = Recipient()
+    val recipient: Recipient = Recipient(),
+    val screenshotLink:String = ""
 )

@@ -7,6 +7,8 @@ import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.postgrest
+import io.github.jan.supabase.storage.storage
+import io.github.jan.supabase.storage.upload
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 
@@ -16,7 +18,8 @@ class TransferRepositoryImpl(private val client: SupabaseClient): TransferReposi
         sent: Int,
         currency: CurrencyType,
         reason:String,
-        recipientId: Int
+        recipientId: Int,
+        screenshotLink:String
     ) {
 
         val email = client.auth.currentUserOrNull()?.email
@@ -36,8 +39,14 @@ class TransferRepositoryImpl(private val client: SupabaseClient): TransferReposi
                 put("p_reason", reason)
                 put("p_sender_id", profile.ttf_user_id)
                 put("p_recipient_id", recipientId)
+                put("p_screenshot", screenshotLink)
 
             }
         )
+    }
+
+    override suspend fun uploadScreenshot(fileName: String, fileBytes: ByteArray) {
+        val bucket = client.storage.from("transaction-screenshots")
+        bucket.upload(fileName, fileBytes){upsert = true}
     }
 }

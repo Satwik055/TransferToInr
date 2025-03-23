@@ -92,6 +92,9 @@ dependencies {
     implementation("io.insert-koin:koin-androidx-compose:4.0.2")
     implementation("io.insert-koin:koin-androidx-compose-navigation:4.0.2")
     implementation("io.insert-koin:koin-androidx-navigation:4.0.2")
+    implementation ("com.airbnb.android:lottie-compose:4.0.0")
+
+
 
 
 

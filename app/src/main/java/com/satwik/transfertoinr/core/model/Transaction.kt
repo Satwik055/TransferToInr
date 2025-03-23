@@ -11,6 +11,7 @@ data class Transaction(
     val receive:Int = 0,
     val currency:CurrencyType = CurrencyType.EUR,
     val status:TransactionStatus = TransactionStatus.PENDING,
-    val date:String = ""
+    val date:String = "",
+    val screenshot:String = ""
 )
 

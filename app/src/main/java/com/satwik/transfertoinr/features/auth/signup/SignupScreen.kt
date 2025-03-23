@@ -161,7 +161,7 @@ fun SignupScreen(modifier: Modifier = Modifier, navController: NavController) {
         }
         SnackbarHost(
             snackbar = { TTFSnackbar(text = addSpacesToCamelCase(errorText), color = Color.Red, modifier = Modifier.padding(vertical = 65.dp, horizontal = 16.dp)) },
-            modifier = Modifier.align(Alignment.BottomCenter),
+            modifier = Modifier.align(Alignment.TopCenter),
             hostState = snackbarHostState,
         )
     }

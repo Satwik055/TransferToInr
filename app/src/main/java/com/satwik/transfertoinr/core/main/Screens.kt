@@ -52,6 +52,10 @@ data class ScreenEmailVerification(
     val email:String = ""
 )
 
+
+@Serializable
+object ScreenSuccess
+
 @Serializable
 object ScreenKyc
 
