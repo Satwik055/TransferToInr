@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.satwik.transfertoinr.R
-import com.satwik.transfertoinr.core.designsystem.components.CustomAlertDialog
+import com.satwik.transfertoinr.core.designsystem.components.LogoutConfirmationDialog
 import com.satwik.transfertoinr.core.designsystem.components.NewTTFDropdown
 import com.satwik.transfertoinr.core.designsystem.theme.JungleGreen
 import com.satwik.transfertoinr.core.designsystem.theme.VeryLightGrey
@@ -74,7 +74,7 @@ internal fun Content(modifier: Modifier = Modifier, navController: NavController
     val isLogoutClicked = remember { mutableStateOf(false) }
 
     if(isLogoutClicked.value){
-        CustomAlertDialog(
+        LogoutConfirmationDialog(
             title = "Confirm Logout",
             message = "Are you sure you want to logout?",
             onDismissRequest = { isLogoutClicked.value = false },

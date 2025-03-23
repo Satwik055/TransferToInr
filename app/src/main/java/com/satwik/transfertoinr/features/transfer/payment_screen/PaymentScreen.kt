@@ -70,18 +70,17 @@ fun PaymentScreen(navController: NavController, viewModel: TransferSharedViewMod
 private fun Content(modifier: Modifier = Modifier, viewModel: TransferSharedViewModel, navController: NavController) {
     var imageUri by remember { mutableStateOf<Uri?>(null) }
     val coroutineScope = rememberCoroutineScope()
+    var isUploaded by remember { mutableStateOf(false) }
 
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
-        onResult = { uri ->
-            imageUri = uri
-        }
+        onResult = { uri -> imageUri = uri }
     )
+
     val uploadScreenshotState = viewModel.uploadScreenshotResult.collectAsState().value
     val user = viewModel.userInfoState.collectAsState().value
 
     Column (modifier = modifier) {
-
         val style = TextStyle(
             fontFamily = fontFamily,
             fontWeight = FontWeight.SemiBold,
@@ -127,7 +126,10 @@ private fun Content(modifier: Modifier = Modifier, viewModel: TransferSharedView
                 tint = JungleGreen,
                 contentDescription = null,
                 modifier = Modifier
-                    .clickable { launcher.launch("image/*") }
+                    .clickable {
+                        isUploaded = false
+                        launcher.launch("image/*")
+                    }
                     .padding(vertical = 7.dp, horizontal = 30.dp)
             )
         }
@@ -136,6 +138,9 @@ private fun Content(modifier: Modifier = Modifier, viewModel: TransferSharedView
         Spacer(modifier = Modifier.height(16.dp))
 
         imageUri?.let { uri ->
+
+
+
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -152,6 +157,7 @@ private fun Content(modifier: Modifier = Modifier, viewModel: TransferSharedView
 
                 Spacer(modifier = Modifier.width(16.dp))
 
+
                 TTFButton(
                     text = "Upload",
                     isLoading = uploadScreenshotState.isLoading,
@@ -167,13 +173,12 @@ private fun Content(modifier: Modifier = Modifier, viewModel: TransferSharedView
                                     inputStream.copyTo(outputStream)
                                 }
                             }
-
                             val fileBytes = file.readBytes()
                             val fileName = "images/${System.currentTimeMillis()}.jpg"
-
                             viewModel.uploadScreenshot(fileName, fileBytes)
                         }
-                    })
+                    }
+                )
             }
         }
 

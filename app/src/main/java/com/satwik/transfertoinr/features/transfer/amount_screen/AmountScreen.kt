@@ -26,10 +26,13 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.satwik.transfertoinr.core.designsystem.components.CompleteKYCDialog
 import com.satwik.transfertoinr.core.designsystem.components.TTFButton
 import com.satwik.transfertoinr.core.designsystem.components.TTFTextField
 import com.satwik.transfertoinr.core.designsystem.theme.JungleGreen
 import com.satwik.transfertoinr.core.designsystem.theme.fontFamily
+import com.satwik.transfertoinr.core.main.ScreenKyc
+import com.satwik.transfertoinr.core.main.ScreenMain
 import com.satwik.transfertoinr.core.main.ScreenSelectRecipient
 import com.satwik.transfertoinr.core.utils.getCurrencySymbol
 import com.satwik.transfertoinr.core.utils.roundToTwoDecimalPlaces
@@ -38,6 +41,16 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun AmountScreen(navController: NavController, transferSharedViewModel: TransferSharedViewModel) {
+
+    val user = transferSharedViewModel.userInfoState.collectAsState().value.profile
+
+//    if(!user.kyc_status){
+//        CompleteKYCDialog(
+//            onDismissRequest = { },
+//            onButtonClicked = { navController.navigate(ScreenKyc) },
+//            onCancelClicked = {navController.navigate(ScreenMain)}
+//        )
+//    }
 
     Content(transferSharedViewModel = transferSharedViewModel, navController = navController )
 
