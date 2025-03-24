@@ -22,6 +22,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.satwik.transfertoinr.core.designsystem.components.TTFBottomNavigationBar
 import com.satwik.transfertoinr.core.designsystem.components.headers.TTFScaffoldHeader
+import com.satwik.transfertoinr.core.utils.PermissionRequester
 import com.satwik.transfertoinr.features.account.AccountScreen
 import com.satwik.transfertoinr.features.home.HomeScreen
 import com.satwik.transfertoinr.features.recipient.RecipientScreen
@@ -44,6 +45,7 @@ class MainActivity : ComponentActivity() {
         installSplashScreen().apply { setKeepOnScreenCondition{viewModel.isInitializing.value} }
 
         setContent {
+            PermissionRequester()
             val isInitializing = viewModel.isInitializing.collectAsState().value
             val isLoggedIn = viewModel.isLoggedIn.collectAsState().value
             val startDestination:Any = if(isLoggedIn){ ScreenMain } else{ ScreenSignup }
