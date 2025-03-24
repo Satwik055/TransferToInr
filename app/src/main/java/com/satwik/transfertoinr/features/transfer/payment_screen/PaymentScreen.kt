@@ -115,7 +115,6 @@ private fun Content(modifier: Modifier = Modifier, viewModel: TransferSharedView
 
         Spacer(modifier = Modifier.height(30.dp))
 
-
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
@@ -127,21 +126,16 @@ private fun Content(modifier: Modifier = Modifier, viewModel: TransferSharedView
                 contentDescription = null,
                 modifier = Modifier
                     .clickable {
-                        isUploaded = false
                         launcher.launch("image/*")
+                        viewModel.resetUploadScreenshotState()
                     }
                     .padding(vertical = 7.dp, horizontal = 30.dp)
             )
         }
 
-
         Spacer(modifier = Modifier.height(16.dp))
 
         imageUri?.let { uri ->
-
-
-
-
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
@@ -157,9 +151,9 @@ private fun Content(modifier: Modifier = Modifier, viewModel: TransferSharedView
 
                 Spacer(modifier = Modifier.width(16.dp))
 
-
                 TTFButton(
-                    text = "Upload",
+                    text = if (uploadScreenshotState.success) "Uploaded" else "Upload",
+                    isEnabled = !uploadScreenshotState.success,
                     isLoading = uploadScreenshotState.isLoading,
                     modifier = Modifier
                         .height(30.dp)
@@ -183,10 +177,14 @@ private fun Content(modifier: Modifier = Modifier, viewModel: TransferSharedView
         }
 
         Spacer(modifier = Modifier.weight(1f))
-        TTFButton(text = "Continue", onClick = {
-            viewModel.createTransfer()
-            navController.navigate(ScreenSuccess)
-        })
+        TTFButton(
+            text = "Continue",
+            isEnabled = uploadScreenshotState.success,
+            onClick = {
+                viewModel.createTransfer()
+                navController.navigate(ScreenSuccess)
+            }
+        )
 
     }
 }

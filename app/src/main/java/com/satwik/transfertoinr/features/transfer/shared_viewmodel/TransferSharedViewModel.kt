@@ -124,6 +124,10 @@ class TransferSharedViewModel(
 
     }
 
+    fun resetUploadScreenshotState(){
+        _uploadScreenshotResult.value = Result()
+    }
+
     fun uploadScreenshot(fileName:String, fileBytes:ByteArray){
         viewModelScope.launch {
             _uploadScreenshotResult.value = Result(isLoading = true)
@@ -134,19 +138,6 @@ class TransferSharedViewModel(
                 setScreenshotLink(fileName)
 
             }
-
-
-
-
-
-
-
-
-
-
-
-
-
             catch (e:Exception){
                 _uploadScreenshotResult.value = Result(error = e.message.toString())
             }

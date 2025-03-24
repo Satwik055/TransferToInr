@@ -28,20 +28,23 @@ class TransactionViewModel(
         getAllTransaction()
     }
 
-    private fun getAllTransaction(){
+    private fun getAllTransaction() {
         viewModelScope.launch {
             _transactionState.value = TransactionState(isLoading = true)
-            try{
-                transactionRepository.getAllTransaction().collect { newTransaction ->
+            try {
+                transactionRepository.getAllTransaction().collect { newTransactions ->
                     val currentTransactions = _transactionState.value.transaction
-                    val updatedTransactions = currentTransactions + newTransaction
+                    val transactionMap = currentTransactions.associateBy { it.id }.toMutableMap()
+                    newTransactions.forEach { newTransaction ->
+                        transactionMap[newTransaction.id] = newTransaction
+                    }
+                    val updatedTransactions = transactionMap.values.toList()
                     _transactionState.value = _transactionState.value.copy(
                         transaction = updatedTransactions,
                         isLoading = false
                     )
                 }
-            }
-            catch (e:Exception){
+            } catch (e: Exception) {
                 _transactionState.value = TransactionState(error = e.message.toString())
             }
         }

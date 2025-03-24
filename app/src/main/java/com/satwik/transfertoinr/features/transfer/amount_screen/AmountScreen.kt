@@ -63,7 +63,7 @@ private fun Content(modifier: Modifier = Modifier, transferSharedViewModel: Tran
 
     val style = TextStyle(fontFamily = fontFamily, fontSize = 15.sp, fontWeight = FontWeight.SemiBold)
     var amountSend by remember { mutableStateOf("") }
-//    var amountReceive by remember { mutableStateOf("") }
+    var errorText by remember { mutableStateOf("") }
 
     val amountScreenViewModel = koinViewModel<AmountScreenViewModel>()
     val rate = amountScreenViewModel.ttiRate.collectAsState().value
@@ -76,7 +76,14 @@ private fun Content(modifier: Modifier = Modifier, transferSharedViewModel: Tran
         Text(text = "You Send", style=style)
         Spacer(modifier = Modifier.height(5.dp))
 
-        TTFTextField(text = amountSend, onValueChange = {amountSend = it}, placeholder = "Eg: 100$symbol", keyboardType = KeyboardType.Number)
+        TTFTextField(
+            text = amountSend,
+            isError = errorText.isNotEmpty(),
+            errorText = errorText,
+            onValueChange = { amountSend = it },
+            placeholder = "Eg: 100$symbol",
+            keyboardType = KeyboardType.Number
+        )
         Column(verticalArrangement = Arrangement.spacedBy(10.dp)){
             OperationRow(symbol = "-", text = "Our Fees", amount = "0.00$symbol (OFFER)")
             OperationRow(symbol = "=", text = "Net Amount", amount = if(amountSend=="") "0$amountSend" else "$amountSend$symbol")
@@ -91,9 +98,15 @@ private fun Content(modifier: Modifier = Modifier, transferSharedViewModel: Tran
 
         Spacer(modifier = Modifier.weight(1f))
         TTFButton(text = "Continue", onClick = {
-            transferSharedViewModel.setSendAmount(amountSend.toInt())
-            transferSharedViewModel.setReceiveAmount(amountReceive.toInt())
-            navController.navigate(ScreenSelectRecipient) }
+            if(amountSend.isEmpty()){
+                errorText = "Please enter the amount"
+            }
+            else{
+                transferSharedViewModel.setSendAmount(amountSend.toInt())
+                transferSharedViewModel.setReceiveAmount(amountReceive.toInt())
+                navController.navigate(ScreenSelectRecipient) }
+            }
+
         )
     }
 

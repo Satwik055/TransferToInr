@@ -31,11 +31,12 @@ fun TTFButton(
     fontSize: TextUnit = 16.sp,
     fontWeight: FontWeight = FontWeight.Normal,
     onClick: () -> Unit,
+    isEnabled:Boolean= true,
     isLoading:Boolean = false
 ){
     Button(
         onClick = onClick,
-        enabled = !isLoading,
+        enabled = !isLoading && isEnabled,
         shape = RoundedCornerShape(10.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = color,
