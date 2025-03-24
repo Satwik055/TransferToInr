@@ -38,6 +38,10 @@ class RecipientViewModel(
     private val _addRecipientResult = MutableStateFlow(Result())
     val addRecipientResult: StateFlow<Result> = _addRecipientResult
 
+    private val _deleteRecipientResult = mutableStateOf(Result())
+    val deleteRecipientResult: State<Result> = _deleteRecipientResult
+
+
     init {
         getAllRecipients()
     }
@@ -63,10 +67,10 @@ class RecipientViewModel(
 
     fun deleteRecipientById(id: Int) {
         viewModelScope.launch {
-            recipientRepository.deleteRecipientById(id)
             _recipientsState.value = _recipientsState.value.copy(
                 recipients = _recipientsState.value.recipients.filter { it.id != id }
             )
+            recipientRepository.deleteRecipientById(id)
         }
     }
 

@@ -35,10 +35,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.satwik.transfertoinr.core.designsystem.components.LogoutConfirmationDialog
 import com.satwik.transfertoinr.core.designsystem.components.TTFButton
 import com.satwik.transfertoinr.core.designsystem.theme.JungleGreen
 import com.satwik.transfertoinr.core.designsystem.theme.fontFamily
 import com.satwik.transfertoinr.core.main.ScreenAddRecipient
+import com.satwik.transfertoinr.core.main.ScreenSignup
 import com.satwik.transfertoinr.features.auth.signup.SignupScreenViewModel
 import org.koin.androidx.compose.koinViewModel
 
@@ -50,7 +52,6 @@ fun RecipientScreen(navController: NavController) {
 @Composable
 private fun Content(modifier: Modifier = Modifier, navController: NavController) {
 
-    val context  = LocalContext.current
     Box(modifier=modifier){
 
         val style1 = TextStyle(fontWeight = FontWeight.Normal, fontFamily = fontFamily, fontSize = 14.sp, color = JungleGreen)
@@ -61,6 +62,9 @@ private fun Content(modifier: Modifier = Modifier, navController: NavController)
         if(state.isLoading){
             CircularProgressIndicator(color = JungleGreen, modifier = Modifier.align(Alignment.Center))
         }
+        if(state.recipients.isEmpty()&&!state.isLoading){
+            Text(text = "No recipient found", style = style1, modifier = Modifier.align(Alignment.Center))
+        }
         if(state.error.isNotEmpty()){
             Text(text = state.error, style = style1, modifier = Modifier.align(Alignment.Center))
         }
@@ -69,16 +73,19 @@ private fun Content(modifier: Modifier = Modifier, navController: NavController)
                 verticalArrangement = Arrangement.spacedBy(5.dp)
             ){
                 items(state.recipients){recipient->
-                    RecipientListItem(name = recipient.name, accountNumber = recipient.account_number, bankName = recipient.bank, deleteOnClick = { viewModel.deleteRecipientById(recipient.id) })
+                    RecipientListItem(
+                        name = recipient.name,
+                        accountNumber = recipient.account_number,
+                        bankName = recipient.bank,
+                        onConfirm = { viewModel.deleteRecipientById(recipient.id) }
+                    )
                 }
             }
         }
 
         TTFButton(
             text = "Add Recipient",
-            onClick = {
-                navController.navigate(ScreenAddRecipient)
-                      },
+            onClick = { navController.navigate(ScreenAddRecipient) },
             modifier = Modifier.align(Alignment.BottomCenter)
         )
 
@@ -95,16 +102,28 @@ fun RecipientListItem(
     isSelected:Boolean = false,
     onSelect: () -> Unit = {},
     radioEnabled: Boolean = false,
-    deleteOnClick: () -> Unit
-) {
+    onConfirm: () -> Unit,
+
+    ) {
     val style1 = TextStyle(fontFamily = fontFamily, fontWeight = FontWeight.SemiBold, fontSize = 16.sp)
     val style2 = TextStyle(fontFamily = fontFamily, fontWeight = FontWeight.Normal, fontSize = 13.sp)
     val style3 = TextStyle(fontFamily = fontFamily, fontWeight = FontWeight.Normal, fontSize = 13.sp)
 
+    val isDeleteRecipientClicked = remember { mutableStateOf(false) }
+
+
+    if(isDeleteRecipientClicked.value){
+        LogoutConfirmationDialog(
+            title = "Delete Recipient",
+            message = "Are you sure you want to delete this recipient ?",
+            onDismissRequest = { isDeleteRecipientClicked.value = false },
+            onConfirm = { onConfirm.invoke() },
+            onCancel = { isDeleteRecipientClicked.value = false }
+        )
+    }
+
     Surface(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 5.dp),
+        modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp),
         color = Color.White,
         shadowElevation = 3.dp,
         shape = RoundedCornerShape(8.dp)
@@ -123,7 +142,15 @@ fun RecipientListItem(
                 RadioButton(selected = isSelected, onClick = { onSelect.invoke() }, colors = RadioButtonColors(selectedColor = JungleGreen, unselectedColor = JungleGreen, disabledSelectedColor = JungleGreen, disabledUnselectedColor = JungleGreen))
             }
             else{
-                Icon(imageVector = Icons.Filled.Delete, contentDescription = null, tint = Color.Red, modifier = Modifier.clickable { deleteOnClick.invoke() })
+                Icon(
+                    imageVector = Icons.Filled.Delete,
+                    contentDescription = null,
+                    tint = Color.Red,
+                    modifier = Modifier.clickable {
+                        isDeleteRecipientClicked.value = true
+                    }
+                )
+
             }
         }
     }
