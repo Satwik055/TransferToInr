@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.SnackbarDuration
@@ -40,6 +41,7 @@ import com.satwik.transfertoinr.core.designsystem.components.TTFSnackbar
 import com.satwik.transfertoinr.core.designsystem.components.TTFTextField
 import com.satwik.transfertoinr.core.designsystem.theme.JungleGreen
 import com.satwik.transfertoinr.core.designsystem.theme.fontFamily
+import com.satwik.transfertoinr.core.main.ScreenResetPasswordEmailVerify
 import com.satwik.transfertoinr.core.main.ScreenSignup
 import com.satwik.transfertoinr.core.utils.addSpacesToCamelCase
 import kotlinx.coroutines.launch
@@ -101,14 +103,28 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                         isError = formState.emailError != null,
                         keyboardType = KeyboardType.Email
                     )
-                    TTFTextField(
-                        text = formState.password,
-                        onValueChange ={viewModel.onEvent(LoginFormEvent.PasswordChanged(it))},
-                        placeholder = "Password",
-                        isError = formState.passwordError != null,
-                        errorText = formState.passwordError?:"",
-                        isPassword = true
-                    )
+                    Column {
+                        TTFTextField(
+                            text = formState.password,
+                            onValueChange ={viewModel.onEvent(LoginFormEvent.PasswordChanged(it))},
+                            placeholder = "Password",
+                            isError = formState.passwordError != null,
+                            errorText = formState.passwordError?:"",
+                            isPassword = true
+                        )
+                        Text(
+                            text = "Forget password ?",
+                            fontFamily = fontFamily,
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.Medium,
+                            color = JungleGreen,
+                            modifier = Modifier
+                                .align(Alignment.End)
+                                .offset(y = -(10.dp))
+                                .clickable(onClick = {navController.navigate(ScreenResetPasswordEmailVerify)}, interactionSource = null, indication = null)
+                        )
+                    }
+
                 }
 
                 Spacer(modifier = Modifier.height(100.dp))

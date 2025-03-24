@@ -6,5 +6,7 @@ interface AuthRepository {
     suspend fun updateFcmToken(token: String)
     suspend fun verifyOtp(otp: String, email: String)
     suspend fun resendEmailOtp(email: String)
+    suspend fun sendPasswordResetEmail(email: String)
+    suspend fun changePassword(newPassword:String)
     suspend fun logout()
 }

@@ -3,22 +3,17 @@ package com.satwik.transfertoinr.core.main
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.snap
-import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.navigation
-import androidx.navigation.createGraph
-import androidx.navigation.navigation
-import com.satwik.transfertoinr.R
 import com.satwik.transfertoinr.features.auth.login.LoginScreen
+import com.satwik.transfertoinr.features.auth.reset_password.create_password.CreatePasswordScreen
 import com.satwik.transfertoinr.features.auth.verify_email.EmailVerificationScreen
 import com.satwik.transfertoinr.features.auth.signup.SignupScreen
+import com.satwik.transfertoinr.features.auth.reset_password.verify_email_reset_password.ResetPasswordEmailVerifyScreen
 import com.satwik.transfertoinr.features.help.HelpScreen
 import com.satwik.transfertoinr.features.kyc.KycScreen
 import com.satwik.transfertoinr.features.privacypolicy.PrivacyPolicyScreen
@@ -30,9 +25,6 @@ import com.satwik.transfertoinr.features.transfer.amount_screen.AmountScreen
 import com.satwik.transfertoinr.features.transfer.select_recipient_screen.SelectRecipientScreen
 import com.satwik.transfertoinr.features.transfer.success_screen.SuccessScreen
 import com.satwik.transfertoinr.features.transfer.summary_screen.SummaryScreen
-import org.koin.androidx.compose.koinViewModel
-import org.koin.androidx.compose.navigation.koinNavViewModel
-import org.koin.core.qualifier.Qualifier
 import org.koin.java.KoinJavaComponent.inject
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -137,6 +129,22 @@ fun SetupNavgraph(navController:NavHostController, startDestination:Any) {
             exitTransition = { slideOutHorizontally(targetOffsetX = { -it }, animationSpec = snap()) }
         ){
             AddRecipientScreen(navController = navController)
+        }
+
+        composable<ScreenResetPasswordEmailVerify>(
+            enterTransition = { slideInHorizontally(initialOffsetX = { it }, animationSpec = snap()) },
+            exitTransition = { slideOutHorizontally(targetOffsetX = { -it }, animationSpec = snap()) }
+        ){
+            ResetPasswordEmailVerifyScreen(navController = navController)
+        }
+
+
+
+        composable<ScreenResetPassword>(
+            enterTransition = { slideInHorizontally(initialOffsetX = { it }, animationSpec = snap()) },
+            exitTransition = { slideOutHorizontally(targetOffsetX = { -it }, animationSpec = snap()) }
+        ){
+            CreatePasswordScreen()
         }
 
         composable<ScreenSuccess>(
