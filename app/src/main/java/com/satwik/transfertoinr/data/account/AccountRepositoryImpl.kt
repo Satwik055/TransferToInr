@@ -6,6 +6,7 @@ import com.satwik.transfertoinr.core.model.Profile
 import io.github.jan.supabase.SupabaseClient
 import io.github.jan.supabase.annotations.SupabaseExperimental
 import io.github.jan.supabase.auth.auth
+import io.github.jan.supabase.auth.handleDeeplinks
 import io.github.jan.supabase.auth.status.SessionStatus
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.postgrest
@@ -31,7 +32,6 @@ class AccountRepositoryImpl(private val client: SupabaseClient):AccountRepositor
         }
         return flow
     }
-
 
     override suspend fun updatePrefferedCurrency(email:String, currency: CurrencyType) {
         client.postgrest.rpc(

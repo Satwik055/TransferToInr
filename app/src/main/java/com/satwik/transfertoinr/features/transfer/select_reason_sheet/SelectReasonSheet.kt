@@ -31,7 +31,7 @@ import com.satwik.transfertoinr.features.transfer.shared_viewmodel.TransferShare
 
 @Composable
 fun SelectReasonSheet(navController: NavController, viewModel: TransferSharedViewModel) {
-    val reasons = listOf("My NRE/NRO Account", "Savings & Family Support", "Real Estate/Housing Societies", "Educational Institutions", "Tax Payment", "Hospitals/Healthcare Providers", "Travel/Tourism Partners", "Utility Bill Payments", "Loan Account Payment")
+    val reasons = listOf("Self Transfer", "My NRE/NRO Account", "Savings & Family Support", "Real Estate/Housing Societies", "Educational Institutions", "Tax Payment", "Hospitals/Healthcare Providers", "Travel/Tourism Partners", "Utility Bill Payments", "Loan Account Payment")
     var selectedReason by remember { mutableStateOf(reasons.first()) }
 
     LaunchedEffect(selectedReason) {

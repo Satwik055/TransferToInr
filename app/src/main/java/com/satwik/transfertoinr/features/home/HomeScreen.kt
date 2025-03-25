@@ -28,6 +28,7 @@ import com.satwik.transfertoinr.core.designsystem.theme.JungleGreen
 import com.satwik.transfertoinr.core.designsystem.theme.fontFamily
 import com.satwik.transfertoinr.core.model.ExchangeRate
 import com.satwik.transfertoinr.core.model.Profile
+import com.satwik.transfertoinr.core.utils.extension_functions.firstWord
 import org.koin.androidx.compose.koinViewModel
 
 
@@ -63,7 +64,7 @@ internal fun Content(modifier: Modifier = Modifier, user: Profile, rate:Exchange
 
 
     Column (modifier = modifier){
-        Text(text = "Hey ${user.name}", style=style, maxLines = 1, overflow = TextOverflow.Ellipsis)
+        Text(text = "Hey ${user.name.firstWord()}", style=style, maxLines = 1, overflow = TextOverflow.Ellipsis)
         Spacer(modifier = Modifier.height(10.dp))
 
         AutoSlidingCarousel(

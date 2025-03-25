@@ -91,7 +91,7 @@ class AuthRepositoryImpl(private val client: SupabaseClient) :AuthRepository {
     }
 
     override suspend fun sendPasswordResetEmail(email: String) {
-        client.auth.resetPasswordForEmail(email = email )
+        client.auth.resetPasswordForEmail(email = email, redirectUrl = "app://reset-password" )
     }
 
     override suspend fun changePassword(newPassword: String) {

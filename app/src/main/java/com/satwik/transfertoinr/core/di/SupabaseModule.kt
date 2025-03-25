@@ -1,6 +1,7 @@
 package com.satwik.transfertoinr.core.di
 
 import io.github.jan.supabase.auth.Auth
+import io.github.jan.supabase.auth.ExternalAuthAction
 import io.github.jan.supabase.auth.FlowType
 import io.github.jan.supabase.createSupabaseClient
 import io.github.jan.supabase.postgrest.Postgrest
@@ -21,6 +22,7 @@ val supabaseModule = module {
                 flowType = FlowType.PKCE
                 scheme = "app"
                 host = "supabase.com"
+                defaultExternalAuthAction = ExternalAuthAction.CustomTabs()
             }
         }
     }

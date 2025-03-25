@@ -1,5 +1,6 @@
 package com.satwik.transfertoinr.core.main
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -31,9 +32,16 @@ import com.satwik.transfertoinr.features.transaction.TransactionScreen
 import com.satwik.transfertoinr.features.transfer.shared_viewmodel.TransferSharedViewModel
 import com.satwik.transfertoinr.features.transfer.amount_screen.AmountScreen
 import org.koin.android.ext.android.inject
+import android.net.Uri
 
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        println("peekaboo")
+        handleDeepLink(intent)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         actionBar?.hide()
@@ -54,7 +62,12 @@ class MainActivity : ComponentActivity() {
                     startDestination = startDestination,
                 )
             }
+
         }
+        // ATTENTION: This was auto-generated to handle app links.
+//        val appLinkIntent: Intent = intent
+//        val appLinkAction: String? = appLinkIntent.action
+//        val appLinkData: Uri? = appLinkIntent.data
     }
 }
 
@@ -84,5 +97,22 @@ fun MainScreen(navController: NavController, viewModel: TransferSharedViewModel)
 }
 
 
+fun handleDeepLink(intent: Intent) {
+    if (intent.action == Intent.ACTION_VIEW) {
+        intent.data?.let { uri ->
+            if (uri.toString().startsWith("https://transfertoinr.com")) {
+                println("pikaboo")
+                val accessToken = uri.getQueryParameter("access_token")
+                val tokenType = uri.getQueryParameter("token_type")
+                val expiresIn = uri.getQueryParameter("expires_in")
+                val refreshToken = uri.getQueryParameter("refresh_token")
+                val type = uri.getQueryParameter("type")
 
+//                if (type == "recovery") {
+//                    navController.navigate(ScreenResetPassword)
+//                }
+            }
+        }
+    }
+}
 
