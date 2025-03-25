@@ -68,13 +68,18 @@ internal fun Content(modifier: Modifier = Modifier, navController: NavController
         if(state.error.isNotEmpty()){
             Text(text = state.error, style = style1.copy(fontSize = 14.sp), modifier = Modifier.align(Alignment.Center))
         }
+
+        if(state.transaction.isEmpty()){
+            Text(text = "No transaction found", style = style1.copy(fontSize = 14.sp), modifier = Modifier.align(Alignment.Center))
+        }
+
         else{
-            Column{
+            Column {
                 TableHeader()
                 HorizontalDivider(Modifier.padding(5.dp))
                 LazyColumn{
-                    items(state.transaction){
-                        TransactionEntry(
+                    items(state.transaction) {
+                        TransactionEntry (
                             modifier = Modifier.fillMaxWidth(),
                             date = formatTimestamp(it.date),
                             id = it.transaction_code,
