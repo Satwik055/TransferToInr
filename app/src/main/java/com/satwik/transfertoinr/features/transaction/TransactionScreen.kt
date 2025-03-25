@@ -65,10 +65,9 @@ internal fun Content(modifier: Modifier = Modifier, navController: NavController
         if(state.isLoading){
             CircularProgressIndicator(color = JungleGreen, modifier = Modifier.align(Alignment.Center))
         }
-        if(state.error.isNotEmpty()){
+        if(state.error.isNotEmpty()&&!state.isLoading){
             Text(text = state.error, style = style1.copy(fontSize = 14.sp), modifier = Modifier.align(Alignment.Center))
         }
-
         if(state.transaction.isEmpty()){
             Text(text = "No transaction found", style = style1.copy(fontSize = 14.sp), modifier = Modifier.align(Alignment.Center))
         }
