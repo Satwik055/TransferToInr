@@ -1,5 +1,6 @@
 package com.satwik.transfertoinr.features.auth.reset_password
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,21 +26,29 @@ import com.satwik.transfertoinr.core.designsystem.components.TTFButton
 import com.satwik.transfertoinr.core.designsystem.components.TTFTextField
 import com.satwik.transfertoinr.core.designsystem.theme.JungleGreen
 import com.satwik.transfertoinr.core.designsystem.theme.fontFamily
+import com.satwik.transfertoinr.core.main.ScreenCreateNewPassword
 import com.satwik.transfertoinr.core.main.ScreenLogin
+import com.satwik.transfertoinr.core.main.ScreenResetPasswordSuccess
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun CreateNewPasswordScreen(navController: NavController) {
 
     var newPassword by remember { mutableStateOf("") }
+    var confirmNewPassword by remember { mutableStateOf("") }
+
     val style = TextStyle(fontFamily = fontFamily, fontSize = 13.sp, fontWeight = FontWeight.Normal, color = JungleGreen)
 
     val viewModel = koinViewModel<ResetPasswordViewModel>()
     val state = viewModel.changePasswordResult.value
 
     LaunchedEffect(state.success){
-        if(state.success){
-            navController.navigate(ScreenLogin)
+        if(state.success) {
+            navController.navigate(ScreenResetPasswordSuccess) {
+                popUpTo(ScreenCreateNewPassword) {
+                    inclusive = true
+                }
+            }
         }
     }
 
@@ -51,7 +60,8 @@ fun CreateNewPasswordScreen(navController: NavController) {
         Icon(
             painter = painterResource(id = R.drawable.ic_carret),
             tint = JungleGreen,
-            contentDescription = null
+            contentDescription = null,
+            modifier = Modifier.clickable { navController.popBackStack() }
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
@@ -71,7 +81,7 @@ fun CreateNewPasswordScreen(navController: NavController) {
 
         Spacer(modifier = Modifier.height(70.dp))
 
-        Text(text = "Enter new password",  style = style)
+        Text(text = "Enter new password", style = style)
 
         Spacer(modifier = Modifier.height(5.dp))
         TTFTextField(
@@ -83,9 +93,9 @@ fun CreateNewPasswordScreen(navController: NavController) {
 //        errorText = state.error
         )
         TTFTextField(
-            text = newPassword,
+            text = confirmNewPassword,
             isPassword = true,
-            onValueChange = { newPassword = it },
+            onValueChange = { confirmNewPassword = it },
             placeholder = "Confirm password",
 //        isError = state.error.isNotEmpty(),
 //        errorText = state.error

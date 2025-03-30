@@ -2,6 +2,7 @@ package com.satwik.transfertoinr.features.auth.reset_password
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -74,7 +75,8 @@ fun EnterEmailScreen(navController: NavController) {
         Icon(
             painter = painterResource(id = R.drawable.ic_carret),
             tint = JungleGreen,
-            contentDescription = null
+            contentDescription = null,
+            modifier = Modifier.clickable { navController.popBackStack() }
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(

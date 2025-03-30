@@ -1,5 +1,6 @@
 package com.satwik.transfertoinr.features.auth.reset_password
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -56,7 +57,12 @@ fun EnterOtpScreen(navController: NavController) {
         modifier = Modifier.fillMaxSize().padding(16.dp)
     ){
         Spacer(modifier = Modifier.height(10.dp))
-        Icon(painter = painterResource(id = R.drawable.ic_carret), tint = JungleGreen, contentDescription = null)
+        Icon(
+            painter = painterResource(id = R.drawable.ic_carret),
+            tint = JungleGreen,
+            contentDescription = null,
+            modifier = Modifier.clickable { navController.popBackStack() }
+        )
         Spacer(modifier = Modifier.height(16.dp))
         Text(text = "VERIFICATION", fontFamily = fontFamily, fontSize = 35.sp, fontWeight = FontWeight.Bold, color = JungleGreen)
         Text(text = "Verify your email to continue", fontFamily = fontFamily, fontSize = 15.sp, fontWeight = FontWeight.SemiBold, color = JungleGreen)

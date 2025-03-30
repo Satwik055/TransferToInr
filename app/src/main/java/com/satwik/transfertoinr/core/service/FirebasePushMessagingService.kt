@@ -17,7 +17,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 
-@SuppressLint("MissingFirebaseInstanceTokenRefresh")
 class FirebasePushMessagingService:FirebaseMessagingService(){
 
     private val authRepository: AuthRepository by inject()

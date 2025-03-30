@@ -27,7 +27,9 @@ import com.satwik.transfertoinr.R
 import com.satwik.transfertoinr.core.designsystem.components.TTFButton
 import com.satwik.transfertoinr.core.designsystem.theme.JungleGreen
 import com.satwik.transfertoinr.core.designsystem.theme.fontFamily
+import com.satwik.transfertoinr.core.main.ScreenCreateNewPassword
 import com.satwik.transfertoinr.core.main.ScreenLogin
+import com.satwik.transfertoinr.core.main.ScreenResetPasswordSuccess
 
 @Composable
 fun ResetPasswordSuccessScreen(navController: NavController) {
@@ -52,7 +54,19 @@ fun ResetPasswordSuccessScreen(navController: NavController) {
             Text(text = "Password has been changed successfully", style = style)
         }
 
-        TTFButton(text = "Continue to login", onClick = { navController.navigate(ScreenLogin) }, modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 20.dp))
+        TTFButton(
+            text = "Continue to login",
+            onClick = {
+                navController.navigate(ScreenLogin){
+                    popUpTo(ScreenResetPasswordSuccess) {
+                    inclusive = true
+                    }
+                }
+                      },
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 20.dp)
+        )
     }
 }
 
