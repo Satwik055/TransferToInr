@@ -25,14 +25,12 @@ import com.satwik.transfertoinr.core.designsystem.components.TTFBottomNavigation
 import com.satwik.transfertoinr.core.designsystem.components.headers.TTFScaffoldHeader
 import com.satwik.transfertoinr.core.utils.PermissionRequester
 import com.satwik.transfertoinr.features.account.AccountScreen
-import com.satwik.transfertoinr.features.auth.reset_password.verify_email_reset_password.ResetPasswordEmailVerifyScreen
 import com.satwik.transfertoinr.features.home.HomeScreen
 import com.satwik.transfertoinr.features.recipient.RecipientScreen
 import com.satwik.transfertoinr.features.transaction.TransactionScreen
 import com.satwik.transfertoinr.features.transfer.shared_viewmodel.TransferSharedViewModel
 import com.satwik.transfertoinr.features.transfer.amount_screen.AmountScreen
 import org.koin.android.ext.android.inject
-import android.net.Uri
 
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)

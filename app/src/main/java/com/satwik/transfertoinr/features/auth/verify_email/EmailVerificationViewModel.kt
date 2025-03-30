@@ -23,9 +23,11 @@ class EmailVerificationViewModel(private val authRepository: AuthRepository):Vie
                 _verificationResult.value = VerificationResultState(success = true)
             }
             catch (e:AuthRestException){
+                print(e)
                 _verificationResult.value = VerificationResultState(error = e.errorDescription ?: "")
             }
             catch (e:Exception){
+                print(e)
                 Log.e("Verify OTP Error", e.stackTraceToString())
             }
         }

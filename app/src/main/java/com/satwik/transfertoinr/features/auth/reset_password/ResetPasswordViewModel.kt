@@ -2,6 +2,7 @@ package com.satwik.transfertoinr.features.auth.reset_password
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.util.trace
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.satwik.transfertoinr.core.model.Result
@@ -15,6 +16,10 @@ class ResetPasswordViewModel(
 
     private val _sendPasswordResetEmailResult = mutableStateOf(Result())
     val sendPasswordResetEmailResult: State<Result> = _sendPasswordResetEmailResult
+
+
+    private val _changePasswordResult = mutableStateOf(Result())
+    val changePasswordResult: State<Result> = _changePasswordResult
 
     fun sendPasswordResetEmail(email:String){
         viewModelScope.launch {
@@ -32,7 +37,16 @@ class ResetPasswordViewModel(
 
     fun changePassword(newPassword:String){
         viewModelScope.launch {
-            authRepository.changePassword(newPassword)
+            try {
+                _changePasswordResult.value = Result(isLoading = true)
+
+                authRepository.changePassword(newPassword)
+                _changePasswordResult.value = Result(success = true)
+            }
+            catch (e:Exception){
+                _changePasswordResult.value = Result(error = e.message.toString())
+            }
+
         }
     }
 }

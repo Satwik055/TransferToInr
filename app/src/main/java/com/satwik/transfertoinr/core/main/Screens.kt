@@ -50,18 +50,24 @@ object ScreenAmount
 @Serializable
 object ScreenResetPasswordEmailVerify
 
+@Serializable
+data class ScreenResetPasswordOtpVerification(
+    val email:String = ""
+)
 
 @Serializable
 data class ScreenEmailVerification(
     val email:String = ""
 )
 
-
 @Serializable
-object ScreenResetPassword
+object ScreenCreateNewPassword
 
 @Serializable
 object ScreenSuccess
+
+@Serializable
+object ScreenResetPasswordSuccess
 
 @Serializable
 object ScreenKyc

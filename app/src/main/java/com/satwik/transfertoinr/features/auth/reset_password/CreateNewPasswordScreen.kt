@@ -1,4 +1,4 @@
-package com.satwik.transfertoinr.features.auth.reset_password.create_password
+package com.satwik.transfertoinr.features.auth.reset_password
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -18,18 +19,29 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.satwik.transfertoinr.R
 import com.satwik.transfertoinr.core.designsystem.components.TTFButton
 import com.satwik.transfertoinr.core.designsystem.components.TTFTextField
 import com.satwik.transfertoinr.core.designsystem.theme.JungleGreen
 import com.satwik.transfertoinr.core.designsystem.theme.fontFamily
+import com.satwik.transfertoinr.core.main.ScreenLogin
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun CreatePasswordScreen() {
+fun CreateNewPasswordScreen(navController: NavController) {
 
     var newPassword by remember { mutableStateOf("") }
     val style = TextStyle(fontFamily = fontFamily, fontSize = 13.sp, fontWeight = FontWeight.Normal, color = JungleGreen)
 
+    val viewModel = koinViewModel<ResetPasswordViewModel>()
+    val state = viewModel.changePasswordResult.value
+
+    LaunchedEffect(state.success){
+        if(state.success){
+            navController.navigate(ScreenLogin)
+        }
+    }
 
     Column(modifier = Modifier
         .fillMaxSize()
@@ -80,9 +92,12 @@ fun CreatePasswordScreen() {
         )
 
         Spacer(modifier = Modifier.weight(1f))
-        TTFButton(text = "Submit", onClick = { /*TODO*/ })
+        TTFButton(
+            text = "Submit",
+            isLoading = state.isLoading,
+            onClick = {
+                viewModel.changePassword(newPassword)
+            }
+        )
     }
-
-
-
 }

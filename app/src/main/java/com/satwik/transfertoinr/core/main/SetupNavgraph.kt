@@ -10,10 +10,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.satwik.transfertoinr.features.auth.login.LoginScreen
-import com.satwik.transfertoinr.features.auth.reset_password.create_password.CreatePasswordScreen
+import com.satwik.transfertoinr.features.auth.reset_password.CreateNewPasswordScreen
 import com.satwik.transfertoinr.features.auth.verify_email.EmailVerificationScreen
 import com.satwik.transfertoinr.features.auth.signup.SignupScreen
-import com.satwik.transfertoinr.features.auth.reset_password.verify_email_reset_password.ResetPasswordEmailVerifyScreen
+import com.satwik.transfertoinr.features.auth.reset_password.EnterEmailScreen
+import com.satwik.transfertoinr.features.auth.reset_password.EnterOtpScreen
+import com.satwik.transfertoinr.features.auth.reset_password.ResetPasswordSuccessScreen
 import com.satwik.transfertoinr.features.help.HelpScreen
 import com.satwik.transfertoinr.features.kyc.KycScreen
 import com.satwik.transfertoinr.features.privacypolicy.PrivacyPolicyScreen
@@ -135,16 +137,24 @@ fun SetupNavgraph(navController:NavHostController, startDestination:Any) {
             enterTransition = { slideInHorizontally(initialOffsetX = { it }, animationSpec = snap()) },
             exitTransition = { slideOutHorizontally(targetOffsetX = { -it }, animationSpec = snap()) }
         ){
-            ResetPasswordEmailVerifyScreen(navController = navController)
+            EnterEmailScreen(navController = navController)
+        }
+        composable<ScreenResetPasswordOtpVerification>(
+            enterTransition = { slideInHorizontally(initialOffsetX = { it }, animationSpec = snap()) },
+            exitTransition = { slideOutHorizontally(targetOffsetX = { -it }, animationSpec = snap()) }
+        ){
+            EnterOtpScreen(navController = navController)
         }
 
 
 
-        composable<ScreenResetPassword>(
+
+
+        composable<ScreenCreateNewPassword>(
             enterTransition = { slideInHorizontally(initialOffsetX = { it }, animationSpec = snap()) },
             exitTransition = { slideOutHorizontally(targetOffsetX = { -it }, animationSpec = snap()) }
         ){
-            CreatePasswordScreen()
+            CreateNewPasswordScreen(navController = navController)
         }
 
         composable<ScreenSuccess>(
@@ -159,6 +169,13 @@ fun SetupNavgraph(navController:NavHostController, startDestination:Any) {
             exitTransition = { slideOutHorizontally(targetOffsetX = { -it }, animationSpec = snap()) }
         ) {
             KycScreen(navController)
+        }
+
+        composable<ScreenResetPasswordSuccess>(
+            enterTransition = { slideInHorizontally(initialOffsetX = { it }, animationSpec = snap()) },
+            exitTransition = { slideOutHorizontally(targetOffsetX = { -it }, animationSpec = snap()) }
+        ) {
+            ResetPasswordSuccessScreen(navController = navController)
         }
 
 ////        *************
