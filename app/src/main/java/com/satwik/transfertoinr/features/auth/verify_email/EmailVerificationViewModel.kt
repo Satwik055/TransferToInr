@@ -15,12 +15,13 @@ class EmailVerificationViewModel(private val authRepository: AuthRepository):Vie
     private val _verificationResult = mutableStateOf(VerificationResultState())
     val verificationResult: State<VerificationResultState> = _verificationResult
 
-    fun verifyOtp(otp:String, email:String){
+    fun verifyOtp(otp:String, email:String, onSuccess:()->Unit){
         viewModelScope.launch {
             _verificationResult.value = VerificationResultState(isLoading = true)
             try {
                 authRepository.verifyOtp(otp, email)
                 _verificationResult.value = VerificationResultState(success = true)
+                onSuccess.invoke()
             }
             catch (e:AuthRestException){
                 print(e)

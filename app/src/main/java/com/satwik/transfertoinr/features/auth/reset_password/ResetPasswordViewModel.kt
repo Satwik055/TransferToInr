@@ -21,12 +21,13 @@ class ResetPasswordViewModel(
     private val _changePasswordResult = mutableStateOf(Result())
     val changePasswordResult: State<Result> = _changePasswordResult
 
-    fun sendPasswordResetEmail(email:String){
+    fun sendPasswordResetEmail(email:String, onSuccess:()->Unit){
         viewModelScope.launch {
             _sendPasswordResetEmailResult.value = Result(isLoading = true)
             try {
                 authRepository.sendPasswordResetEmail(email)
                 _sendPasswordResetEmailResult.value = Result(success = true)
+                onSuccess.invoke()
 
             }
             catch (e:Exception){

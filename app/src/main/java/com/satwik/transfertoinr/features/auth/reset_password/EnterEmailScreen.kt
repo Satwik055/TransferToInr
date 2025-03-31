@@ -48,29 +48,20 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun EnterEmailScreen(navController: NavController) {
     var email by remember { mutableStateOf("") }
-    var otp by remember { mutableStateOf("") }
-
-    var submittedEmail by remember { mutableStateOf("") }
-
     val style = TextStyle(fontFamily = fontFamily, fontSize = 13.sp, fontWeight = FontWeight.Normal, color = JungleGreen)
-
     val viewmodel = koinViewModel<ResetPasswordViewModel>()
     val state = viewmodel.sendPasswordResetEmailResult.value
-    val isInfoBoxVisible by remember {
-        mutableStateOf("")
-    }
 
-    LaunchedEffect(state.success){
-        if(state.success){
-            navController.navigate(ScreenResetPasswordOtpVerification(email))
-        }
-    }
+//    LaunchedEffect(state.success){
+//        if(state.success){
+//            navController.navigate(ScreenResetPasswordOtpVerification(email))
+//        }
+//    }
 
     Column(modifier = Modifier
         .fillMaxSize()
         .padding(16.dp)
     ) {
-
         Spacer(modifier = Modifier.height(10.dp))
         Icon(
             painter = painterResource(id = R.drawable.ic_carret),
@@ -107,16 +98,15 @@ fun EnterEmailScreen(navController: NavController) {
 //        errorText = state.error
         )
 
-//        if(state.success){
-//            InfoBox(message = "A otp has been sent to $submittedEmail, Please enter it above")
-//        }
         Spacer(modifier = Modifier.height(50.dp))
         TTFButton(
             text = "Send Code",
             isLoading = state.isLoading,
             onClick = {
-                viewmodel.sendPasswordResetEmail(email)
-                submittedEmail = email
+                viewmodel.sendPasswordResetEmail(
+                    email = email,
+                    onSuccess = { navController.navigate(ScreenResetPasswordOtpVerification(email)) }
+                )
             }
         )
     }

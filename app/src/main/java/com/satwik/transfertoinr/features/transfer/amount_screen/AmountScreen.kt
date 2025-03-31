@@ -38,6 +38,7 @@ import com.satwik.transfertoinr.core.utils.getCurrencySymbol
 import com.satwik.transfertoinr.core.utils.roundToTwoDecimalPlaces
 import com.satwik.transfertoinr.features.transfer.shared_viewmodel.TransferSharedViewModel
 import org.koin.androidx.compose.koinViewModel
+import kotlin.time.times
 
 @Composable
 fun AmountScreen(navController: NavController, transferSharedViewModel: TransferSharedViewModel) {
@@ -66,11 +67,13 @@ private fun Content(modifier: Modifier = Modifier, transferSharedViewModel: Tran
     var errorText by remember { mutableStateOf("") }
 
     val amountScreenViewModel = koinViewModel<AmountScreenViewModel>()
-    val rate = amountScreenViewModel.ttiRate.collectAsState().value
-    var amountReceive = roundToTwoDecimalPlaces((amountSend.toDoubleOrNull()?: 0.00) * rate )
 
     val user = transferSharedViewModel.userInfoState.collectAsState().value
     val symbol = getCurrencySymbol(user.profile.preferred_currency)
+    val ttiRateResult = amountScreenViewModel.ttiRateResult.collectAsState().value
+    val rate = ttiRateResult.successResult.toString().toDoubleOrNull()?:0.00
+    var amountReceive = roundToTwoDecimalPlaces((amountSend.toDoubleOrNull()?: 0.00) * rate )
+
 
     Column (modifier = modifier){
         Text(text = "You Send", style=style)
@@ -97,14 +100,17 @@ private fun Content(modifier: Modifier = Modifier, transferSharedViewModel: Tran
         TTFTextField(text = "₹$amountReceive", onValueChange = {amountReceive = it.toDoubleOrNull()?:0.00}, placeholder = "Eg: 1000", keyboardType = KeyboardType.Number, enabled = false)
 
         Spacer(modifier = Modifier.weight(1f))
-        TTFButton(text = "Continue", onClick = {
-            if(amountSend.isEmpty()){
-                errorText = "Please enter the amount"
-            }
-            else{
-                transferSharedViewModel.setSendAmount(amountSend.toInt())
-                transferSharedViewModel.setReceiveAmount(amountReceive.toInt())
-                navController.navigate(ScreenSelectRecipient) }
+        TTFButton(
+            text = "Continue",
+            isLoading = ttiRateResult.isLoading,
+            onClick = {
+                if (amountSend.isEmpty()) {
+                    errorText = "Please enter the amount"
+                } else {
+                    transferSharedViewModel.setSendAmount(amountSend.toInt())
+                    transferSharedViewModel.setReceiveAmount(amountReceive.toInt())
+                    navController.navigate(ScreenSelectRecipient)
+                }
             }
 
         )

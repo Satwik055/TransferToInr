@@ -47,11 +47,11 @@ fun EnterOtpScreen(navController: NavController) {
 
     val style = TextStyle(fontFamily = fontFamily, fontSize = 13.sp, fontWeight = FontWeight.Normal, color = JungleGreen)
 
-    LaunchedEffect(state.success) {
-        if(state.success){
-            navController.navigate(ScreenCreateNewPassword)
-        }
-    }
+//    LaunchedEffect(state.success) {
+//        if(state.success){
+//            navController.navigate(ScreenCreateNewPassword)
+//        }
+//    }
 
     Column(
         modifier = Modifier.fillMaxSize().padding(16.dp)
@@ -64,8 +64,8 @@ fun EnterOtpScreen(navController: NavController) {
             modifier = Modifier.clickable { navController.popBackStack() }
         )
         Spacer(modifier = Modifier.height(16.dp))
-        Text(text = "VERIFICATION", fontFamily = fontFamily, fontSize = 35.sp, fontWeight = FontWeight.Bold, color = JungleGreen)
-        Text(text = "Verify your email to continue", fontFamily = fontFamily, fontSize = 15.sp, fontWeight = FontWeight.SemiBold, color = JungleGreen)
+        Text(text = "Enter OTP", fontFamily = fontFamily, fontSize = 35.sp, fontWeight = FontWeight.Bold, color = JungleGreen)
+        Text(text = "Enter OTP sent to your email", fontFamily = fontFamily, fontSize = 15.sp, fontWeight = FontWeight.SemiBold, color = JungleGreen)
 
         Spacer(modifier = Modifier.height(70.dp))
 
@@ -91,7 +91,11 @@ fun EnterOtpScreen(navController: NavController) {
             text = "Verify Otp",
             isLoading = state.isLoading,
             onClick = {
-                viewModel.verifyOtp(otp = otp, email = email)
+                viewModel.verifyOtp(
+                    otp = otp,
+                    email = email,
+                    onSuccess = {  }
+                )
             }
         )
     }

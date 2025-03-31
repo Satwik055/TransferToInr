@@ -70,7 +70,6 @@ fun EmailVerificationScreen(navController: NavController) {
     val state =  viewModel.verificationResult.value
     val style = TextStyle(fontFamily = fontFamily, fontSize = 13.sp, fontWeight = FontWeight.Normal, color = JungleGreen)
 
-    println(state)
     Column(modifier = Modifier
         .fillMaxSize()
         .padding(16.dp)){
@@ -109,7 +108,12 @@ fun EmailVerificationScreen(navController: NavController) {
             isError = state.error.isNotEmpty(),
             errorText = state.error
         )
-        ResendOtpButton(onResendOtpClicked = { viewModel.resendEmailOtp(email) }, modifier = Modifier.align(Alignment.End).offset(y = -(20.dp)))
+        ResendOtpButton(
+            onResendOtpClicked = { viewModel.resendEmailOtp(email) },
+            modifier = Modifier
+                .align(Alignment.End)
+                .offset(y = -(20.dp))
+        )
 
         Spacer(modifier = Modifier.height(50.dp))
 
@@ -118,7 +122,11 @@ fun EmailVerificationScreen(navController: NavController) {
             text = "Verify Otp",
             isLoading = state.isLoading,
             onClick = {
-                viewModel.verifyOtp(otp = otp, email = email)
+                viewModel.verifyOtp(
+                    otp = otp,
+                    email = email,
+                    onSuccess = {}
+                )
             }
         )
     }

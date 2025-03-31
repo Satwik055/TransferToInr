@@ -29,14 +29,11 @@ class TransferSharedViewModel(
     private val _transactionCode = mutableStateOf("")
     val transactionCode:State<String> = _transactionCode
 
-
     private val _uploadScreenshotResult = MutableStateFlow(Result())
     val uploadScreenshotResult:StateFlow<Result> = _uploadScreenshotResult
 
-
     private val _userInfoState = MutableStateFlow(UserInfoStateHome())
     val userInfoState: StateFlow<UserInfoStateHome> = _userInfoState
-
 
     init {
         getUserInfo()
