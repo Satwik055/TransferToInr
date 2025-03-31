@@ -4,6 +4,8 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.satwik.transfertoinr.core.model.Result
 import com.satwik.transfertoinr.data.account.AccountRepository
 import com.satwik.transfertoinr.data.exchange_rate.ExchangeRateRepository
 import com.satwik.transfertoinr.features.transfer.shared_viewmodel.TransferSharedViewModel
@@ -24,11 +26,16 @@ class HomeScreenViewModel(
     private val _userInfoState = MutableStateFlow(UserInfoStateHome())
     val userInfoState: StateFlow<UserInfoStateHome> = _userInfoState
 
+    private val _carousellImageLinkResult = MutableStateFlow(Result())
+    val carousellImageLinkResult: StateFlow<Result> = _carousellImageLinkResult
+
+
     private val _exchangeRateState = MutableStateFlow(ExchangeRateState())
     val exchangeRateState: StateFlow<ExchangeRateState> = _exchangeRateState
 
     init {
         getUserInfo()
+        getCarousellImageLinks()
         getExchangeRates()
     }
 
@@ -43,6 +50,19 @@ class HomeScreenViewModel(
             }
             catch (e:Exception){
                 _userInfoState.value = UserInfoStateHome(error = e.message.toString())
+            }
+        }
+    }
+
+    private fun getCarousellImageLinks(){
+        viewModelScope.launch {
+            try {
+                _carousellImageLinkResult.value = Result(isLoading = true)
+                val urls = accountRepository.getCarousellImageLinks()
+                _carousellImageLinkResult.value = Result(successResult = urls)
+            }
+            catch (e:Exception){
+                _carousellImageLinkResult.value = Result(error = e.message.toString())
             }
         }
     }

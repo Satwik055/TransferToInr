@@ -11,6 +11,7 @@ import io.github.jan.supabase.auth.status.SessionStatus
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.postgrest
 import io.github.jan.supabase.realtime.selectSingleValueAsFlow
+import io.github.jan.supabase.storage.storage
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -31,6 +32,19 @@ class AccountRepositoryImpl(private val client: SupabaseClient):AccountRepositor
             eq("email", email!!)
         }
         return flow
+    }
+
+    override suspend fun getCarousellImageLinks(): List<String> {
+        val files = client.storage
+            .from("carousel-images")
+            .list()
+        val urls = files.map { file ->
+            client.storage
+                .from("carousel-images")
+                .publicUrl(file.name)
+        }
+        println(urls)
+        return urls
     }
 
     override suspend fun updatePrefferedCurrency(email:String, currency: CurrencyType) {

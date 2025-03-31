@@ -8,5 +8,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface AccountRepository {
     suspend fun getProfile():Flow<Profile>
+    suspend fun getCarousellImageLinks():List<String>
     suspend fun updatePrefferedCurrency(email:String, currency: CurrencyType)
 }

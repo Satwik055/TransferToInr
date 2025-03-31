@@ -42,27 +42,25 @@ fun HomeScreen(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier.fillMaxSize()
     ) {
-        if(userState.isLoading || rateState.isLoading){
+        if (userState.isLoading || rateState.isLoading){
             CircularProgressIndicator(modifier = Modifier.align(Alignment.Center), color = JungleGreen)
         }
-        else{
-            Content(user = userState.profile, rate = rateState.rate)
+        else {
+            Content(user = userState.profile, rate = rateState.rate, viewModel = viewModel)
         }
     }
 }
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-internal fun Content(modifier: Modifier = Modifier, user: Profile, rate:ExchangeRate) {
+internal fun Content(modifier: Modifier = Modifier, user: Profile, rate:ExchangeRate, viewModel: HomeScreenViewModel) {
 
     val style = TextStyle(fontFamily = fontFamily, fontWeight = FontWeight.SemiBold, fontSize = 37.sp, color = JungleGreen)
-    val images:List<String> = listOf(
-        "https://as2.ftcdn.net/v2/jpg/04/86/72/71/1000_F_486727138_LIbtjQYhz2nwYFoziXPeUIFSpdz5tiHZ.jpg",
-        "https://img.freepik.com/free-vector/flat-abstract-sales-banner-with-offer_23-2149020199.jpg",
-        "https://img.freepik.com/premium-vector/extra-discount-3d-sale-banner-template-design-background_416835-474.jpg"
-    )
+    val carouselImageLinkResultState = viewModel.carousellImageLinkResult.collectAsState().value
+    val images = carouselImageLinkResultState.successResult.let { it as List<*> }
 
     Column (modifier = modifier){
+
         Text(text = "Hey ${user.name.firstWord()}", style=style, maxLines = 1, overflow = TextOverflow.Ellipsis)
         Spacer(modifier = Modifier.height(10.dp))
 
