@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.google.gms.google.services)
     alias(libs.plugins.kotiln.serializer.plugin)
+    alias(libs.plugins.google.firebase.crashlytics)
 
 }
 android {
@@ -84,6 +85,7 @@ dependencies {
 
     //Accompanist Pager
     implementation ("com.google.accompanist:accompanist-pager:0.22.0-rc")
+    implementation(libs.firebase.crashlytics)
 
     val koin = "4.0.2"
 

@@ -45,13 +45,13 @@ fun AmountScreen(navController: NavController, transferSharedViewModel: Transfer
 
     val user = transferSharedViewModel.userInfoState.collectAsState().value.profile
 
-//    if(!user.kyc_status){
-//        CompleteKYCDialog(
-//            onDismissRequest = { },
-//            onButtonClicked = { navController.navigate(ScreenKyc) },
-//            onCancelClicked = {navController.navigate(ScreenMain)}
-//        )
-//    }
+    if(!user.kyc_status){
+        CompleteKYCDialog(
+            onDismissRequest = { },
+            onButtonClicked = { navController.navigate(ScreenKyc) },
+            onCancelClicked = {navController.navigate(ScreenMain)}
+        )
+    }
 
     Content(transferSharedViewModel = transferSharedViewModel, navController = navController )
 
@@ -60,7 +60,6 @@ fun AmountScreen(navController: NavController, transferSharedViewModel: Transfer
 
 @Composable
 private fun Content(modifier: Modifier = Modifier, transferSharedViewModel: TransferSharedViewModel, navController: NavController) {
-
 
     val style = TextStyle(fontFamily = fontFamily, fontSize = 15.sp, fontWeight = FontWeight.SemiBold)
     var amountSend by remember { mutableStateOf("") }
@@ -90,7 +89,7 @@ private fun Content(modifier: Modifier = Modifier, transferSharedViewModel: Tran
         Column(verticalArrangement = Arrangement.spacedBy(10.dp)){
             OperationRow(symbol = "-", text = "Our Fees", amount = "0.00$symbol (OFFER)")
             OperationRow(symbol = "=", text = "Net Amount", amount = if(amountSend=="") "0$amountSend" else "$amountSend$symbol")
-            OperationRow(symbol = "x", text = "Guaranteed Amount", amount = "₹$rate")
+            OperationRow(symbol = "x", text = "Our Rate (Google + 1)", amount = "₹$rate")
         }
 
         Spacer(modifier = Modifier.height(20.dp))
