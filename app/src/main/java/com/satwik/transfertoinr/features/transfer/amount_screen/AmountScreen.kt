@@ -115,7 +115,6 @@ private fun Content(modifier: Modifier = Modifier, transferSharedViewModel: Tran
 
         )
     }
-
 }
 
 

@@ -47,12 +47,11 @@ fun EnterOtpScreen(navController: NavController) {
 
     val style = TextStyle(fontFamily = fontFamily, fontSize = 13.sp, fontWeight = FontWeight.Normal, color = JungleGreen)
 
-//    LaunchedEffect(state.success) {
-//        if(state.success){
-//            navController.navigate(ScreenCreateNewPassword)
-//        }
-//    }
-
+    LaunchedEffect(state.success){
+        if(state.success){
+            navController.navigate(ScreenCreateNewPassword)
+        }
+    }
     Column(
         modifier = Modifier.fillMaxSize().padding(16.dp)
     ){

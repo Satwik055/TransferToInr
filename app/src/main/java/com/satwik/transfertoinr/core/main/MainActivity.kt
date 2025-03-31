@@ -60,12 +60,7 @@ class MainActivity : ComponentActivity() {
                     startDestination = startDestination,
                 )
             }
-
         }
-        // ATTENTION: This was auto-generated to handle app links.
-//        val appLinkIntent: Intent = intent
-//        val appLinkAction: String? = appLinkIntent.action
-//        val appLinkData: Uri? = appLinkIntent.data
     }
 }
 

@@ -59,8 +59,6 @@ internal fun Content(modifier: Modifier = Modifier, navController: NavController
         viewModel.getPreferredCurrency()
     }
 
-    val preferredCurrency = viewModel.prefferedCurrency.value
-
     Box (modifier = modifier){
         if(state.isLoading){
             CircularProgressIndicator(color = JungleGreen, modifier = Modifier.align(Alignment.Center))
@@ -137,7 +135,7 @@ fun TableHeader(modifier: Modifier = Modifier) {
         Text(text = "ID", style = style, modifier = Modifier.padding(8.dp) )
         Text(text = "Sent", style = style, modifier = Modifier.padding(8.dp) )
         Text(text = "Receive", style = style, modifier = Modifier.padding(8.dp) )
-        Text(text = "Status", style = style, modifier = Modifier.padding(8.dp) )
+        Text(text = "Status", style = style, modifier = Modifier.padding(vertical = 8.dp, horizontal = 1.dp) )
     }
 
 }

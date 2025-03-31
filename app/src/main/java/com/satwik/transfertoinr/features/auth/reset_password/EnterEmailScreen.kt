@@ -52,11 +52,11 @@ fun EnterEmailScreen(navController: NavController) {
     val viewmodel = koinViewModel<ResetPasswordViewModel>()
     val state = viewmodel.sendPasswordResetEmailResult.value
 
-//    LaunchedEffect(state.success){
-//        if(state.success){
-//            navController.navigate(ScreenResetPasswordOtpVerification(email))
-//        }
-//    }
+    LaunchedEffect(state.success){
+        if(state.success){
+            navController.navigate(ScreenResetPasswordOtpVerification(email))
+        }
+    }
 
     Column(modifier = Modifier
         .fillMaxSize()
@@ -105,13 +105,11 @@ fun EnterEmailScreen(navController: NavController) {
             onClick = {
                 viewmodel.sendPasswordResetEmail(
                     email = email,
-                    onSuccess = { navController.navigate(ScreenResetPasswordOtpVerification(email)) }
+                    onSuccess = { }
                 )
             }
         )
     }
-
-
 }
 
 
@@ -135,7 +133,5 @@ fun InfoBox(modifier: Modifier = Modifier, message:String) {
             Spacer(modifier = Modifier.height(10.dp))
             Text(text = message, style = style)
         }
-
     }
-
 }
