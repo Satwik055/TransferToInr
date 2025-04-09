@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -33,13 +34,13 @@ import com.satwik.transfertoinr.features.transfer.amount_screen.AmountScreen
 import org.koin.android.ext.android.inject
 
 class MainActivity : ComponentActivity() {
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         println("peekaboo")
         handleDeepLink(intent)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         actionBar?.hide()
@@ -51,8 +52,13 @@ class MainActivity : ComponentActivity() {
             PermissionRequester()
             val isInitializing = viewModel.isInitializing.collectAsState().value
             val isLoggedIn = viewModel.isLoggedIn.collectAsState().value
+
             val startDestination:Any = if(isLoggedIn){ ScreenMain } else{ ScreenSignup }
             val navController = rememberNavController()
+
+            LaunchedEffect(isLoggedIn) {
+                println(isLoggedIn)
+            }
 
             if(!isInitializing){
                 SetupNavgraph(

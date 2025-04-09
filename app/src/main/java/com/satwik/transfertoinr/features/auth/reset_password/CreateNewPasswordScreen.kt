@@ -52,6 +52,7 @@ fun CreateNewPasswordScreen(navController: NavController) {
         }
     }
 
+
     Column(modifier = Modifier
         .fillMaxSize()
         .padding(16.dp))
@@ -106,7 +107,16 @@ fun CreateNewPasswordScreen(navController: NavController) {
             text = "Submit",
             isLoading = state.isLoading,
             onClick = {
-                viewModel.changePassword(newPassword)
+                viewModel.changePassword(
+                    newPassword = newPassword,
+                    onSuccess = {
+                        navController.navigate(ScreenResetPasswordSuccess) {
+                            popUpTo(ScreenCreateNewPassword) {
+                                inclusive = true
+                            }
+                        }
+                    }
+                )
             }
         )
     }

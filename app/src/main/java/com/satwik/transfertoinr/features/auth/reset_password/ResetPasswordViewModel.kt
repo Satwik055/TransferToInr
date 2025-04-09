@@ -36,13 +36,14 @@ class ResetPasswordViewModel(
         }
     }
 
-    fun changePassword(newPassword:String){
+    fun changePassword(newPassword:String, onSuccess: () -> Unit){
         viewModelScope.launch {
             try {
                 _changePasswordResult.value = Result(isLoading = true)
 
                 authRepository.changePassword(newPassword)
                 _changePasswordResult.value = Result(success = true)
+                onSuccess.invoke()
             }
             catch (e:Exception){
                 _changePasswordResult.value = Result(error = e.message.toString())
