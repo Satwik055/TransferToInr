@@ -22,6 +22,9 @@ import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.ktx.Firebase
 import com.satwik.transfertoinr.core.designsystem.components.TTFBottomNavigationBar
 import com.satwik.transfertoinr.core.designsystem.components.headers.TTFScaffoldHeader
 import com.satwik.transfertoinr.core.utils.PermissionRequester
@@ -34,6 +37,7 @@ import com.satwik.transfertoinr.features.transfer.amount_screen.AmountScreen
 import org.koin.android.ext.android.inject
 
 class MainActivity : ComponentActivity() {
+    private lateinit var analytics: FirebaseAnalytics
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         println("peekaboo")
@@ -44,7 +48,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         actionBar?.hide()
-
+        analytics = Firebase.analytics
         val viewModel: MainActivityViewModel by inject()
         installSplashScreen().apply { setKeepOnScreenCondition{viewModel.isInitializing.value} }
 

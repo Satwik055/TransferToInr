@@ -1,5 +1,7 @@
 package com.satwik.transfertoinr.data.account
 
+import com.google.firebase.crashlytics.ktx.crashlytics
+import com.google.firebase.ktx.Firebase
 import com.satwik.transfertoinr.core.model.ExchangeRate
 import com.satwik.transfertoinr.core.model.CurrencyType
 import com.satwik.transfertoinr.core.model.Profile
@@ -28,7 +30,7 @@ class AccountRepositoryImpl(private val client: SupabaseClient):AccountRepositor
     @OptIn(SupabaseExperimental::class)
     override suspend fun getProfile(): Flow<Profile> {
         val email = client.auth.currentUserOrNull()?.email
-       val flow = client.from("ttfuser").selectSingleValueAsFlow(Profile::email) {
+        val flow = client.from("ttfuser").selectSingleValueAsFlow(Profile::email) {
             eq("email", email!!)
         }
         return flow

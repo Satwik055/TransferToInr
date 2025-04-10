@@ -15,8 +15,8 @@ android {
         applicationId = "com.satwik.transfertoinr"
         minSdk = 24
         targetSdk = 35
-        versionCode = 3
-        versionName = "1.3.0"
+        versionCode = 4
+        versionName = "1.3.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
@@ -86,6 +86,7 @@ dependencies {
     //Accompanist Pager
     implementation ("com.google.accompanist:accompanist-pager:0.22.0-rc")
     implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.analytics)
 
     val koin = "4.0.2"
 
