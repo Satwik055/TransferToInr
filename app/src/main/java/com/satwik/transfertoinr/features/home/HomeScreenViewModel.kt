@@ -9,6 +9,7 @@ import com.satwik.transfertoinr.core.model.Result
 import com.satwik.transfertoinr.data.account.AccountRepository
 import com.satwik.transfertoinr.data.exchange_rate.ExchangeRateRepository
 import com.satwik.transfertoinr.features.transfer.shared_viewmodel.TransferSharedViewModel
+import io.github.jan.supabase.postgrest.exception.PostgrestRestException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch

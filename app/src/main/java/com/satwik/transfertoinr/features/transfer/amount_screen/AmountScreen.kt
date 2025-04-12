@@ -45,13 +45,13 @@ fun AmountScreen(navController: NavController, transferSharedViewModel: Transfer
 
     val user = transferSharedViewModel.userInfoState.collectAsState().value.profile
 
-    if(!user.kyc_status){
-        CompleteKYCDialog(
-            onDismissRequest = { },
-            onButtonClicked = { navController.navigate(ScreenKyc) },
-            onCancelClicked = {navController.navigate(ScreenMain)}
-        )
-    }
+//    if(!user.kyc_status){
+//        CompleteKYCDialog(
+//            onDismissRequest = { },
+//            onButtonClicked = { navController.navigate(ScreenKyc) },
+//            onCancelClicked = {navController.navigate(ScreenMain)}
+//        )
+//    }
 
     Content(transferSharedViewModel = transferSharedViewModel, navController = navController )
 

@@ -40,6 +40,7 @@ fun KycButton(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .clickable(
+                enabled = !isVerified ,
                 onClick = { onClick.invoke() },
                 interactionSource = remember { MutableInteractionSource() },
                 indication = customIndication

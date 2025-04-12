@@ -15,9 +15,10 @@ import kotlinx.serialization.json.put
 
 class AuthRepositoryImpl(private val client: SupabaseClient) :AuthRepository {
     override suspend fun login(email: String, password: String) {
+        val fEmail = email.lowercase()
         try{
             client.auth.signInWith(Email) {
-                this.email = email
+                this.email = fEmail
                 this.password = password
             }
         }
@@ -27,24 +28,18 @@ class AuthRepositoryImpl(private val client: SupabaseClient) :AuthRepository {
     }
 
     override suspend fun signup(email: String, password: String, name: String, phone: String) {
+        val fEmail = email.lowercase()
         try{
             client.auth.signUpWith(Email) {
-                this.email = email
+                this.email = fEmail
                 this.password = password
-                this.data = buildJsonObject {
-                    put("name", name)
-                    put("email", email)
-                    put("phone", phone)
-                    put("kyc_status", false)
-                    put("preferred_currency", CurrencyType.EUR.name)
-                }
             }
             val token = FirebaseMessaging.getInstance().token.await()
             client.postgrest.rpc(
                 function = "addttfuser",
                 parameters = buildJsonObject {
                     put("p_name", name)
-                    put("p_email", email)
+                    put("p_email", fEmail)
                     put("p_phone", phone)
                     put("p_fcm_token", token)
                 }
@@ -83,19 +78,23 @@ class AuthRepositoryImpl(private val client: SupabaseClient) :AuthRepository {
     }
 
     override suspend fun verifyRegistrationOtp(otp: String, email: String){
-        client.auth.verifyEmailOtp(type = OtpType.Email.EMAIL, email = email, token = otp)
+        val fEmail = email.lowercase()
+        client.auth.verifyEmailOtp(type = OtpType.Email.EMAIL, email = fEmail, token = otp)
     }
 
     override suspend fun verifyResetOtp(otp: String, email: String) {
-        client.auth.verifyEmailOtp(type = OtpType.Email.RECOVERY, email = email, token = otp)
+        val fEmail = email.lowercase()
+        client.auth.verifyEmailOtp(type = OtpType.Email.RECOVERY, email = fEmail, token = otp)
     }
 
     override suspend fun resendEmailOtp(email:String) {
-        client.auth.resendEmail(type = OtpType.Email.EMAIL, email = email)
+        val fEmail = email.lowercase()
+        client.auth.resendEmail(type = OtpType.Email.EMAIL, email = fEmail)
     }
 
     override suspend fun sendPasswordResetEmail(email: String) {
-        client.auth.resetPasswordForEmail(email = email)
+        val fEmail = email.lowercase()
+        client.auth.resetPasswordForEmail(email = fEmail)
     }
 
     override suspend fun changePassword(newPassword: String) {

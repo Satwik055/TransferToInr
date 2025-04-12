@@ -9,6 +9,7 @@ import com.satwik.transfertoinr.data.kyc.KycRepository
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.serialization.internal.throwMissingFieldException
 
 class KycScreenViewModel(
     private val kycRepository: KycRepository,

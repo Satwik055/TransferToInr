@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
@@ -45,7 +46,11 @@ fun HomeScreen(modifier: Modifier = Modifier) {
         if (userState.isLoading || rateState.isLoading){
             CircularProgressIndicator(modifier = Modifier.align(Alignment.Center), color = JungleGreen)
         }
-        else {
+        if(userState.error.isNotEmpty()){
+            val style = TextStyle(fontFamily = fontFamily, fontSize = 13.sp, fontWeight = FontWeight.Normal, color = Color.Red)
+            Text(text = userState.error, style = style)
+        }
+        if(userState.profile.name.isNotEmpty()) {
             Content(user = userState.profile, rate = rateState.rate, viewModel = viewModel)
         }
     }

@@ -39,7 +39,6 @@ class AccountsScreenViewModel(
                 val profileFlow = accountRepository.getProfile()
                 profileFlow.collectLatest { profile->
                     _userInfoState.value = UserInfoState(profile = profile)
-                    println("CURRENCY:${profile.preferred_currency}")
                 }
             }
             catch (e:Exception){
