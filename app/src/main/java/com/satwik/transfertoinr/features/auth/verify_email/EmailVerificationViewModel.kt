@@ -6,7 +6,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.satwik.transfertoinr.data.auth.AuthRepository
-import com.satwik.transfertoinr.features.auth.signup.SignupScreenState
 import io.github.jan.supabase.auth.exception.AuthRestException
 import kotlinx.coroutines.launch
 
@@ -19,7 +18,7 @@ class EmailVerificationViewModel(private val authRepository: AuthRepository):Vie
         viewModelScope.launch {
             _verificationResult.value = VerificationResultState(isLoading = true)
             try {
-                authRepository.verifyOtp(otp, email)
+                authRepository.verifyRegistrationOtp(otp, email)
                 _verificationResult.value = VerificationResultState(success = true)
                 onSuccess.invoke()
             }

@@ -38,11 +38,6 @@ import org.koin.android.ext.android.inject
 
 class MainActivity : ComponentActivity() {
     private lateinit var analytics: FirebaseAnalytics
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-        println("peekaboo")
-        handleDeepLink(intent)
-    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -99,23 +94,4 @@ fun MainScreen(navController: NavController, viewModel: TransferSharedViewModel)
     }
 }
 
-
-fun handleDeepLink(intent: Intent) {
-    if (intent.action == Intent.ACTION_VIEW) {
-        intent.data?.let { uri ->
-            if (uri.toString().startsWith("https://transfertoinr.com")) {
-                println("pikaboo")
-                val accessToken = uri.getQueryParameter("access_token")
-                val tokenType = uri.getQueryParameter("token_type")
-                val expiresIn = uri.getQueryParameter("expires_in")
-                val refreshToken = uri.getQueryParameter("refresh_token")
-                val type = uri.getQueryParameter("type")
-
-//                if (type == "recovery") {
-//                    navController.navigate(ScreenResetPassword)
-//                }
-            }
-        }
-    }
-}
 

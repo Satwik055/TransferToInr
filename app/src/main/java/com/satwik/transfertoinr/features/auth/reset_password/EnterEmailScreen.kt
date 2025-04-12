@@ -94,8 +94,8 @@ fun EnterEmailScreen(navController: NavController) {
             text = email,
             onValueChange = { email = it },
             placeholder = "example@gmail.com",
-//        isError = state.error.isNotEmpty(),
-//        errorText = state.error
+            isError = state.error.isNotEmpty(),
+            errorText = state.error
         )
 
         Spacer(modifier = Modifier.height(50.dp))
@@ -105,7 +105,6 @@ fun EnterEmailScreen(navController: NavController) {
             onClick = {
                 viewmodel.sendPasswordResetEmail(
                     email = email,
-                    onSuccess = { }
                 )
             }
         )

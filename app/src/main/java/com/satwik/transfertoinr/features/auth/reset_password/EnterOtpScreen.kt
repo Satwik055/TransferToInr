@@ -42,10 +42,15 @@ fun EnterOtpScreen(navController: NavController) {
     var otp by remember { mutableStateOf("") }
     val email  = args.email
 
-    val viewModel = koinViewModel<EmailVerificationViewModel>()
+    val viewModel = koinViewModel<ResetPasswordViewModel>()
     val state =  viewModel.verificationResult.value
 
-    val style = TextStyle(fontFamily = fontFamily, fontSize = 13.sp, fontWeight = FontWeight.Normal, color = JungleGreen)
+    val style = TextStyle(
+        fontFamily = fontFamily,
+        fontSize = 13.sp,
+        fontWeight = FontWeight.Normal,
+        color = JungleGreen
+    )
 
     LaunchedEffect(state.success){
         if(state.success){
@@ -63,8 +68,20 @@ fun EnterOtpScreen(navController: NavController) {
             modifier = Modifier.clickable { navController.popBackStack() }
         )
         Spacer(modifier = Modifier.height(16.dp))
-        Text(text = "Enter OTP", fontFamily = fontFamily, fontSize = 35.sp, fontWeight = FontWeight.Bold, color = JungleGreen)
-        Text(text = "Enter OTP sent to your email", fontFamily = fontFamily, fontSize = 15.sp, fontWeight = FontWeight.SemiBold, color = JungleGreen)
+        Text(
+            text = "Enter OTP",
+            fontFamily = fontFamily,
+            fontSize = 35.sp,
+            fontWeight = FontWeight.Bold,
+            color = JungleGreen
+        )
+        Text(
+            text = "Enter OTP sent to your email",
+            fontFamily = fontFamily,
+            fontSize = 15.sp,
+            fontWeight = FontWeight.SemiBold,
+            color = JungleGreen
+        )
 
         Spacer(modifier = Modifier.height(70.dp))
 
@@ -78,9 +95,12 @@ fun EnterOtpScreen(navController: NavController) {
             isError = state.error.isNotEmpty(),
             errorText = state.error
         )
-        ResendOtpButton(onResendOtpClicked = { viewModel.resendEmailOtp(email) }, modifier = Modifier
-            .align(Alignment.End)
-            .offset(y = -(20.dp)))
+        ResendOtpButton(
+            onResendOtpClicked = { viewModel.resendEmailOtp(email) },
+            modifier = Modifier
+                .align(Alignment.End)
+                .offset(y = -(20.dp))
+        )
 
 
         Spacer(modifier = Modifier.height(50.dp))
@@ -90,16 +110,13 @@ fun EnterOtpScreen(navController: NavController) {
             text = "Verify Otp",
             isLoading = state.isLoading,
             onClick = {
-                viewModel.verifyOtp(
+                viewModel.verifyResetOtp(
                     otp = otp,
                     email = email,
-                    onSuccess = {  }
                 )
             }
         )
     }
-
-
 }
 
 

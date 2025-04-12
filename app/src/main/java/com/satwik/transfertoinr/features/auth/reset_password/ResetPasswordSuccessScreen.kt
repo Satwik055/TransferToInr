@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,12 +31,18 @@ import com.satwik.transfertoinr.core.designsystem.theme.fontFamily
 import com.satwik.transfertoinr.core.main.ScreenCreateNewPassword
 import com.satwik.transfertoinr.core.main.ScreenLogin
 import com.satwik.transfertoinr.core.main.ScreenResetPasswordSuccess
+import kotlinx.coroutines.delay
 
 @Composable
 fun ResetPasswordSuccessScreen(navController: NavController) {
     Box (modifier = Modifier
         .fillMaxSize()
         .padding(16.dp)){
+
+        LaunchedEffect(Unit) {
+            delay(2500)
+            navController.popBackStack()
+        }
 
         val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.checkanimation))
         val progress by animateLottieCompositionAsState(
@@ -53,20 +60,6 @@ fun ResetPasswordSuccessScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(10.dp))
             Text(text = "Password has been changed successfully", style = style)
         }
-
-        TTFButton(
-            text = "Continue to login",
-            onClick = {
-                navController.navigate(ScreenLogin){
-                    popUpTo(ScreenResetPasswordSuccess) {
-                    inclusive = true
-                    }
-                }
-                      },
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(bottom = 20.dp)
-        )
     }
 }
 

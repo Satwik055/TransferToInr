@@ -42,7 +42,7 @@ fun CreateNewPasswordScreen(navController: NavController) {
     val viewModel = koinViewModel<ResetPasswordViewModel>()
     val state = viewModel.changePasswordResult.value
 
-    LaunchedEffect(state.success){
+    LaunchedEffect(state){
         if(state.success) {
             navController.navigate(ScreenResetPasswordSuccess) {
                 popUpTo(ScreenCreateNewPassword) {
@@ -109,13 +109,6 @@ fun CreateNewPasswordScreen(navController: NavController) {
             onClick = {
                 viewModel.changePassword(
                     newPassword = newPassword,
-                    onSuccess = {
-                        navController.navigate(ScreenResetPasswordSuccess) {
-                            popUpTo(ScreenCreateNewPassword) {
-                                inclusive = true
-                            }
-                        }
-                    }
                 )
             }
         )
