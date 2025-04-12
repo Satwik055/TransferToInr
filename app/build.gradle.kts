@@ -15,8 +15,8 @@ android {
         applicationId = "com.satwik.transfertoinr"
         minSdk = 24
         targetSdk = 35
-        versionCode = 5
-        versionName = "1.3.3"
+        versionCode = 9
+        versionName = "1.4.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
@@ -97,12 +97,8 @@ dependencies {
     implementation("io.insert-koin:koin-androidx-navigation:4.0.2")
     implementation ("com.airbnb.android:lottie-compose:4.0.0")
 
-
-
-
-
-
-
+    implementation("com.google.android.play:app-update:2.1.0")
+    implementation("com.google.android.play:app-update-ktx:2.1.0")
 
     implementation(libs.firebase.messaging)
 
