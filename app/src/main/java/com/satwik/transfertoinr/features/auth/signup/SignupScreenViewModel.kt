@@ -30,6 +30,10 @@ class SignupScreenViewModel(
     private val validationEventChannel = Channel<ValidationEvent>()
     val validationEvents = validationEventChannel.receiveAsFlow()
 
+    fun signupScreenStateReset(){
+        _signupScreenState.value = SignupScreenState()
+    }
+
     fun signup(email:String, password:String, name:String, phone:String){
         viewModelScope.launch {
             _signupScreenState.value = SignupScreenState(isLoading = true)

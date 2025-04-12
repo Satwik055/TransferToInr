@@ -55,6 +55,7 @@ fun EnterEmailScreen(navController: NavController) {
     LaunchedEffect(state.success){
         if(state.success){
             navController.navigate(ScreenResetPasswordOtpVerification(email))
+            viewmodel.sendPasswordResetEmailResultStateReset()
         }
     }
 

@@ -71,9 +71,9 @@ fun SignupScreen(modifier: Modifier = Modifier, navController: NavController) {
         }
     }
 
-    if(state.error.isNotEmpty()){
-        errorText = state.error
-    }
+//    if(state.error.isNotEmpty()){
+//        errorText = state.error
+//    }
     Box {
 
         Column(modifier.background(Color.White)){
@@ -125,14 +125,7 @@ fun SignupScreen(modifier: Modifier = Modifier, navController: NavController) {
                     text = "Submit",
                     isLoading = state.isLoading,
                     onClick = {
-                        if (errorText.isNotEmpty()) {
-                            coroutineScope.launch {
-                                snackbarHostState.showSnackbar(
-                                    message = errorText,
-                                    duration = SnackbarDuration.Short
-                                )
-                            }
-                        }
+
                         viewModel.onEvent(SignupFormEvent.Submit)
                     })
 
@@ -145,7 +138,25 @@ fun SignupScreen(modifier: Modifier = Modifier, navController: NavController) {
                             name = formState.name,
                             phone = formState.phone
                         )
+                        isFormValidated = false
+                    }
+                }
+
+                LaunchedEffect(state.success){
+                    if(state.success){
                         navController.navigate(ScreenEmailVerification(email = formState.email))
+                        viewModel.signupScreenStateReset()
+                    }
+                }
+
+                LaunchedEffect(state.error) {
+                    if (state.error.isNotEmpty()) {
+                        coroutineScope.launch {
+                            snackbarHostState.showSnackbar(
+                                message = state.error,
+                                duration = SnackbarDuration.Short
+                            )
+                        }
                     }
                 }
 
@@ -160,7 +171,7 @@ fun SignupScreen(modifier: Modifier = Modifier, navController: NavController) {
             }
         }
         SnackbarHost(
-            snackbar = { TTFSnackbar(text = addSpacesToCamelCase(errorText), color = Color.Red, modifier = Modifier.padding(vertical = 65.dp, horizontal = 16.dp)) },
+            snackbar = { TTFSnackbar(text = addSpacesToCamelCase(state.error), color = Color.Red, modifier = Modifier.padding(vertical = 65.dp, horizontal = 16.dp)) },
             modifier = Modifier.align(Alignment.TopCenter),
             hostState = snackbarHostState,
         )

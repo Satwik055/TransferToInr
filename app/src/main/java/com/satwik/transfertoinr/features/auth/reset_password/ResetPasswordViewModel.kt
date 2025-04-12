@@ -38,6 +38,10 @@ class ResetPasswordViewModel(
         }
     }
 
+    fun sendPasswordResetEmailResultStateReset(){
+        _sendPasswordResetEmailResult.value = Result()
+    }
+
     fun changePassword(newPassword:String){
         viewModelScope.launch {
             try {

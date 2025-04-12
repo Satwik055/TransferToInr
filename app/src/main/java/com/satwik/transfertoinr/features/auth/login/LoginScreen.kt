@@ -61,8 +61,6 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
     val formState = viewModel.formState.value
     val context = LocalContext.current
     var isFormValidated by remember { mutableStateOf(false) }
-    var errorText by remember { mutableStateOf("") }
-    var isError by remember { mutableStateOf(false) }
 
     //For snackbar
     val snackbarHostState = remember { SnackbarHostState() }
@@ -78,9 +76,16 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
         }
     }
 
-    if(state.error.isNotEmpty()){
-        errorText = state.error
-        isError = true
+
+    LaunchedEffect(state.error){
+        if (state.error.isNotEmpty()) {
+            coroutineScope.launch {
+                snackbarHostState.showSnackbar(
+                    message = state.error,
+                    duration = SnackbarDuration.Short
+                )
+            }
+        }
     }
 
     Box{
@@ -121,7 +126,11 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                             modifier = Modifier
                                 .align(Alignment.End)
                                 .offset(y = -(10.dp))
-                                .clickable(onClick = {navController.navigate(ScreenResetPasswordEmailVerify)}, interactionSource = null, indication = null)
+                                .clickable(onClick = {
+                                    navController.navigate(
+                                        ScreenResetPasswordEmailVerify
+                                    )
+                                }, interactionSource = null, indication = null)
                         )
                     }
 
@@ -133,16 +142,6 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                     text = "Submit",
                     isLoading = state.isLoading,
                     onClick = {
-
-                        if (errorText.isNotEmpty()) {
-                            coroutineScope.launch {
-                                snackbarHostState.showSnackbar(
-                                    message = errorText,
-                                    duration = SnackbarDuration.Short
-                                )
-                            }
-                        }
-
                         viewModel.onEvent(LoginFormEvent.Submit)
                     }
                 )
@@ -150,6 +149,7 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                 LaunchedEffect(isFormValidated) {
                     if (isFormValidated) {
                         viewModel.login(formState.email, formState.password)
+                        isFormValidated = false
                     }
                 }
 
@@ -164,7 +164,7 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
             }
         }
         SnackbarHost(
-            snackbar = { TTFSnackbar(text = addSpacesToCamelCase(errorText), color = Color.Red, modifier = Modifier.padding(vertical = 65.dp, horizontal = 16.dp)) },
+            snackbar = { TTFSnackbar(text = addSpacesToCamelCase(state.error), color = Color.Red, modifier = Modifier.padding(vertical = 65.dp, horizontal = 16.dp)) },
             modifier = Modifier.align(Alignment.TopCenter),
             hostState = snackbarHostState,
         )
