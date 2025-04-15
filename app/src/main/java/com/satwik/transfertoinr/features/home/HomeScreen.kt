@@ -62,8 +62,8 @@ internal fun Content(modifier: Modifier = Modifier, user: Profile, rate:Exchange
 
     val style = TextStyle(fontFamily = fontFamily, fontWeight = FontWeight.SemiBold, fontSize = 37.sp, color = JungleGreen)
     val carouselImageLinkResultState = viewModel.carousellImageLinkResult.collectAsState().value
-    val images = carouselImageLinkResultState.successResult.let { it as List<*> }
-
+//    val images = carouselImageLinkResultState.successResult as? List<*>
+    val images = (carouselImageLinkResultState.successResult as? List<*>) ?: emptyList<Any>()
     Column (modifier = modifier){
 
         Text(text = "Hey ${user.name.firstWord()}", style=style, maxLines = 1, overflow = TextOverflow.Ellipsis)
