@@ -87,9 +87,9 @@ class AuthRepositoryImpl(private val client: SupabaseClient) :AuthRepository {
         client.auth.verifyEmailOtp(type = OtpType.Email.RECOVERY, email = fEmail, token = otp)
     }
 
-    override suspend fun resendEmailOtp(email:String) {
+    override suspend fun resendEmailOtp(email:String, type: OtpType.Email) {
         val fEmail = email.lowercase()
-        client.auth.resendEmail(type = OtpType.Email.EMAIL, email = fEmail)
+        client.auth.resendEmail(type = type, email = fEmail)
     }
 
     override suspend fun sendPasswordResetEmail(email: String) {

@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.satwik.transfertoinr.data.auth.AuthRepository
+import io.github.jan.supabase.auth.OtpType
 import io.github.jan.supabase.auth.exception.AuthRestException
 import kotlinx.coroutines.launch
 
@@ -35,7 +36,7 @@ class EmailVerificationViewModel(private val authRepository: AuthRepository):Vie
 
     fun resendEmailOtp(email: String){
         viewModelScope.launch {
-            authRepository.resendEmailOtp(email)
+            authRepository.resendEmailOtp(email, OtpType.Email.SIGNUP)
         }
     }
 }

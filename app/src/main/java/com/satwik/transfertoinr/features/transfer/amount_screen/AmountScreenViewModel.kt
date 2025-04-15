@@ -16,7 +16,6 @@ class AmountScreenViewModel(
     private val exchangeRatesRepository: ExchangeRateRepository
 ): ViewModel() {
 
-
     private val _ttiRateResult = MutableStateFlow(Result())
     val ttiRateResult: StateFlow<Result> = _ttiRateResult
 

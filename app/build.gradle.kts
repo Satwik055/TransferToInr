@@ -23,7 +23,6 @@ android {
         }
     }
 
-
     // Excludes heavy TF *.so files from the APK
     packagingOptions {
         exclude("lib/**/libtensorflowlite_jni.so")

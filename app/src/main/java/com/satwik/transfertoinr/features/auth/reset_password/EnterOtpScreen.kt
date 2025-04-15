@@ -95,12 +95,12 @@ fun EnterOtpScreen(navController: NavController) {
             isError = state.error.isNotEmpty(),
             errorText = state.error
         )
-        ResendOtpButton(
-            onResendOtpClicked = { viewModel.resendEmailOtp(email) },
-            modifier = Modifier
-                .align(Alignment.End)
-                .offset(y = -(20.dp))
-        )
+//        ResendOtpButton(
+//            onResendOtpClicked = { viewModel.resendEmailOtp(email) },
+//            modifier = Modifier
+//                .align(Alignment.End)
+//                .offset(y = -(20.dp))
+//        )
 
 
         Spacer(modifier = Modifier.height(50.dp))

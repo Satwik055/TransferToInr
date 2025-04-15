@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.satwik.transfertoinr.core.model.Result
 import com.satwik.transfertoinr.data.auth.AuthRepository
 import com.satwik.transfertoinr.features.auth.verify_email.VerificationResultState
+import io.github.jan.supabase.auth.OtpType
 import io.github.jan.supabase.auth.exception.AuthRestException
 import kotlinx.coroutines.launch
 
@@ -77,7 +78,7 @@ class ResetPasswordViewModel(
 
     fun resendEmailOtp(email: String){
         viewModelScope.launch {
-            authRepository.resendEmailOtp(email)
+            authRepository.resendEmailOtp(email, OtpType.Email.SIGNUP)
         }
     }
 }
