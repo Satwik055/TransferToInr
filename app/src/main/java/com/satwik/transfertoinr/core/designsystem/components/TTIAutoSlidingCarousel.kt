@@ -39,6 +39,8 @@ fun AutoSlidingCarousel(
     itemsCount: Int,
     itemContent: @Composable (index: Int) -> Unit,
 ) {
+
+    if (itemsCount <= 0) return
     val isDragged by pagerState.interactionSource.collectIsDraggedAsState()
 
     LaunchedEffect(pagerState.currentPage) {
@@ -58,7 +60,6 @@ fun AutoSlidingCarousel(
             }
         }
 
-
         DotsIndicator(
             modifier = Modifier.padding(horizontal = 8.dp, vertical = 6.dp).align(Alignment.CenterHorizontally),
             totalDots = itemsCount,
@@ -77,6 +78,8 @@ fun DotsIndicator(
     unSelectedColor: Color = VeryLightGrey,
     dotSize: Dp
 ) {
+    if (totalDots <= 0) return
+
     LazyRow(
         modifier = modifier
             .wrapContentWidth()

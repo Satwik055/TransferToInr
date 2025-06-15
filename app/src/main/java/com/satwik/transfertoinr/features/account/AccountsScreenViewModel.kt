@@ -1,7 +1,5 @@
 package com.satwik.transfertoinr.features.account
 
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.satwik.transfertoinr.core.model.CurrencyType
@@ -11,7 +9,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
 class AccountsScreenViewModel(
@@ -22,17 +19,16 @@ class AccountsScreenViewModel(
     val userInfoState: StateFlow<UserInfoState> = _userInfoState
 
     init {
-        getUserInfo()
+        fetchProfile()
     }
 
     fun logout(){
         viewModelScope.launch {
-            println("Logout clicked")
             authRepository.logout()
         }
     }
 
-    private fun getUserInfo(){
+    private fun fetchProfile(){
         viewModelScope.launch {
             _userInfoState.value = UserInfoState(isLoading = true)
             try {
@@ -42,7 +38,6 @@ class AccountsScreenViewModel(
                 }
             }
             catch (e:Exception){
-                println("ACCOUNT SCREEN PROFILE ERROR: ${e.message}")
                 _userInfoState.value = UserInfoState(error = e.message.toString())
             }
         }
@@ -53,9 +48,6 @@ class AccountsScreenViewModel(
             val profileFlow = accountRepository.getProfile()
             val profile = profileFlow.first()
             accountRepository.updatePrefferedCurrency(profile.email, currency)
-//            profileFlow.collectLatest { profile->
-//                accountRepository.updatePrefferedCurrency(profile.email, currency)
-//            }
         }
     }
 }
