@@ -23,8 +23,8 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="com.satwik.transfertoinr" />
-                  <option name="mobileSdkAppId" value="1:878982231915:android:c46a23c5ffc29d706ebe2e" />
+                  <option name="appId" value="com.ttf.transfertoinr" />
+                  <option name="mobileSdkAppId" value="1:878982231915:android:5c2a257a6030035b6ebe2e" />
                   <option name="projectId" value="transfertoinr-491ea" />
                   <option name="projectNumber" value="878982231915" />
                 </ConnectionSetting>

@@ -8,11 +8,11 @@ plugins {
 
 }
 android {
-    namespace = "com.ttf.transfertoinr"
+    namespace = "com.satwik.transfertoinr"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.ttf.transfertoinr"
+        applicationId = "com.satwik.transfertoinr"
         minSdk = 24
         targetSdk = 35
         versionCode = 12
